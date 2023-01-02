@@ -1,0 +1,8 @@
+disabled_rules:
+
+included:
+  - Routine
+excluded:
+  - Pods
+  - Routine/AppDelegate.swift
+  - Routine/SceneDelegate.swift
