@@ -13,10 +13,11 @@
 		18C6529E29628DDD00EEB927 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18C6529C29628DDD00EEB927 /* Main.storyboard */; };
 		18C652A029628DDE00EEB927 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 18C6529F29628DDE00EEB927 /* Assets.xcassets */; };
 		18C652A329628DDE00EEB927 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18C652A129628DDE00EEB927 /* LaunchScreen.storyboard */; };
+		18C652AD2962A0C400EEB927 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 18C652AC2962A0C400EEB927 /* .swiftlint.yml */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		18C6529329628DDD00EEB927 /* Routine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Routine.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		18C6529329628DDD00EEB927 /* Routine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = Routine.app; path = "/Users/apple/Desktop/swift/Routine/build/Debug-iphoneos/Routine.app"; sourceTree = "<absolute>"; };
 		18C6529629628DDD00EEB927 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		18C6529829628DDD00EEB927 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		18C6529A29628DDD00EEB927 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -24,6 +25,7 @@
 		18C6529F29628DDE00EEB927 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		18C652A229628DDE00EEB927 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		18C652A429628DDE00EEB927 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		18C652AC2962A0C400EEB927 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -40,17 +42,9 @@
 		18C6528A29628DDD00EEB927 = {
 			isa = PBXGroup;
 			children = (
+				18C652AC2962A0C400EEB927 /* .swiftlint.yml */,
 				18C6529529628DDD00EEB927 /* Routine */,
-				18C6529429628DDD00EEB927 /* Products */,
 			);
-			sourceTree = "<group>";
-		};
-		18C6529429628DDD00EEB927 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				18C6529329628DDD00EEB927 /* Routine.app */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		18C6529529628DDD00EEB927 /* Routine */ = {
@@ -77,6 +71,7 @@
 				18C6528F29628DDD00EEB927 /* Sources */,
 				18C6529029628DDD00EEB927 /* Frameworks */,
 				18C6529129628DDD00EEB927 /* Resources */,
+				18C652AB29629F3500EEB927 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -111,7 +106,7 @@
 				Base,
 			);
 			mainGroup = 18C6528A29628DDD00EEB927;
-			productRefGroup = 18C6529429628DDD00EEB927 /* Products */;
+			productRefGroup = 18C6528A29628DDD00EEB927;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -125,6 +120,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18C652AD2962A0C400EEB927 /* .swiftlint.yml in Resources */,
 				18C652A329628DDE00EEB927 /* LaunchScreen.storyboard in Resources */,
 				18C652A029628DDE00EEB927 /* Assets.xcassets in Resources */,
 				18C6529E29628DDD00EEB927 /* Main.storyboard in Resources */,
@@ -132,6 +128,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		18C652AB29629F3500EEB927 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = "/bin/sh\n${PODS_ROOT}/SwiftLint/swiftlint";
+			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint >/dev/null; then\n    swiftlint\nelse \n    echo \"[warning] SwiftLint not installed, download using `brew install swiftlint`\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		18C6528F29628DDD00EEB927 /* Sources */ = {
@@ -216,7 +233,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -270,7 +287,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -295,7 +312,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -324,7 +341,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
