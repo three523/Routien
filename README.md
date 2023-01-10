@@ -1,7 +1,7 @@
 # Routien
 
 ## 버전
-언어 : Swift 5
+언어 : Swift 5     
 최소 버전: iOS: 11.0
 
 ## 기능
