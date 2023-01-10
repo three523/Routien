@@ -28,5 +28,5 @@ assignees: ''
 - 엑스코드 버전 정보 <!-- replace with the output of 'xcodebuild -version' -->
 - 배포 대상: <!-- e.g. iOS 12.3 -->
 
-**Additional context**
-Add any other context about the problem here.
+**추가사항**
+추가로 필요한 내용을 이곳에 작성하세요.
