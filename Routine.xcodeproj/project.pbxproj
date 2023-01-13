@@ -7,21 +7,44 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		188300C2296FA71600E418DB /* UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188300C1296FA71600E418DB /* UITableView.swift */; };
+		18B6265C296F111200BDAB50 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18B6265B296F111200BDAB50 /* UIColor.swift */; };
+		18B6265E296F118F00BDAB50 /* ButtonRoutineTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18B6265D296F118F00BDAB50 /* ButtonRoutineTableViewCell.swift */; };
+		18B62669296F11F200BDAB50 /* TextRoutineTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18B62667296F11F200BDAB50 /* TextRoutineTableViewCell.swift */; };
+		18B6266A296F11F200BDAB50 /* DailyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18B62668296F11F200BDAB50 /* DailyCollectionViewCell.swift */; };
+		18B6266E296F123800BDAB50 /* TodoListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18B6266D296F123800BDAB50 /* TodoListTableViewCell.swift */; };
+		18C363CF296D0C4F00745400 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C363CD296D0C4F00745400 /* ListViewController.swift */; };
+		18C363D3296D0D0900745400 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C363D1296D0D0900745400 /* TabBarController.swift */; };
+		18C363D7296D100200745400 /* MyInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C363D5296D100200745400 /* MyInfoViewController.swift */; };
+		18C363DB296D105100745400 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C363D9296D105100745400 /* SettingViewController.swift */; };
+		18C363E7296D4D2700745400 /* CircleTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C363E6296D4D2700745400 /* CircleTextView.swift */; };
+		18C363F5296D828400745400 /* UICollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C363F4296D828400745400 /* UICollectionViewCell.swift */; };
+		18C36400296DBCFE00745400 /* SnapKit-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 18C363FF296DBCFE00745400 /* SnapKit-Dynamic */; };
+		18C36402296DBFFC00745400 /* CALayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C36401296DBFFC00745400 /* CALayer.swift */; };
 		18C6529729628DDD00EEB927 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C6529629628DDD00EEB927 /* AppDelegate.swift */; };
 		18C6529929628DDD00EEB927 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C6529829628DDD00EEB927 /* SceneDelegate.swift */; };
-		18C6529B29628DDD00EEB927 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C6529A29628DDD00EEB927 /* ViewController.swift */; };
-		18C6529E29628DDD00EEB927 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18C6529C29628DDD00EEB927 /* Main.storyboard */; };
 		18C652A029628DDE00EEB927 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 18C6529F29628DDE00EEB927 /* Assets.xcassets */; };
 		18C652A329628DDE00EEB927 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18C652A129628DDE00EEB927 /* LaunchScreen.storyboard */; };
 		18C652AD2962A0C400EEB927 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 18C652AC2962A0C400EEB927 /* .swiftlint.yml */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		18C6529329628DDD00EEB927 /* Routine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = Routine.app; path = "/Users/apple/Desktop/swift/Routine/build/Debug-iphoneos/Routine.app"; sourceTree = "<absolute>"; };
+		188300C1296FA71600E418DB /* UITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableView.swift; sourceTree = "<group>"; };
+		18B6265B296F111200BDAB50 /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
+		18B6265D296F118F00BDAB50 /* ButtonRoutineTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ButtonRoutineTableViewCell.swift; path = Cell/ButtonRoutineTableViewCell.swift; sourceTree = "<group>"; };
+		18B62667296F11F200BDAB50 /* TextRoutineTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TextRoutineTableViewCell.swift; path = Cell/TextRoutineTableViewCell.swift; sourceTree = "<group>"; };
+		18B62668296F11F200BDAB50 /* DailyCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DailyCollectionViewCell.swift; path = Cell/DailyCollectionViewCell.swift; sourceTree = "<group>"; };
+		18B6266D296F123800BDAB50 /* TodoListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TodoListTableViewCell.swift; path = Cell/TodoListTableViewCell.swift; sourceTree = "<group>"; };
+		18C363C6296D091B00745400 /* Routine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Routine.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		18C363CD296D0C4F00745400 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
+		18C363D1296D0D0900745400 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		18C363D5296D100200745400 /* MyInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInfoViewController.swift; sourceTree = "<group>"; };
+		18C363D9296D105100745400 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
+		18C363E6296D4D2700745400 /* CircleTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleTextView.swift; sourceTree = "<group>"; };
+		18C363F4296D828400745400 /* UICollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionViewCell.swift; sourceTree = "<group>"; };
+		18C36401296DBFFC00745400 /* CALayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CALayer.swift; sourceTree = "<group>"; };
 		18C6529629628DDD00EEB927 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		18C6529829628DDD00EEB927 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		18C6529A29628DDD00EEB927 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		18C6529D29628DDD00EEB927 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		18C6529F29628DDE00EEB927 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		18C652A229628DDE00EEB927 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		18C652A429628DDE00EEB927 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -33,27 +56,72 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18C36400296DBCFE00745400 /* SnapKit-Dynamic in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		18B6265A296F0F5600BDAB50 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				18B62668296F11F200BDAB50 /* DailyCollectionViewCell.swift */,
+				18B62667296F11F200BDAB50 /* TextRoutineTableViewCell.swift */,
+				18B6265D296F118F00BDAB50 /* ButtonRoutineTableViewCell.swift */,
+				18B6266D296F123800BDAB50 /* TodoListTableViewCell.swift */,
+			);
+			name = Cell;
+			sourceTree = "<group>";
+		};
+		18C363C7296D0A3E00745400 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				18C363CD296D0C4F00745400 /* ListViewController.swift */,
+				18C363D1296D0D0900745400 /* TabBarController.swift */,
+				18C363D5296D100200745400 /* MyInfoViewController.swift */,
+				18C363D9296D105100745400 /* SettingViewController.swift */,
+			);
+			name = ViewController;
+			sourceTree = "<group>";
+		};
+		18C363C8296D0A4800745400 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				18C363E6296D4D2700745400 /* CircleTextView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		18C363E8296D530300745400 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				18B6265B296F111200BDAB50 /* UIColor.swift */,
+				18C363F4296D828400745400 /* UICollectionViewCell.swift */,
+				18C36401296DBFFC00745400 /* CALayer.swift */,
+				188300C1296FA71600E418DB /* UITableView.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
 		18C6528A29628DDD00EEB927 = {
 			isa = PBXGroup;
 			children = (
 				18C652AC2962A0C400EEB927 /* .swiftlint.yml */,
 				18C6529529628DDD00EEB927 /* Routine */,
+				18C363C6296D091B00745400 /* Routine.app */,
 			);
 			sourceTree = "<group>";
 		};
 		18C6529529628DDD00EEB927 /* Routine */ = {
 			isa = PBXGroup;
 			children = (
+				18B6265A296F0F5600BDAB50 /* Cell */,
+				18C363E8296D530300745400 /* Extension */,
+				18C363C8296D0A4800745400 /* View */,
+				18C363C7296D0A3E00745400 /* ViewController */,
 				18C6529629628DDD00EEB927 /* AppDelegate.swift */,
 				18C6529829628DDD00EEB927 /* SceneDelegate.swift */,
-				18C6529A29628DDD00EEB927 /* ViewController.swift */,
-				18C6529C29628DDD00EEB927 /* Main.storyboard */,
 				18C6529F29628DDE00EEB927 /* Assets.xcassets */,
 				18C652A129628DDE00EEB927 /* LaunchScreen.storyboard */,
 				18C652A429628DDE00EEB927 /* Info.plist */,
@@ -78,8 +146,11 @@
 			dependencies = (
 			);
 			name = Routine;
+			packageProductDependencies = (
+				18C363FF296DBCFE00745400 /* SnapKit-Dynamic */,
+			);
 			productName = Routine;
-			productReference = 18C6529329628DDD00EEB927 /* Routine.app */;
+			productReference = 18C363C6296D091B00745400 /* Routine.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -106,6 +177,9 @@
 				Base,
 			);
 			mainGroup = 18C6528A29628DDD00EEB927;
+			packageReferences = (
+				18C363FE296DBCFE00745400 /* XCRemoteSwiftPackageReference "SnapKit" */,
+			);
 			productRefGroup = 18C6528A29628DDD00EEB927;
 			projectDirPath = "";
 			projectRoot = "";
@@ -123,7 +197,6 @@
 				18C652AD2962A0C400EEB927 /* .swiftlint.yml in Resources */,
 				18C652A329628DDE00EEB927 /* LaunchScreen.storyboard in Resources */,
 				18C652A029628DDE00EEB927 /* Assets.xcassets in Resources */,
-				18C6529E29628DDD00EEB927 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -155,23 +228,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				18C6529B29628DDD00EEB927 /* ViewController.swift in Sources */,
+				18B6265C296F111200BDAB50 /* UIColor.swift in Sources */,
+				18B62669296F11F200BDAB50 /* TextRoutineTableViewCell.swift in Sources */,
 				18C6529729628DDD00EEB927 /* AppDelegate.swift in Sources */,
+				18C363E7296D4D2700745400 /* CircleTextView.swift in Sources */,
+				18C363CF296D0C4F00745400 /* ListViewController.swift in Sources */,
 				18C6529929628DDD00EEB927 /* SceneDelegate.swift in Sources */,
+				18C363F5296D828400745400 /* UICollectionViewCell.swift in Sources */,
+				18C363D7296D100200745400 /* MyInfoViewController.swift in Sources */,
+				18B6265E296F118F00BDAB50 /* ButtonRoutineTableViewCell.swift in Sources */,
+				188300C2296FA71600E418DB /* UITableView.swift in Sources */,
+				18B6266E296F123800BDAB50 /* TodoListTableViewCell.swift in Sources */,
+				18B6266A296F11F200BDAB50 /* DailyCollectionViewCell.swift in Sources */,
+				18C36402296DBFFC00745400 /* CALayer.swift in Sources */,
+				18C363DB296D105100745400 /* SettingViewController.swift in Sources */,
+				18C363D3296D0D0900745400 /* TabBarController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		18C6529C29628DDD00EEB927 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				18C6529D29628DDD00EEB927 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		18C652A129628DDE00EEB927 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -309,7 +386,6 @@
 				INFOPLIST_FILE = Routine/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -322,7 +398,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -338,7 +414,6 @@
 				INFOPLIST_FILE = Routine/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -351,7 +426,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -377,6 +452,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		18C363FE296DBCFE00745400 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		18C363FF296DBCFE00745400 /* SnapKit-Dynamic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 18C363FE296DBCFE00745400 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = "SnapKit-Dynamic";
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 18C6528B29628DDD00EEB927 /* Project object */;
 }
