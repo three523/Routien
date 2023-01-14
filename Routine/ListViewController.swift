@@ -117,7 +117,7 @@ final class ListViewController: UIViewController {
         listTableView.dataSource = self
         listTableView.register(TextRoutineTableViewCell.self)
         listTableView.register(ButtonRoutineTableViewCell.self)
-        listTableView.register(CountRoutineTableViewCell.self)
+        listTableView.register(TextRoutineTableViewCell.self)
         listTableView.register(TodoListTableViewCell.self)
     }
 
