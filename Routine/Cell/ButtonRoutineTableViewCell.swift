@@ -22,8 +22,6 @@ class ButtonRoutineTableViewCell: UITableViewCell {
     private let checkButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "checkmark"), for: .normal)
-        button.layer.borderWidth = 0.5
-        button.layer.borderColor = UIColor.systemGray.cgColor
         button.tintColor = .systemGray
         return button
     }()
@@ -54,13 +52,6 @@ class ButtonRoutineTableViewCell: UITableViewCell {
             make.leading.equalTo(routineButton.snp.trailing)
             make.width.height.equalTo(56)
         }
-        
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
 
 }
