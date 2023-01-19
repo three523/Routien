@@ -9,7 +9,7 @@ import UIKit
 
 final class ListViewController: UIViewController {
     
-    private let dailyCollectionView: UICollectionView = {
+    let dailyCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumInteritemSpacing = 0
@@ -18,7 +18,7 @@ final class ListViewController: UIViewController {
         return collectionView
     }()
     
-    private let listAddButton: UIButton = {
+    let listAddButton: UIButton = {
         let button = UIButton()
         button.setTitle("리스트 추가 +", for: .normal)
         button.backgroundColor = .mainColor
@@ -49,6 +49,10 @@ final class ListViewController: UIViewController {
         }
         return tableView
     }()
+    let today = Date()
+    var selectedDate = Date()
+    let listViewModel: ListViewModel
+    var tasks: [Task] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,11 +61,23 @@ final class ListViewController: UIViewController {
         autolayoutSetting()
         collectionViewSetting()
         tableViewSetting()
+        buttonSetting()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        dailyCollectionView.selectItem(at: IndexPath(item: 9, section: 0), animated: true, scrollPosition: .centeredHorizontally)
+        listTableView.reloadData()
+    }
+    
+    init(viewModel: ListViewModel) {
+        self.listViewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        self.listViewModel = ListViewModel()
+        super.init(nibName: nil, bundle: nil)
+        fatalError("init(coder:) has not been implemented")
     }
     
     private func viewAdd() {
@@ -110,6 +126,7 @@ final class ListViewController: UIViewController {
         dailyCollectionView.register(DailyCollectionViewCell.self)
         dailyCollectionView.layoutIfNeeded()
         dailyCollectionView.layer.addBorder([.top, .bottom], color: UIColor.secondaryColor, size: dailyCollectionView.contentSize, width: 1)
+        dailyCollectionView.selectItem(at: IndexPath(item: today.day, section: 0), animated: true, scrollPosition: .centeredHorizontally)
     }
     
     private func tableViewSetting() {
@@ -124,6 +141,17 @@ final class ListViewController: UIViewController {
     private func navigationSetting() {
         self.navigationItem.title = "2023년 1월"
     }
+    
+    private func buttonSetting() {
+        listAddButton.addTarget(self, action: #selector(listAddButtonClick), for: .touchUpInside)
+    }
+    
+    @objc
+    func listAddButtonClick() {
+        let addVC = CreateRoutineViewController()
+        addVC.modalPresentationStyle = .fullScreen
+        present(addVC, animated: true)
+    }
 
 }
 
@@ -137,19 +165,25 @@ extension ListViewController: UICollectionViewDelegate, UICollectionViewDataSour
         let cell = collectionView.dequeueReusableCell(DailyCollectionViewCell.self, for: indexPath)
         cell.layer.cornerRadius = 5
         cell.clipsToBounds = true
-        let date = indexPath.item + 1
-        if date == 10 {
+        let date = indexPath.item
+        if date == today.day {
             cell.isToday = true
         }
         cell.setDate(date: date)
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let dateComponetes = DateComponents(calendar: .current, day: indexPath.item)
+        selectedDate = Calendar.current.date(from: dateComponetes) ?? today
     }
 }
 
 extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 10
+        tasks = listViewModel.fetchAllTask(to: selectedDate)
+        return tasks.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -168,12 +202,15 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell: UITableViewCell = UITableViewCell()
-        if indexPath.section % 3 == 0 {
+        
+        let task = tasks[indexPath.item]
+        
+        if let _ = task as? RoutineTextTask {
             cell = tableView.dequeueReusableCell(TextRoutineTableViewCell.self, for: indexPath)
-        } else if indexPath.section % 3 == 1 {
+        } else if let _ = task as? RoutineCountTask {
             cell = tableView.dequeueReusableCell(ButtonRoutineTableViewCell.self, for: indexPath)
         } else {
-            cell = tableView.dequeueReusableCell(TodoListTableViewCell.self, for: indexPath)
+            cell = tableView.dequeueReusableCell(ButtonRoutineTableViewCell.self, for: indexPath)
         }
         
         cell.clipsToBounds = true

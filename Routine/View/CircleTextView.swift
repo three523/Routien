@@ -22,6 +22,22 @@ class CircleTextView: UIView {
             self.backgroundColor = isToday ? UIColor(hex: 0xD9D9D9) : .white.withAlphaComponent(0.0)
         }
     }
+    var isSelected: Bool = true {
+        didSet {
+            if isSelected {
+                self.backgroundColor = .mainColor
+                dailyLabel.textColor = .black
+            } else {
+                self.backgroundColor = .secondaryColor
+                dailyLabel.textColor = .white
+            }
+        }
+    }
+    var dayOfWeek: DayOfWeek = .mon {
+        didSet {
+            dailyLabel.text = dayOfWeek.rawValue
+        }
+    }
     var date: String = "1" {
         didSet {
             dailyLabel.text = date
@@ -51,6 +67,10 @@ class CircleTextView: UIView {
     
     override func draw(_ rect: CGRect) {
         layer.cornerRadius = frame.height / 2
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.isSelected = !self.isSelected
     }
 
 }

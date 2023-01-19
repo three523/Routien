@@ -23,7 +23,7 @@ class TabBarController: UITabBarController {
     }
     
     private func viewControllerSetting() {
-        let vc1 = UINavigationController(rootViewController: ListViewController())
+        let vc1 = UINavigationController(rootViewController: ListViewController(viewModel: ListViewModel()))
         let vc2 = UINavigationController(rootViewController: MyInfoViewController())
         let vc3 = UINavigationController(rootViewController: SettingViewController())
 
