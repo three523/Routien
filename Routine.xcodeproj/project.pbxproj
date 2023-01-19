@@ -8,6 +8,17 @@
 
 /* Begin PBXBuildFile section */
 		188300C2296FA71600E418DB /* UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188300C1296FA71600E418DB /* UITableView.swift */; };
+		188508022977A2BF005B7BAB /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188508012977A2BF005B7BAB /* Task.swift */; };
+		188508132977B98D005B7BAB /* Routine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188508122977B98D005B7BAB /* Routine.swift */; };
+		188508152977B993005B7BAB /* Todo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188508142977B993005B7BAB /* Todo.swift */; };
+		1885081C2977F4C0005B7BAB /* ListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1885081B2977F4C0005B7BAB /* ListViewModel.swift */; };
+		1885081E2977F53A005B7BAB /* RoutineManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1885081D2977F53A005B7BAB /* RoutineManager.swift */; };
+		188508202977F5CF005B7BAB /* TodoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1885081F2977F5CF005B7BAB /* TodoManager.swift */; };
+		1885082229784FC9005B7BAB /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1885082129784FC9005B7BAB /* Date.swift */; };
+		1888269829794BDF00B6523A /* ListViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1888269729794BDF00B6523A /* ListViewControllerTests.swift */; };
+		188826AE29794C2100B6523A /* ListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188826AD29794C2100B6523A /* ListViewModelTests.swift */; };
+		188826B629796D6E00B6523A /* CreateRoutineViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188826B529796D6E00B6523A /* CreateRoutineViewControllerTests.swift */; };
+		188826B729796D6E00B6523A /* CreateRoutineViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188826B529796D6E00B6523A /* CreateRoutineViewControllerTests.swift */; };
 		188BF94329724E3B0057C250 /* CreateRoutineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188BF94229724E3B0057C250 /* CreateRoutineViewController.swift */; };
 		18B6265C296F111200BDAB50 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18B6265B296F111200BDAB50 /* UIColor.swift */; };
 		18B6265E296F118F00BDAB50 /* ButtonRoutineTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18B6265D296F118F00BDAB50 /* ButtonRoutineTableViewCell.swift */; };
@@ -29,8 +40,37 @@
 		18C652AD2962A0C400EEB927 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 18C652AC2962A0C400EEB927 /* .swiftlint.yml */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		1888269B29794BDF00B6523A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 18C6528B29628DDD00EEB927 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 18C6529229628DDD00EEB927;
+			remoteInfo = Routine;
+		};
+		188826A829794BF800B6523A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 18C6528B29628DDD00EEB927 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 18C6529229628DDD00EEB927;
+			remoteInfo = Routine;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		188300C1296FA71600E418DB /* UITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableView.swift; sourceTree = "<group>"; };
+		188508012977A2BF005B7BAB /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
+		188508122977B98D005B7BAB /* Routine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Routine.swift; sourceTree = "<group>"; };
+		188508142977B993005B7BAB /* Todo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Todo.swift; sourceTree = "<group>"; };
+		1885081B2977F4C0005B7BAB /* ListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewModel.swift; sourceTree = "<group>"; };
+		1885081D2977F53A005B7BAB /* RoutineManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineManager.swift; sourceTree = "<group>"; };
+		1885081F2977F5CF005B7BAB /* TodoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoManager.swift; sourceTree = "<group>"; };
+		1885082129784FC9005B7BAB /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
+		1888269729794BDF00B6523A /* ListViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewControllerTests.swift; sourceTree = "<group>"; };
+		188826AD29794C2100B6523A /* ListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewModelTests.swift; sourceTree = "<group>"; };
+		188826B529796D6E00B6523A /* CreateRoutineViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRoutineViewControllerTests.swift; sourceTree = "<group>"; };
+		188826C32979825E00B6523A /* RoutineUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = RoutineUITests.xctest; path = "/Users/apple/Desktop/swift/Routine/build/Debug-iphoneos/RoutineUITests.xctest"; sourceTree = "<absolute>"; };
+		188826C42979825E00B6523A /* RoutineTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = RoutineTests.xctest; path = /Users/apple/Desktop/swift/Routine/build/Debug/RoutineTests.xctest; sourceTree = "<absolute>"; };
 		188BF94229724E3B0057C250 /* CreateRoutineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRoutineViewController.swift; sourceTree = "<group>"; };
 		18B6265B296F111200BDAB50 /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		18B6265D296F118F00BDAB50 /* ButtonRoutineTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ButtonRoutineTableViewCell.swift; path = Cell/ButtonRoutineTableViewCell.swift; sourceTree = "<group>"; };
@@ -54,6 +94,20 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		1888269229794BDF00B6523A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		188826A129794BF700B6523A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		18C6529029628DDD00EEB927 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -65,6 +119,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1888269629794BDF00B6523A /* RoutineUITests */ = {
+			isa = PBXGroup;
+			children = (
+				1888269729794BDF00B6523A /* ListViewControllerTests.swift */,
+				188826B529796D6E00B6523A /* CreateRoutineViewControllerTests.swift */,
+			);
+			path = RoutineUITests;
+			sourceTree = "<group>";
+		};
+		188826A529794BF800B6523A /* RoutineTests */ = {
+			isa = PBXGroup;
+			children = (
+				188826AD29794C2100B6523A /* ListViewModelTests.swift */,
+			);
+			path = RoutineTests;
+			sourceTree = "<group>";
+		};
 		18B6265A296F0F5600BDAB50 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
@@ -103,6 +174,7 @@
 				18C363F4296D828400745400 /* UICollectionViewCell.swift */,
 				18C36401296DBFFC00745400 /* CALayer.swift */,
 				188300C1296FA71600E418DB /* UITableView.swift */,
+				1885082129784FC9005B7BAB /* Date.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -113,6 +185,8 @@
 				18C652AC2962A0C400EEB927 /* .swiftlint.yml */,
 				18C6529529628DDD00EEB927 /* Routine */,
 				18C363C6296D091B00745400 /* Routine.app */,
+				1888269629794BDF00B6523A /* RoutineUITests */,
+				188826A529794BF800B6523A /* RoutineTests */,
 			);
 			sourceTree = "<group>";
 		};
@@ -128,6 +202,12 @@
 				18C6529F29628DDE00EEB927 /* Assets.xcassets */,
 				18C652A129628DDE00EEB927 /* LaunchScreen.storyboard */,
 				18C652A429628DDE00EEB927 /* Info.plist */,
+				188508012977A2BF005B7BAB /* Task.swift */,
+				188508122977B98D005B7BAB /* Routine.swift */,
+				1885081B2977F4C0005B7BAB /* ListViewModel.swift */,
+				1885081D2977F53A005B7BAB /* RoutineManager.swift */,
+				1885081F2977F5CF005B7BAB /* TodoManager.swift */,
+				188508142977B993005B7BAB /* Todo.swift */,
 			);
 			path = Routine;
 			sourceTree = "<group>";
@@ -135,6 +215,44 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		1888269429794BDF00B6523A /* RoutineUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1888269D29794BDF00B6523A /* Build configuration list for PBXNativeTarget "RoutineUITests" */;
+			buildPhases = (
+				1888269129794BDF00B6523A /* Sources */,
+				1888269229794BDF00B6523A /* Frameworks */,
+				1888269329794BDF00B6523A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1888269C29794BDF00B6523A /* PBXTargetDependency */,
+			);
+			name = RoutineUITests;
+			packageProductDependencies = (
+			);
+			productName = RoutineUITests;
+			productReference = 188826C32979825E00B6523A /* RoutineUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		188826A329794BF700B6523A /* RoutineTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 188826AA29794BF800B6523A /* Build configuration list for PBXNativeTarget "RoutineTests" */;
+			buildPhases = (
+				188826A029794BF700B6523A /* Sources */,
+				188826A129794BF700B6523A /* Frameworks */,
+				188826A229794BF700B6523A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				188826A929794BF800B6523A /* PBXTargetDependency */,
+			);
+			name = RoutineTests;
+			productName = RoutineTests;
+			productReference = 188826C42979825E00B6523A /* RoutineTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		18C6529229628DDD00EEB927 /* Routine */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 18C652A729628DDE00EEB927 /* Build configuration list for PBXNativeTarget "Routine" */;
@@ -166,6 +284,14 @@
 				LastSwiftUpdateCheck = 1400;
 				LastUpgradeCheck = 1400;
 				TargetAttributes = {
+					1888269429794BDF00B6523A = {
+						CreatedOnToolsVersion = 14.0;
+						TestTargetID = 18C6529229628DDD00EEB927;
+					};
+					188826A329794BF700B6523A = {
+						CreatedOnToolsVersion = 14.0;
+						TestTargetID = 18C6529229628DDD00EEB927;
+					};
 					18C6529229628DDD00EEB927 = {
 						CreatedOnToolsVersion = 14.0;
 					};
@@ -188,11 +314,27 @@
 			projectRoot = "";
 			targets = (
 				18C6529229628DDD00EEB927 /* Routine */,
+				1888269429794BDF00B6523A /* RoutineUITests */,
+				188826A329794BF700B6523A /* RoutineTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		1888269329794BDF00B6523A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		188826A229794BF700B6523A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		18C6529129628DDD00EEB927 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -227,30 +369,68 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		1888269129794BDF00B6523A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1888269829794BDF00B6523A /* ListViewControllerTests.swift in Sources */,
+				188826B729796D6E00B6523A /* CreateRoutineViewControllerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		188826A029794BF700B6523A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				188826AE29794C2100B6523A /* ListViewModelTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		18C6528F29628DDD00EEB927 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1885082229784FC9005B7BAB /* Date.swift in Sources */,
 				18B6265C296F111200BDAB50 /* UIColor.swift in Sources */,
 				18B62669296F11F200BDAB50 /* TextRoutineTableViewCell.swift in Sources */,
 				18C6529729628DDD00EEB927 /* AppDelegate.swift in Sources */,
 				18C363E7296D4D2700745400 /* CircleTextView.swift in Sources */,
+				188508132977B98D005B7BAB /* Routine.swift in Sources */,
 				18C363CF296D0C4F00745400 /* ListViewController.swift in Sources */,
 				18C6529929628DDD00EEB927 /* SceneDelegate.swift in Sources */,
 				18C363F5296D828400745400 /* UICollectionViewCell.swift in Sources */,
 				18C363D7296D100200745400 /* MyInfoViewController.swift in Sources */,
+				188508202977F5CF005B7BAB /* TodoManager.swift in Sources */,
 				18B6265E296F118F00BDAB50 /* ButtonRoutineTableViewCell.swift in Sources */,
 				188300C2296FA71600E418DB /* UITableView.swift in Sources */,
+				188826B629796D6E00B6523A /* CreateRoutineViewControllerTests.swift in Sources */,
 				18B6266E296F123800BDAB50 /* TodoListTableViewCell.swift in Sources */,
 				18B6266A296F11F200BDAB50 /* DailyCollectionViewCell.swift in Sources */,
 				18C36402296DBFFC00745400 /* CALayer.swift in Sources */,
+				1885081E2977F53A005B7BAB /* RoutineManager.swift in Sources */,
 				18C363DB296D105100745400 /* SettingViewController.swift in Sources */,
 				18C363D3296D0D0900745400 /* TabBarController.swift in Sources */,
+				188508022977A2BF005B7BAB /* Task.swift in Sources */,
+				1885081C2977F4C0005B7BAB /* ListViewModel.swift in Sources */,
 				188BF94329724E3B0057C250 /* CreateRoutineViewController.swift in Sources */,
+				188508152977B993005B7BAB /* Todo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		1888269C29794BDF00B6523A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 18C6529229628DDD00EEB927 /* Routine */;
+			targetProxy = 1888269B29794BDF00B6523A /* PBXContainerItemProxy */;
+		};
+		188826A929794BF800B6523A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 18C6529229628DDD00EEB927 /* Routine */;
+			targetProxy = 188826A829794BF800B6523A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		18C652A129628DDE00EEB927 /* LaunchScreen.storyboard */ = {
@@ -264,6 +444,88 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		1888269E29794BDF00B6523A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2FY7M8J988;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = KD.RoutineUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Routine;
+			};
+			name = Debug;
+		};
+		1888269F29794BDF00B6523A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2FY7M8J988;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = KD.RoutineUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Routine;
+			};
+			name = Release;
+		};
+		188826AB29794BF800B6523A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2FY7M8J988;
+				ENABLE_TESTABILITY = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = KD.RoutineTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Routine.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Routine";
+			};
+			name = Debug;
+		};
+		188826AC29794BF800B6523A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2FY7M8J988;
+				ENABLE_TESTABILITY = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = KD.RoutineTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Routine.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Routine";
+			};
+			name = Release;
+		};
 		18C652A529628DDE00EEB927 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -386,6 +648,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2FY7M8J988;
+				ENABLE_TESTING_SEARCH_PATHS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Routine/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -414,6 +677,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2FY7M8J988;
+				ENABLE_TESTING_SEARCH_PATHS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Routine/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -437,6 +701,24 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		1888269D29794BDF00B6523A /* Build configuration list for PBXNativeTarget "RoutineUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1888269E29794BDF00B6523A /* Debug */,
+				1888269F29794BDF00B6523A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		188826AA29794BF800B6523A /* Build configuration list for PBXNativeTarget "RoutineTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				188826AB29794BF800B6523A /* Debug */,
+				188826AC29794BF800B6523A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		18C6528E29628DDD00EEB927 /* Build configuration list for PBXProject "Routine" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

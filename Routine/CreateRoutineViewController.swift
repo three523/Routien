@@ -6,6 +6,13 @@
 //
 
 import UIKit
+enum RoutineType: String {
+    case check = "체크"
+    case text = "글"
+    case count = "카운트"
+    
+    static let allCases: [RoutineType] = [.check, .text, .count]
+}
 
 final class CreateRoutineViewController: UIViewController {
     
@@ -113,12 +120,14 @@ final class CreateRoutineViewController: UIViewController {
     
     let doneButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = .mainColor
+        button.backgroundColor = .systemGray4
+        button.setTitleColor(.white, for: .disabled)
         button.setTitle("완료", for: .normal)
         button.setTitleColor(UIColor.black, for: .normal)
         button.clipsToBounds = true
         button.layer.cornerRadius = 10
         button.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        button.isEnabled = false
         return button
     }()
 
@@ -140,6 +149,9 @@ final class CreateRoutineViewController: UIViewController {
         notificationStackViewSetting()
         typeStackViewSetting()
         autolayoutSetting()
+        textFieldSetting()
+        notificationSwitchSetting()
+        buttonSetting()
     }
     
     private func viewAdd() {
@@ -232,14 +244,14 @@ final class CreateRoutineViewController: UIViewController {
     }
     
     private func dailyStackViewSetting() {
-        let days = ["월", "화", "수", "목", "금", "토", "일"]
-        days.forEach { day in
+        DayOfWeek.allCases.forEach { dayOfWeek in
             let circleView = CircleTextView()
-            circleView.date = day
+            circleView.date = dayOfWeek.rawValue
             circleView.backgroundColor = .secondaryColor
             circleView.snp.makeConstraints { make in
                 make.width.height.equalTo(36)
             }
+            circleView.isSelected = true
             workDailyStackView.addArrangedSubview(circleView)
         }
     }
@@ -258,12 +270,18 @@ final class CreateRoutineViewController: UIViewController {
     
     private func typeStackViewSetting() {
         typeStackView.addArrangedSubview(createLabel(text: "타입"))
-        let buttonTextList = ["체크", "글", "카운트"]
-        buttonTextList.forEach({ buttonText in
+        let buttonTextList = RoutineType.allCases
+        buttonTextList.forEach({ buttonType in
             let button = createButton(type: .disable, size: .small)
-            button.setTitle(buttonText, for: .normal)
+            button.setTitle(buttonType.rawValue, for: .normal)
+            button.setTitleColor(.black, for: .selected)
+            button.addTarget(self, action: #selector(typeButtonClick), for: .touchUpInside)
             typeStackView.addArrangedSubview(button)
         })
+        let typeButtonList = typeStackView.arrangedSubviews.compactMap { $0 as? UIButton }
+        guard let checkButton = typeButtonList.first else { return }
+        checkButton.isSelected = true
+        checkButton.backgroundColor = .mainColor
     }
     
     private func createLabel(text: String) -> UILabel {
@@ -276,7 +294,7 @@ final class CreateRoutineViewController: UIViewController {
         }
         return dateLabel
     }
-    
+        
     enum ButtonSize: CGFloat {
         case medium = 142
         case small = 70
@@ -292,7 +310,7 @@ final class CreateRoutineViewController: UIViewController {
         button.titleLabel?.font = .systemFont(ofSize: 15, weight: .regular)
         switch type {
         case .nomarl:
-            button.setTitle("2023년 01월 03일", for: .normal)
+            button.setTitle(Date().dateToString, for: .normal)
             button.setTitleColor(.black, for: .normal)
         case .disable:
             button.setTitle("설정 안함", for: .normal)
@@ -328,14 +346,119 @@ final class CreateRoutineViewController: UIViewController {
             make.bottom.equalToSuperview()
         }
     }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    
+    private func textFieldSetting() {
+        routineTextField.addTarget(self, action: #selector(routineNameChange), for: .editingChanged)
     }
-    */
+    
+    private func buttonSetting() {
+        doneButton.addTarget(self, action: #selector(doneButtonClick), for: .touchUpInside)
+    }
+    
+    @objc
+    func doneButtonClick() {
+        guard let routine = createRoutine() else {
+            //TODO: 루틴 텍스트를 작성하지 않은 경우 에러 처리
+            return
+        }
+        RoutineManager.routines.append(routine)
+        dismiss(animated: true)
+    }
+    
+    func createRoutine() -> Routine? {
+        guard let description = routineTextField.text else { return nil }
+        let dayOfWeeks = selectedDayOfWeeks()
+        let startDate = fetchDate(to: startDateStackView) ?? Date()
+        let endDate = fetchDate(to: endDateStackView)
+        let notificationTime = selectedNotificationTime()
+        let type = selectedType()
+        return Routine(description: description, dayOfWeek: dayOfWeeks, startDate: startDate, endDate: endDate, notificationTime: notificationTime, type: type)
+    }
+    
+    private func selectedDayOfWeeks() -> [DayOfWeek] {
+        var dayOfWeeks: [DayOfWeek] = []
+        let selectedCircleView = workDailyStackView.arrangedSubviews
+            .compactMap { $0 as? CircleTextView }
+            .filter { $0.isSelected }
+        selectedCircleView.forEach { view in
+            dayOfWeeks.append(view.dayOfWeek)
+        }
+        return dayOfWeeks
+    }
+    
+    private func notificationSwitchSetting() {
+        notificationSwitch.addTarget(self, action: #selector(switchChange), for: .valueChanged)
+    }
+    
+    private func fetchDate(to stackView: UIStackView) -> Date? {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy년MM월dd일"
+        var date: Date?
+        if let dateButton = stackView.arrangedSubviews.compactMap({ $0 as? UIButton }).first,
+           let dateString = dateButton.title(for: .normal) {
+            date = formatter.date(from: dateString)
+        }
+        return date
+    }
+    
+    private func selectedNotificationTime() -> Date? {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        var date: Date?
+        if let dateButton = notificationStackView.arrangedSubviews.compactMap({ $0 as? UIButton }).first,
+           let dateString = dateButton.title(for: .normal) {
+            date = formatter.date(from: dateString)
+        }
+        return date
+    }
+    
+    private func selectedType() -> RoutineType {
+        let selectedButton = workDailyStackView.arrangedSubviews
+            .compactMap { $0 as? UIButton }
+            .first(where: { $0.isSelected })
+        guard let title = selectedButton?.title(for: .selected),
+              let type = RoutineType(rawValue: title) else { return RoutineType.check }
+        return type
+    }
+    
+    private func unSelectAllTypeButton() {
+        let typeButtonList = typeStackView.arrangedSubviews.compactMap({ $0 as? UIButton })
+        typeButtonList.forEach { button in
+            button.isSelected = false
+            button.backgroundColor = .secondaryColor
+        }
+    }
+    
+    @objc
+    func switchChange(_ toggle: UISwitch) {
+        guard let notificationButton = notificationStackView.arrangedSubviews.compactMap({ $0 as? UIButton }).first else { return }
+        if toggle.isOn {
+            notificationButton.isSelected = true
+            notificationButton.setTitle(Date().timeToString, for: .normal)
+            notificationButton.backgroundColor = .mainColor
+        } else {
+            notificationButton.isSelected = false
+            notificationButton.setTitle("설정 안함", for: .normal)
+            notificationButton.backgroundColor = .secondaryColor
+        }
+    }
+    
+    @objc
+    func typeButtonClick(_ button: UIButton) {
+        unSelectAllTypeButton()
+        button.backgroundColor = .mainColor
+        button.isSelected = true
+    }
+    
+    @objc
+    func routineNameChange(_ textField: UITextField) {
+        if let _ = textField.text {
+            doneButton.isEnabled = true
+            doneButton.backgroundColor = .mainColor
+        } else {
+            doneButton.isEnabled = false
+            doneButton.backgroundColor = .systemGray4
+        }
+    }
 
 }
