@@ -31,4 +31,10 @@ extension Date {
     var day: Int {
         return Calendar.current.component(.day, from: self)
     }
+    
+    var weekDay: DayOfWeek? {
+        let index = Calendar.current.component(.weekday, from: self) - 1
+        let weekDays = DayOfWeek.allCases
+        return index < 0 ? weekDays.last : weekDays[index]
+    }
 }

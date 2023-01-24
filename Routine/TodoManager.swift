@@ -8,27 +8,31 @@
 import Foundation
 
 class TodoManager {
-    private var todoList: [Todo] = []
+    static var todoList: [Todo] = []
     var todoCount: Int {
-        return todoList.count
+        return TodoManager.todoList.count
     }
     
     func append(_ todo: Todo) {
-        todoList.append(todo)
+        TodoManager.todoList.append(todo)
     }
     
     func fecth(_ identifier: UUID) -> Todo? {
-        return todoList.first(where: { $0.identifier == identifier })
+        return TodoManager.todoList.first(where: { $0.identifier == identifier })
     }
     
     func fetchAllTask(to date: Date) -> [Task] {
         var tasks = [Task]()
         let calendar = Calendar.current
-        todoList.forEach { todo in
+        TodoManager.todoList.forEach { todo in
             if calendar.isDate(date, equalTo: todo.taskDate, toGranularity: .day) {
                 tasks.append(todo)
             }
         }
         return tasks
+    }
+    
+    func remove(_ todo: Todo) {
+        TodoManager.todoList.removeAll { $0.identifier == todo.identifier }
     }
 }

@@ -53,11 +53,26 @@ class RoutineManager {
     func fetchAllTask(to date: Date) -> [Task] {
         var tasks = [Task]()
         let calendar = Calendar.current
-        print(RoutineManager.routines)
         RoutineManager.routines.forEach { routine in
-            let routineTask = routine.myTaskList.first( where: { calendar.isDate(date, equalTo: $0.taskDate, toGranularity: .day) })
-            tasks.append(routineTask ?? routine.createTask(date: date))
+            if let routineTask = routine.myTaskList.first(where: { calendar.isDate(date, equalTo: $0.taskDate, toGranularity: .day) }) {
+                tasks.append(routineTask)
+            } else if let newRoutineTask = routine.createTask(date: date) {
+                tasks.append(newRoutineTask)
+            }
         }
         return tasks
+    }
+    
+    func remove(routine: Routine) {
+        RoutineManager.routines.removeAll { $0.identifier == routine.identifier }
+    }
+    
+    func remove(routineTask: RoutineTask) {
+        for (index, routine) in RoutineManager.routines.enumerated() {
+            if routine.identifier == routineTask.routineIdentifier {
+                RoutineManager.routines[index].myTaskList.removeAll { $0.identifier == routineTask.identifier }
+                return
+            }
+        }
     }
 }
