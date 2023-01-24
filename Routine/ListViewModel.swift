@@ -40,4 +40,16 @@ final class ListViewModel {
         tasks.append(contentsOf: todoManager.fetchAllTask(to: date))
         return tasks
     }
+    
+    func remove(routine: Routine) {
+        routineManager.remove(routine: routine)
+    }
+    
+    func remove(routineTask: RoutineTask) {
+        routineManager.remove(routineTask: routineTask)
+    }
+    
+    func remove(todo: Todo) {
+        todoManager.remove(todo)
+    }
 }

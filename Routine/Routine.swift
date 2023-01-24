@@ -23,7 +23,6 @@ protocol RoutineTask: Task {
     var routineIdentifier: UUID { get }
 }
 
-//TODO: 제네릭 타입으로 바꿔서 원하는 루틴 타입에 맞게 myTaskList의 타입을 정할수 있게 변경하기
 struct Routine {
     let identifier: UUID = UUID()
     var description: String
@@ -34,9 +33,10 @@ struct Routine {
     var type: RoutineType = .check
     var myTaskList: [RoutineTask] = []
     
-    //TODO: RotineTask의 타입을 제네릭으로 설정후 그에 맞는 타입으로 Task를 생성
-    func createTask(date: Date) -> RoutineTask {
-        return RoutineCheckTask(routine: self, taskDate: date )
+    func createTask(date: Date) -> RoutineTask? {
+        guard let weekDay = date.weekDay else { return nil }
+        let isExits = dayOfWeek.first { $0 == weekDay }
+        return isExits == nil ? nil : RoutineCheckTask(routine: self, taskDate: date )
     }
 }
 
@@ -52,7 +52,7 @@ struct RoutineTextTask: RoutineTask {
     var taskDate: Date
     var isDone: Bool = false
     
-    init(routine: Routine, text: String, taskDate: Date) {
+    init(routine: Routine, text: String, taskDate: Date, isDone: Bool = false) {
         self.routineIdentifier = routine.identifier
         self.descrpition = routine.description
         self.text = text

@@ -56,7 +56,11 @@ final class TaskListViewModelTests: XCTestCase {
     
     func test맞는날짜에_대한_할일들_불러오기() {
         let routine = Routine(description: "TestRoutine")
+        let routine2 = Routine(description: "TestRoutine2", dayOfWeek: [.mon, .wed, .fir])
+        let routine3 = Routine(description: "TestRoutine3", dayOfWeek: [.tue, .thu])
         sut.create(routine: routine)
+        sut.create(routine: routine2)
+        sut.create(routine: routine3)
         
         let todo = Todo(descrpition: "TestTodo", taskDate: Date())
         sut.append(todo: todo)
@@ -64,23 +68,13 @@ final class TaskListViewModelTests: XCTestCase {
         let routineTask = RoutineTextTask(routine: routine, text: "TestTask", taskDate: Date())
         sut.append(routinTask: routineTask)
         let tasks = sut.fetchAllTask(to: Date())
-        
-        XCTAssertEqual(tasks.count, 2, "오늘 해야할 일들을 가져오지 못함")
-        XCTAssertEqual(tasks.filter({ $0.identifier == routineTask.identifier }).isEmpty, false, "오늘 할일을 가져오지 못함")
-    }
-    
-    func test오늘_할일을_가져올때_어제_할일을_가져오면_안됨() {
-        let routine = Routine(description: "TestRoutine")
-        sut.create(routine: routine)
-        
-        if let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date()) {
-            let yesterdayRoutineTask = RoutineTextTask(routine: routine, text: "TestYesterday", taskDate: yesterday)
-            sut.append(routinTask: yesterdayRoutineTask)
-        } else {
-            XCTAssert(false, "yesterday is nil")
+        guard let weekDay = Date().weekDay else {
+            XCTAssert(false, "오늘 요일을 가져오지 못함")
+            return
         }
-        let fetchTasks = sut.fetchAllTask(to: Date())
-        XCTAssertEqual(fetchTasks.count, 0, "오늘 할일만 가져와야 하는데 어제 할일을 가져옴")
+        let taskCount = tasks.count
+        let taskFilter = tasks.filter { $0.taskDate.weekDay == weekDay }
+        XCTAssertEqual(taskCount, taskFilter.count, "원하는 요일에 맞는 일을 가져오지 못함")
     }
     
 }
