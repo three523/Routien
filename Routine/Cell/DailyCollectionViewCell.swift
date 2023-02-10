@@ -30,6 +30,9 @@ final class DailyCollectionViewCell: UICollectionViewCell {
             isBorder = isSelected
         }
     }
+    var date: Date {
+        return dateCircleView.date
+    }
     private var isBorder: Bool = false {
         didSet {
             if isBorder {
@@ -50,6 +53,7 @@ final class DailyCollectionViewCell: UICollectionViewCell {
         layer.borderColor = UIColor.mainColor.cgColor
         addView()
         autolayoutSetting()
+        dateCircleView.isUserInteractionEnabled = false
     }
     
     required init?(coder: NSCoder) {
@@ -72,12 +76,13 @@ final class DailyCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    func setDate(date: Int) {
-        guard date < 31 || date > 1 else {
+    func setDate(date: Date) {
+        let day = date.day
+        guard day < 31 || day > 1 else {
             print("date range over")
             return
         }
-        dateCircleView.date = "\(date)"
+        dateCircleView.date = date
     }
-
+    
 }

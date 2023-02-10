@@ -246,7 +246,7 @@ final class CreateRoutineViewController: UIViewController {
     private func dailyStackViewSetting() {
         DayOfWeek.allCases.forEach { dayOfWeek in
             let circleView = CircleTextView()
-            circleView.date = dayOfWeek.rawValue
+            circleView.text = dayOfWeek.rawValue
             circleView.backgroundColor = .secondaryColor
             circleView.snp.makeConstraints { make in
                 make.width.height.equalTo(36)

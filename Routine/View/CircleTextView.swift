@@ -38,9 +38,14 @@ class CircleTextView: UIView {
             dailyLabel.text = dayOfWeek.rawValue
         }
     }
-    var date: String = "1" {
+    var date: Date = Date() {
         didSet {
-            dailyLabel.text = date
+            dailyLabel.text = String(date.day)
+        }
+    }
+    var text: String = "" {
+        didSet {
+            dailyLabel.text = text
         }
     }
     

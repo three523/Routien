@@ -14,7 +14,11 @@ final class ListViewController: UIViewController {
         layout.scrollDirection = .horizontal
         layout.minimumInteritemSpacing = 0
         layout.minimumLineSpacing = 0
+        layout.itemSize = CGSize(width: UIScreen.main.bounds.width/7, height: 60)
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.isPagingEnabled = true
         return collectionView
     }()
     
@@ -49,10 +53,28 @@ final class ListViewController: UIViewController {
         }
         return tableView
     }()
-    let today = Date()
-    var selectedDate = Date()
+    var todayIndex = 0
+    private var beginPositionX: CGFloat = 0.0
+    private var selectedDate = Date() {
+        didSet {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy년 M월"
+            DispatchQueue.main.async {
+                print(self.selectedDate)
+                self.navigationItem.title = formatter.string(from: self.selectedDate)
+            }
+        }
+    }
     let listViewModel: ListViewModel
     var tasks: [Task] = []
+    var dateList: [Date] = Date().defaultDays {
+        didSet {
+            DispatchQueue.main.async {
+                self.dailyCollectionView.reloadData()
+                self.dailyCollectionView.layer.addBorder([.top, .bottom], color: UIColor.secondaryColor, size: self.dailyCollectionView.contentSize, width: 1)
+            }
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -126,7 +148,9 @@ final class ListViewController: UIViewController {
         dailyCollectionView.register(DailyCollectionViewCell.self)
         dailyCollectionView.layoutIfNeeded()
         dailyCollectionView.layer.addBorder([.top, .bottom], color: UIColor.secondaryColor, size: dailyCollectionView.contentSize, width: 1)
-        dailyCollectionView.selectItem(at: IndexPath(item: today.day, section: 0), animated: true, scrollPosition: .centeredHorizontally)
+        todayIndex = dateList.count/2
+        dailyCollectionView.selectItem(at: IndexPath(item: todayIndex, section: 0), animated: true, scrollPosition: .centeredHorizontally)
+        dailyCollectionView.scrollToItem(at: IndexPath(item: todayIndex, section: 0), at: .right, animated: false)
     }
     
     private func tableViewSetting() {
@@ -139,7 +163,8 @@ final class ListViewController: UIViewController {
     }
 
     private func navigationSetting() {
-        self.navigationItem.title = "2023년 1월"
+        let todayDate = Date()
+        self.navigationItem.title = "\(todayDate.year)년 \(todayDate.month)월"
     }
     
     private func buttonSetting() {
@@ -158,15 +183,16 @@ final class ListViewController: UIViewController {
 extension ListViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 31
+        return dateList.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(DailyCollectionViewCell.self, for: indexPath)
         cell.layer.cornerRadius = 5
         cell.clipsToBounds = true
-        let date = indexPath.item
-        if date == today.day {
+        let date = dateList[indexPath.item]
+        cell.isToday = false
+        if date.isToday {
             cell.isToday = true
         }
         cell.setDate(date: date)
@@ -174,8 +200,49 @@ extension ListViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let dateComponetes = DateComponents(calendar: .current, day: indexPath.item)
-        selectedDate = Calendar.current.date(from: dateComponetes) ?? today
+        selectedDate = dateList[indexPath.item]
+    }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        beginPositionX = scrollView.contentOffset.x
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let endPositionX = scrollView.contentOffset.x
+        
+        let visibleRect = CGRect(origin: dailyCollectionView.bounds.origin, size: dailyCollectionView.bounds.size)
+        let visibleFirstCellPoint = CGPoint(x: visibleRect.minX + 10, y: visibleRect.midY)
+
+        guard var visibleFirstCellIndexPath = dailyCollectionView.indexPathForItem(at: visibleFirstCellPoint) else { return }
+                
+        if beginPositionX < endPositionX {
+            appendDateList()
+        } else if beginPositionX > endPositionX {
+            insertFirstDateList()
+            visibleFirstCellIndexPath.item += 7
+        } else {
+            return
+        }
+                
+        DispatchQueue.main.async {
+            self.dailyCollectionView.selectItem(at: visibleFirstCellIndexPath, animated: false, scrollPosition: .left)
+        }
+        
+        guard let selectedCell = dailyCollectionView.cellForItem(at: visibleFirstCellIndexPath) as? DailyCollectionViewCell else {
+            print("cell is not DailyCollectionViewCell")
+            return
+        }
+        selectedDate = selectedCell.date
+    }
+    
+    func appendDateList() {
+        guard let nextDates = dateList.last?.nextWeek else { return }
+        dateList.append(contentsOf: nextDates)
+    }
+    
+    func insertFirstDateList() {
+        guard let previousDates = dateList.first?.previousWeek else { return }
+        dateList.insert(contentsOf: previousDates, at: 0)
     }
 }
 

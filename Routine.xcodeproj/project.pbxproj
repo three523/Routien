@@ -19,6 +19,8 @@
 		188826AE29794C2100B6523A /* ListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188826AD29794C2100B6523A /* ListViewModelTests.swift */; };
 		188826B629796D6E00B6523A /* CreateRoutineViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188826B529796D6E00B6523A /* CreateRoutineViewControllerTests.swift */; };
 		188826B729796D6E00B6523A /* CreateRoutineViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188826B529796D6E00B6523A /* CreateRoutineViewControllerTests.swift */; };
+		1888996D29839DEE00F03EA9 /* DateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1888996C29839DEE00F03EA9 /* DateTests.swift */; };
+		1888996E2983A86900F03EA9 /* SnapKit-Dynamic in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 18C363FF296DBCFE00745400 /* SnapKit-Dynamic */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		188BF94329724E3B0057C250 /* CreateRoutineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188BF94229724E3B0057C250 /* CreateRoutineViewController.swift */; };
 		18B6265C296F111200BDAB50 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18B6265B296F111200BDAB50 /* UIColor.swift */; };
 		18B6265E296F118F00BDAB50 /* ButtonRoutineTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18B6265D296F118F00BDAB50 /* ButtonRoutineTableViewCell.swift */; };
@@ -57,6 +59,20 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		1888996F2983A86900F03EA9 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				1888996E2983A86900F03EA9 /* SnapKit-Dynamic in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		188300C1296FA71600E418DB /* UITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableView.swift; sourceTree = "<group>"; };
 		188508012977A2BF005B7BAB /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
@@ -69,8 +85,9 @@
 		1888269729794BDF00B6523A /* ListViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewControllerTests.swift; sourceTree = "<group>"; };
 		188826AD29794C2100B6523A /* ListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewModelTests.swift; sourceTree = "<group>"; };
 		188826B529796D6E00B6523A /* CreateRoutineViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRoutineViewControllerTests.swift; sourceTree = "<group>"; };
-		188826C32979825E00B6523A /* RoutineUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = RoutineUITests.xctest; path = "/Users/apple/Desktop/swift/Routine/build/Debug-iphoneos/RoutineUITests.xctest"; sourceTree = "<absolute>"; };
-		188826C42979825E00B6523A /* RoutineTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = RoutineTests.xctest; path = /Users/apple/Desktop/swift/Routine/build/Debug/RoutineTests.xctest; sourceTree = "<absolute>"; };
+		1888996A2983902000F03EA9 /* RoutineUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RoutineUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1888996B2983902000F03EA9 /* RoutineTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RoutineTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1888996C29839DEE00F03EA9 /* DateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTests.swift; sourceTree = "<group>"; };
 		188BF94229724E3B0057C250 /* CreateRoutineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRoutineViewController.swift; sourceTree = "<group>"; };
 		18B6265B296F111200BDAB50 /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		18B6265D296F118F00BDAB50 /* ButtonRoutineTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ButtonRoutineTableViewCell.swift; path = Cell/ButtonRoutineTableViewCell.swift; sourceTree = "<group>"; };
@@ -131,6 +148,7 @@
 		188826A529794BF800B6523A /* RoutineTests */ = {
 			isa = PBXGroup;
 			children = (
+				1888996C29839DEE00F03EA9 /* DateTests.swift */,
 				188826AD29794C2100B6523A /* ListViewModelTests.swift */,
 			);
 			path = RoutineTests;
@@ -187,6 +205,8 @@
 				18C363C6296D091B00745400 /* Routine.app */,
 				1888269629794BDF00B6523A /* RoutineUITests */,
 				188826A529794BF800B6523A /* RoutineTests */,
+				1888996A2983902000F03EA9 /* RoutineUITests.xctest */,
+				1888996B2983902000F03EA9 /* RoutineTests.xctest */,
 			);
 			sourceTree = "<group>";
 		};
@@ -232,7 +252,7 @@
 			packageProductDependencies = (
 			);
 			productName = RoutineUITests;
-			productReference = 188826C32979825E00B6523A /* RoutineUITests.xctest */;
+			productReference = 1888996A2983902000F03EA9 /* RoutineUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 		188826A329794BF700B6523A /* RoutineTests */ = {
@@ -250,7 +270,7 @@
 			);
 			name = RoutineTests;
 			productName = RoutineTests;
-			productReference = 188826C42979825E00B6523A /* RoutineTests.xctest */;
+			productReference = 1888996B2983902000F03EA9 /* RoutineTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		18C6529229628DDD00EEB927 /* Routine */ = {
@@ -261,6 +281,7 @@
 				18C6529029628DDD00EEB927 /* Frameworks */,
 				18C6529129628DDD00EEB927 /* Resources */,
 				18C652AB29629F3500EEB927 /* ShellScript */,
+				1888996F2983A86900F03EA9 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -383,6 +404,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				188826AE29794C2100B6523A /* ListViewModelTests.swift in Sources */,
+				1888996D29839DEE00F03EA9 /* DateTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
