@@ -60,7 +60,6 @@ final class ListViewController: UIViewController {
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy년 M월"
             DispatchQueue.main.async {
-                print(self.selectedDate)
                 self.navigationItem.title = formatter.string(from: self.selectedDate)
             }
         }
@@ -214,6 +213,7 @@ extension ListViewController: UICollectionViewDelegate, UICollectionViewDataSour
         let visibleFirstCellPoint = CGPoint(x: visibleRect.minX + 10, y: visibleRect.midY)
 
         guard var visibleFirstCellIndexPath = dailyCollectionView.indexPathForItem(at: visibleFirstCellPoint) else { return }
+        let visibleFirstCellIndexPathTemp = visibleFirstCellIndexPath
                 
         if beginPositionX < endPositionX {
             appendDateList()
@@ -227,8 +227,8 @@ extension ListViewController: UICollectionViewDelegate, UICollectionViewDataSour
         DispatchQueue.main.async {
             self.dailyCollectionView.selectItem(at: visibleFirstCellIndexPath, animated: false, scrollPosition: .left)
         }
-        
-        guard let selectedCell = dailyCollectionView.cellForItem(at: visibleFirstCellIndexPath) as? DailyCollectionViewCell else {
+                
+        guard let selectedCell = dailyCollectionView.cellForItem(at: visibleFirstCellIndexPathTemp) as? DailyCollectionViewCell else {
             print("cell is not DailyCollectionViewCell")
             return
         }
