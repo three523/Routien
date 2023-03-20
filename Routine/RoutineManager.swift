@@ -8,24 +8,34 @@
 import Foundation
 
 class RoutineManager {
-    static var routines: [Routine] = []
+    static var routines: [Routine] = [] {
+        didSet {
+            RoutineManager.update()
+        }
+    }
+    static var update: () -> Void = {}
     var routineCount: Int {
         return RoutineManager.routines.count
     }
     
-    func create(_ routine: Routine) {
+    static func create(_ routine: Routine) {
         RoutineManager.routines.append(routine)
     }
     
-    func append(_ task: RoutineTask) {
+    static func append(_ task: RoutineTask) {
         guard let index = RoutineManager.routines.firstIndex( where: { $0.identifier == task.routineIdentifier }) else {
             print("Routine does not exist")
+            return
+        }
+        let isExist = RoutineManager.routines[index].myTaskList.contains { $0.identifier == task.identifier }
+        if isExist {
+            RoutineManager.update(task)
             return
         }
         RoutineManager.routines[index].myTaskList.append(task)
     }
     
-    func update(_ task: RoutineTask) {
+    static func update(_ task: RoutineTask) {
         guard let routineIndex = RoutineManager.routines.firstIndex( where: { $0.identifier == task.routineIdentifier }) else {
             print("Routine does not exist")
             return
@@ -47,10 +57,10 @@ class RoutineManager {
             print("routine does not exits")
             return nil
         }
-    return routine.myTaskList.first(where: { $0.identifier == routineTask.identifier })
+        return routine.myTaskList.first(where: { $0.identifier == routineTask.identifier })
     }
     
-    func fetchAllTask(to date: Date) -> [Task] {
+    static func fetchAllTask(to date: Date) -> [Task] {
         var tasks = [Task]()
         let calendar = Calendar.current
         RoutineManager.routines.forEach { routine in
@@ -63,7 +73,7 @@ class RoutineManager {
         return tasks
     }
     
-    func remove(routine: Routine) {
+    static func remove(routine: Routine) {
         RoutineManager.routines.removeAll { $0.identifier == routine.identifier }
     }
     

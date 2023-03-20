@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ButtonRoutineTableViewCell: UITableViewCell {
+class CheckRoutineTableViewCell: UITableViewCell {
     
     private let routineButton: UIButton = {
         let button = UIButton()
@@ -15,7 +15,7 @@ class ButtonRoutineTableViewCell: UITableViewCell {
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         button.setTitleColor(UIColor.black, for: .normal)
         button.layer.borderWidth = 0.5
-        button.layer.borderColor = UIColor.systemGray.cgColor
+        button.layer.borderColor = UIColor.black.cgColor
         return button
     }()
     
@@ -23,15 +23,18 @@ class ButtonRoutineTableViewCell: UITableViewCell {
         let button = UIButton()
         button.setImage(UIImage(systemName: "checkmark"), for: .normal)
         button.layer.borderWidth = 0.5
-        button.layer.borderColor = UIColor.systemGray.cgColor
-        button.tintColor = .systemGray
+        button.layer.borderColor = UIColor.black.cgColor
+        button.tintColor = .black
         return button
     }()
-
+    
+    var routineCheckTask: RoutineCheckTask? = nil
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         viewAdd()
         autolayoutSetting()
+        addAction()
     }
     
     required init?(coder: NSCoder) {
@@ -54,13 +57,33 @@ class ButtonRoutineTableViewCell: UITableViewCell {
             make.leading.equalTo(routineButton.snp.trailing)
             make.width.height.equalTo(56)
         }
-        
+    }
+    
+    func addAction() {
+        checkButton.addTarget(self, action: #selector(checkButtonClick), for: .touchUpInside)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }
+    
+    func setAll(color: UIColor) {
+        DispatchQueue.main.async {
+            self.routineButton.setTitleColor(color, for: .normal)
+            self.routineButton.layer.borderColor = color.cgColor
+            self.checkButton.tintColor = color
+            self.checkButton.layer.borderColor = color.cgColor
+            self.layer.borderColor = color.cgColor
+        }
+    }
+    
+    @objc
+    func checkButtonClick() {
+        guard let isDone = routineCheckTask?.isDone else { return }
+        self.routineCheckTask?.isDone = !isDone
+        !isDone ? setAll(color: UIColor.systemGray) : setAll(color: UIColor.black)
     }
 
 }

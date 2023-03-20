@@ -21,7 +21,7 @@ class TodoManager {
         return TodoManager.todoList.first(where: { $0.identifier == identifier })
     }
     
-    func fetchAllTask(to date: Date) -> [Task] {
+    static func fetchAllTask(to date: Date) -> [Task] {
         var tasks = [Task]()
         let calendar = Calendar.current
         TodoManager.todoList.forEach { todo in
@@ -32,7 +32,7 @@ class TodoManager {
         return tasks
     }
     
-    func remove(_ todo: Todo) {
+    static func remove(_ todo: Todo) {
         TodoManager.todoList.removeAll { $0.identifier == todo.identifier }
     }
 }

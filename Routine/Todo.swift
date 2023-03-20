@@ -9,7 +9,7 @@ import Foundation
 
 struct Todo: Task {
     var identifier: UUID = UUID()
-    var descrpition: String
+    var description: String
     var taskDate: Date
     var isDone: Bool = false
 }

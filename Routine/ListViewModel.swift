@@ -10,17 +10,21 @@ import Foundation
 final class ListViewModel {
     private let routineManager: RoutineManager = RoutineManager()
     private let todoManager: TodoManager = TodoManager()
+    var update: ()->() = {}
     
     func create(routine: Routine) {
-        routineManager.create(routine)
+        RoutineManager.create(routine)
+        update()
     }
     
     func append(routinTask: RoutineTask) {
-        routineManager.append(routinTask)
+        RoutineManager.append(routinTask)
+        update()
     }
     
     func append(todo: Todo) {
         todoManager.append(todo)
+        update()
     }
     
     func fetch(routineIdentifier: UUID) -> Routine? {
@@ -36,20 +40,23 @@ final class ListViewModel {
     }
     
     func fetchAllTask(to date: Date) -> [Task] {
-        var tasks = routineManager.fetchAllTask(to: date)
-        tasks.append(contentsOf: todoManager.fetchAllTask(to: date))
+        var tasks = RoutineManager.fetchAllTask(to: date)
+        tasks.append(contentsOf: TodoManager.fetchAllTask(to: date))
         return tasks
     }
     
     func remove(routine: Routine) {
-        routineManager.remove(routine: routine)
+        RoutineManager.remove(routine: routine)
+        update()
     }
     
     func remove(routineTask: RoutineTask) {
         routineManager.remove(routineTask: routineTask)
+        update()
     }
     
     func remove(todo: Todo) {
-        todoManager.remove(todo)
+        TodoManager.remove(todo)
+        update()
     }
 }

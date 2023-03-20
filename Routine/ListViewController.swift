@@ -7,6 +7,14 @@
 
 import UIKit
 
+protocol TaskAddProtocol: AnyObject {
+    func textTaskIsDone(textTask: RoutineTextTask)
+}
+
+protocol PresentTextProtocol: AnyObject {
+    func excute(task: RoutineTextTask)
+}
+
 final class ListViewController: UIViewController {
     
     let dailyCollectionView: UICollectionView = {
@@ -147,17 +155,21 @@ final class ListViewController: UIViewController {
         dailyCollectionView.register(DailyCollectionViewCell.self)
         dailyCollectionView.layoutIfNeeded()
         dailyCollectionView.layer.addBorder([.top, .bottom], color: UIColor.secondaryColor, size: dailyCollectionView.contentSize, width: 1)
-        todayIndex = dateList.count/2
-        dailyCollectionView.selectItem(at: IndexPath(item: todayIndex, section: 0), animated: true, scrollPosition: .centeredHorizontally)
-        dailyCollectionView.scrollToItem(at: IndexPath(item: todayIndex, section: 0), at: .right, animated: false)
+        for (index, date) in dateList.enumerated() where date.isToday { todayIndex = index }
+        let todayIndexPath = IndexPath(item: todayIndex, section: 0)
+        dailyCollectionView.selectItem(at: todayIndexPath, animated: true, scrollPosition: .centeredHorizontally)
+        guard let date = (dailyCollectionView.cellForItem(at: todayIndexPath) as? DailyCollectionViewCell)?.date else { return }
+        selectedDate = date
+        RoutineManager.update = listTableView.reloadData
     }
     
     private func tableViewSetting() {
+        listViewModel.update = listTableView.reloadData
         listTableView.delegate = self
         listTableView.dataSource = self
         listTableView.register(TextRoutineTableViewCell.self)
-        listTableView.register(ButtonRoutineTableViewCell.self)
-        listTableView.register(TextRoutineTableViewCell.self)
+        listTableView.register(CheckRoutineTableViewCell.self)
+        listTableView.register(CountRoutineTableViewCell.self)
         listTableView.register(TodoListTableViewCell.self)
     }
 
@@ -200,6 +212,13 @@ extension ListViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         selectedDate = dateList[indexPath.item]
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+        guard let cell = dailyCollectionView.cellForItem(at: indexPath) as? DailyCollectionViewCell else { return true }
+        selectedDate = cell.date
+        listTableView.reloadData()
+        return true
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -270,21 +289,44 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell: UITableViewCell = UITableViewCell()
         
-        let task = tasks[indexPath.item]
-        
-        if let _ = task as? RoutineTextTask {
-            cell = tableView.dequeueReusableCell(TextRoutineTableViewCell.self, for: indexPath)
-        } else if let _ = task as? RoutineCountTask {
-            cell = tableView.dequeueReusableCell(ButtonRoutineTableViewCell.self, for: indexPath)
-        } else {
-            cell = tableView.dequeueReusableCell(ButtonRoutineTableViewCell.self, for: indexPath)
+        let task = tasks[indexPath.section]
+                
+        if let textTask = task as? RoutineTextTask {
+            guard let textCell = tableView.dequeueReusableCell(TextRoutineTableViewCell.self, for: indexPath) as? TextRoutineTableViewCell else { return cell }
+            textCell.routineTextTask = textTask
+            textCell.delegate = self
+            cell = textCell
+        } else if let countTask = task as? RoutineCountTask {
+            guard let countCell = tableView.dequeueReusableCell(CountRoutineTableViewCell.self, for: indexPath) as? CountRoutineTableViewCell else { return cell }
+            countCell.routineCountTask = countTask
+            cell = countCell
+        } else if let checkTask = task as? RoutineCheckTask {
+            guard let checkCell = tableView.dequeueReusableCell(CheckRoutineTableViewCell.self, for: indexPath) as? CheckRoutineTableViewCell else { return cell }
+            checkCell.routineCheckTask = checkTask
+            cell = checkCell
         }
         
         cell.clipsToBounds = true
+        cell.selectionStyle = .none
         cell.layer.cornerRadius = 5
-        cell.layer.borderColor = UIColor.systemGray.cgColor
+        cell.layer.borderColor = UIColor.black.cgColor
         cell.layer.borderWidth = 0.5
         return cell
     }
     
+}
+
+extension ListViewController: PresentTextProtocol, TaskAddProtocol {
+    
+    func textTaskIsDone(textTask: RoutineTextTask) {
+        listViewModel.append(routinTask: textTask)
+    }
+    
+    func excute(task: RoutineTextTask) {
+        let vc = TextAddViewController()
+        vc.modalPresentationStyle = .overFullScreen
+        vc.delegate = self
+        vc.textTask = task
+        present(vc, animated: true)
+    }
 }

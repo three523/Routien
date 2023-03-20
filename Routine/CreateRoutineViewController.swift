@@ -16,7 +16,7 @@ enum RoutineType: String {
 
 final class CreateRoutineViewController: UIViewController {
     
-    let routineLabel: UILabel = {
+    private let routineLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 17, weight: .semibold)
         label.textColor = .black
@@ -24,7 +24,7 @@ final class CreateRoutineViewController: UIViewController {
         return label
     }()
     
-    let routineTextField: UITextField = {
+    private let routineTextField: UITextField = {
         let textField = UITextField()
         textField.font = .systemFont(ofSize: 17, weight: .regular)
         textField.textColor = .black
@@ -36,7 +36,7 @@ final class CreateRoutineViewController: UIViewController {
         return textField
     }()
     
-    let workDailyLabel: UILabel = {
+    private let workDailyLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 17, weight: .semibold)
         label.textColor = .black
@@ -44,7 +44,7 @@ final class CreateRoutineViewController: UIViewController {
         return label
     }()
     
-    let workDailyStackView: UIStackView = {
+    private let workDailyStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.alignment = .center
@@ -52,7 +52,7 @@ final class CreateRoutineViewController: UIViewController {
         return stackView
     }()
     
-    let workDateLabel: UILabel = {
+    private let workDateLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 17, weight: .semibold)
         label.textColor = .black
@@ -60,7 +60,7 @@ final class CreateRoutineViewController: UIViewController {
         return label
     }()
     
-    let startDateStackView: UIStackView = {
+    private let startDateStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.alignment = .center
@@ -69,7 +69,7 @@ final class CreateRoutineViewController: UIViewController {
         return stackView
     }()
     
-    let endDateStackView: UIStackView = {
+    private let endDateStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.alignment = .center
@@ -78,7 +78,7 @@ final class CreateRoutineViewController: UIViewController {
         return stackView
     }()
     
-    let notificationLabel: UILabel = {
+    private let notificationLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 17, weight: .semibold)
         label.textColor = .black
@@ -86,7 +86,7 @@ final class CreateRoutineViewController: UIViewController {
         return label
     }()
     
-    let notificationStackView: UIStackView = {
+    private let notificationStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.alignment = .center
@@ -95,13 +95,13 @@ final class CreateRoutineViewController: UIViewController {
         return stackView
     }()
     
-    let notificationSwitch: UISwitch = {
+    private let notificationSwitch: UISwitch = {
         let toggle = UISwitch()
         toggle.onTintColor = .mainColor
         return toggle
     }()
     
-    let typeLabel: UILabel = {
+    private let typeLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 17, weight: .semibold)
         label.textColor = .black
@@ -109,7 +109,7 @@ final class CreateRoutineViewController: UIViewController {
         return label
     }()
     
-    let typeStackView: UIStackView = {
+    private let typeStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.alignment = .center
@@ -118,7 +118,26 @@ final class CreateRoutineViewController: UIViewController {
         return stackView
     }()
     
-    let doneButton: UIButton = {
+    private let goalLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 17, weight: .semibold)
+        label.textColor = .black
+        label.text = "목표:"
+        label.isHidden = true
+        return label
+    }()
+    
+    private let goalTextField: UITextField = {
+        let textField: UITextField = UITextField()
+        textField.font = .systemFont(ofSize: 17, weight: .regular)
+        textField.text = "1"
+        textField.keyboardType = .numberPad
+        textField.textAlignment = .center
+        textField.isHidden = true
+        return textField
+    }()
+        
+    private let doneButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .systemGray4
         button.setTitleColor(.white, for: .disabled)
@@ -167,6 +186,8 @@ final class CreateRoutineViewController: UIViewController {
         view.addSubview(notificationSwitch)
         view.addSubview(typeLabel)
         view.addSubview(typeStackView)
+        view.addSubview(goalLabel)
+        view.addSubview(goalTextField)
         view.addSubview(doneButton)
     }
     
@@ -237,6 +258,17 @@ final class CreateRoutineViewController: UIViewController {
             make.trailing.equalToSuperview().inset(22)
         }
         
+        goalLabel.snp.makeConstraints { make in
+            make.top.equalTo(typeStackView.snp.bottom).inset(-16)
+            make.leading.equalToSuperview().inset(10)
+        }
+        
+        goalTextField.snp.makeConstraints { make in
+            make.top.equalTo(typeStackView.snp.bottom).inset(-16)
+            make.width.equalTo(view.frame.width/2)
+            make.centerX.equalToSuperview()
+        }
+        
         doneButton.snp.makeConstraints { make in
             make.height.equalTo(44)
             make.leading.trailing.bottom.equalToSuperview()
@@ -246,7 +278,7 @@ final class CreateRoutineViewController: UIViewController {
     private func dailyStackViewSetting() {
         DayOfWeek.allCases.forEach { dayOfWeek in
             let circleView = CircleTextView()
-            circleView.text = dayOfWeek.rawValue
+            circleView.dayOfWeek = dayOfWeek
             circleView.backgroundColor = .secondaryColor
             circleView.snp.makeConstraints { make in
                 make.width.height.equalTo(36)
@@ -276,6 +308,12 @@ final class CreateRoutineViewController: UIViewController {
             button.setTitle(buttonType.rawValue, for: .normal)
             button.setTitleColor(.black, for: .selected)
             button.addTarget(self, action: #selector(typeButtonClick), for: .touchUpInside)
+            if buttonType == .count {
+                button.addTarget(self, action: #selector(goalAreaVisible), for: .touchUpInside)
+            } else {
+                button.addTarget(self, action: #selector(goalAreaHidden), for: .touchUpInside)
+            }
+            button.addTarget(self, action: #selector(doneButtonEnableSwitch), for: .touchUpInside)
             typeStackView.addArrangedSubview(button)
         })
         let typeButtonList = typeStackView.arrangedSubviews.compactMap { $0 as? UIButton }
@@ -349,6 +387,7 @@ final class CreateRoutineViewController: UIViewController {
     
     private func textFieldSetting() {
         routineTextField.addTarget(self, action: #selector(routineNameChange), for: .editingChanged)
+        goalTextField.delegate = self
     }
     
     private func buttonSetting() {
@@ -359,9 +398,10 @@ final class CreateRoutineViewController: UIViewController {
     func doneButtonClick() {
         guard let routine = createRoutine() else {
             //TODO: 루틴 텍스트를 작성하지 않은 경우 에러 처리
+            print("routine is nil")
             return
         }
-        RoutineManager.routines.append(routine)
+        RoutineManager.create(routine)
         dismiss(animated: true)
     }
     
@@ -372,7 +412,15 @@ final class CreateRoutineViewController: UIViewController {
         let endDate = fetchDate(to: endDateStackView)
         let notificationTime = selectedNotificationTime()
         let type = selectedType()
-        return Routine(description: description, dayOfWeek: dayOfWeeks, startDate: startDate, endDate: endDate, notificationTime: notificationTime, type: type)
+        switch type {
+        case .check:
+            return CheckRoutine(description: description, dayOfWeek: dayOfWeeks, startDate: startDate, endDate: endDate, notificationTime: notificationTime)
+        case .text:
+            return TextRoutine(description: description, dayOfWeek: dayOfWeeks, startDate: startDate, endDate: endDate, notificationTime: notificationTime)
+        case .count:
+            guard let goal = fetchGoal() else { return nil }
+            return CountRoutine(description: description, dayOfWeek: dayOfWeeks, startDate: startDate, endDate: endDate, notificationTime: notificationTime, goal: goal)
+        }
     }
     
     private func selectedDayOfWeeks() -> [DayOfWeek] {
@@ -413,7 +461,7 @@ final class CreateRoutineViewController: UIViewController {
     }
     
     private func selectedType() -> RoutineType {
-        let selectedButton = workDailyStackView.arrangedSubviews
+        let selectedButton = typeStackView.arrangedSubviews
             .compactMap { $0 as? UIButton }
             .first(where: { $0.isSelected })
         guard let title = selectedButton?.title(for: .selected),
@@ -451,8 +499,35 @@ final class CreateRoutineViewController: UIViewController {
     }
     
     @objc
-    func routineNameChange(_ textField: UITextField) {
-        if let _ = textField.text {
+    func goalAreaVisible() {
+        self.goalLabel.isHidden = false
+        self.goalTextField.isHidden = false
+    }
+    
+    @objc
+    func goalAreaHidden() {
+        goalLabel.isHidden = true
+        goalTextField.isHidden = true
+    }
+    
+    func fetchGoal() -> Int? {
+        guard let text = goalTextField.text,
+              let textFieldGoal = Int(text) else { return nil }
+        return textFieldGoal
+    }
+    
+    @objc
+    func doneButtonEnableSwitch() {
+        let type = selectedType()
+        guard let routinName = routineTextField.text,
+              let goalText = goalTextField.text else { return }
+        if false == routinName.isEmpty && type == .count && false == goalText.isEmpty {
+            doneButton.isEnabled = true
+            doneButton.backgroundColor = .mainColor
+        } else if false == routinName.isEmpty && type == .count && goalText.isEmpty {
+            doneButton.isEnabled = false
+            doneButton.backgroundColor = .systemGray4
+        } else if false == routinName.isEmpty {
             doneButton.isEnabled = true
             doneButton.backgroundColor = .mainColor
         } else {
@@ -460,5 +535,23 @@ final class CreateRoutineViewController: UIViewController {
             doneButton.backgroundColor = .systemGray4
         }
     }
+    
+    @objc
+    func routineNameChange(_ textField: UITextField) {
+        doneButtonEnableSwitch()
+    }
+}
 
+extension CreateRoutineViewController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if range.location == 0 && string == "0" { return false }
+        let set = NSCharacterSet(charactersIn: "0123456789").inverted
+        var compSepByCharInSet = string.components(separatedBy: set)
+        let numberFiltered = compSepByCharInSet.joined()
+        return string == numberFiltered
+    }
+    
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        doneButtonEnableSwitch()
+    }
 }

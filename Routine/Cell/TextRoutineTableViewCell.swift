@@ -27,19 +27,37 @@ class TextRoutineTableViewCell: UITableViewCell {
         return label
     }()
     
-    private let checkButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(systemName: "checkmark"), for: .normal)
-        button.layer.borderWidth = 0.5
-        button.layer.borderColor = UIColor.systemGray.cgColor
-        button.tintColor = .systemGray
-        return button
-    }()
+    weak var delegate: PresentTextProtocol? = nil
+    
+    var routineTextTask: RoutineTextTask? = nil {
+        didSet {
+            routineButton.setTitle(routineTextTask?.description, for: .normal)
+            if false == routineTextTask?.text.isEmpty {
+                routineTextTask?.isDone = true
+                DispatchQueue.main.async {
+                    self.descriptionLabel.text = self.routineTextTask?.text
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self.descriptionLabel.text = "상세 내용"
+                }
+            }
+            guard let isDone = routineTextTask?.isDone else { return }
+            isDone ? setAll(color: UIColor.systemGray) : setAll(color: UIColor.black)
+        }
+    }
+    
+    var text: String = "" {
+        didSet {
+            if false == text.isEmpty { descriptionLabel.text = text }
+        }
+    }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         viewAdd()
         autolayoutSetting()
+        actionSetting()
     }
     
     required init?(coder: NSCoder) {
@@ -49,32 +67,49 @@ class TextRoutineTableViewCell: UITableViewCell {
     func viewAdd() {
         contentView.addSubview(routineButton)
         contentView.addSubview(descriptionLabel)
-        contentView.addSubview(checkButton)
     }
     
     func autolayoutSetting() {
         routineButton.snp.makeConstraints { make in
             make.top.leading.bottom.equalToSuperview()
             make.width.equalToSuperview().dividedBy(3)
+            make.height.equalTo(56).priority(999)
         }
         
         descriptionLabel.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview()
+            make.top.trailing.bottom.equalToSuperview()
             make.leading.equalTo(routineButton.snp.trailing)
         }
         
-        checkButton.snp.makeConstraints { make in
-            make.top.trailing.bottom.equalToSuperview()
-            make.leading.equalTo(descriptionLabel.snp.trailing)
-            make.width.height.equalTo(56)
-        }
-        
+    }
+    
+    func actionSetting() {
+        descriptionLabel.isUserInteractionEnabled = true
+        let descriptionTap = UITapGestureRecognizer(target: self, action: #selector(descriptionTap))
+        descriptionLabel.addGestureRecognizer(descriptionTap)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
+        
         // Configure the view for the selected state
+    }
+    
+    func setAll(color: UIColor) {
+        DispatchQueue.main.async {
+            self.routineButton.setTitleColor(color, for: .normal)
+            self.routineButton.layer.borderColor = color.cgColor
+            self.descriptionLabel.textColor = color
+            self.descriptionLabel.layer.borderColor = color.cgColor
+            self.layer.borderColor = color.cgColor
+        }
+    }
+    
+    @objc
+    func descriptionTap() {
+        guard let delegate = delegate,
+            let routineTextTask = routineTextTask else { return }
+        delegate.excute(task: routineTextTask)
     }
 
 }
