@@ -7,17 +7,20 @@
 
 import UIKit
 
-protocol TaskAddProtocol: AnyObject {
+protocol TaskAddDelegate: AnyObject {
     func textTaskIsDone(textTask: RoutineTextTask)
 }
 
-protocol PresentTextProtocol: AnyObject {
-    func excute(task: RoutineTextTask)
+protocol RoutineDelegate: AnyObject {
+    func textTaskAdd(task: RoutineTextTask)
+    func taskUpdate(task: RoutineTask)
+    func routineUpdate(routine: Routine)
+    func routineRemove(routineIdentifier: UUID)
 }
 
 final class ListViewController: UIViewController {
     
-    let dailyCollectionView: UICollectionView = {
+    private let dailyCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumInteritemSpacing = 0
@@ -30,7 +33,7 @@ final class ListViewController: UIViewController {
         return collectionView
     }()
     
-    let listAddButton: UIButton = {
+    private let listAddButton: UIButton = {
         let button = UIButton()
         button.setTitle("리스트 추가 +", for: .normal)
         button.backgroundColor = .mainColor
@@ -40,16 +43,16 @@ final class ListViewController: UIViewController {
         return button
     }()
     
-    private let filterButton: UIButton = {
+    private let sortButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "line.3.horizontal.decrease"), for: .normal)
+        button.setImage(UIImage(systemName: "arrow.up.arrow.down"), for: .normal)
         button.tintColor = .mainColor
         return button
     }()
     
-    private let sortButton: UIButton = {
+    private let filterButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "arrow.up.arrow.down"), for: .normal)
+        button.setImage(UIImage(systemName: "line.3.horizontal.decrease"), for: .normal)
         button.tintColor = .mainColor
         return button
     }()
@@ -61,7 +64,7 @@ final class ListViewController: UIViewController {
         }
         return tableView
     }()
-    var todayIndex = 0
+    private var todayIndex = 0
     private var beginPositionX: CGFloat = 0.0
     private var selectedDate = Date() {
         didSet {
@@ -72,9 +75,9 @@ final class ListViewController: UIViewController {
             }
         }
     }
-    let listViewModel: ListViewModel
-    var tasks: [Task] = []
-    var dateList: [Date] = Date().defaultDays {
+    private let listViewModel: ListViewModel
+    private var tasks: [Task] = []
+    private var dateList: [Date] = Date().defaultDays {
         didSet {
             DispatchQueue.main.async {
                 self.dailyCollectionView.reloadData()
@@ -90,7 +93,7 @@ final class ListViewController: UIViewController {
         autolayoutSetting()
         collectionViewSetting()
         tableViewSetting()
-        buttonSetting()
+        addAction()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -112,8 +115,8 @@ final class ListViewController: UIViewController {
     private func viewAdd() {
         view.addSubview(dailyCollectionView)
         view.addSubview(listAddButton)
-        view.addSubview(filterButton)
         view.addSubview(sortButton)
+        view.addSubview(filterButton)
         view.addSubview(listTableView)
     }
     
@@ -130,15 +133,15 @@ final class ListViewController: UIViewController {
             make.leading.equalTo(view.safeAreaLayoutGuide).inset(12)
         }
         
-        filterButton.snp.makeConstraints { make in
-            make.top.equalTo(listAddButton)
-            make.trailing.equalTo(view.safeAreaLayoutGuide).inset(12)
-            make.width.height.equalTo(32)
-        }
-        
         sortButton.snp.makeConstraints { make in
             make.top.equalTo(listAddButton)
             make.trailing.equalTo(filterButton.snp.leading).inset(-12)
+            make.width.height.equalTo(filterButton.snp.height)
+        }
+        
+        filterButton.snp.makeConstraints { make in
+            make.top.equalTo(listAddButton)
+            make.trailing.equalTo(view.safeAreaLayoutGuide).inset(12)
             make.width.height.equalTo(32)
         }
         
@@ -167,6 +170,7 @@ final class ListViewController: UIViewController {
         listViewModel.update = listTableView.reloadData
         listTableView.delegate = self
         listTableView.dataSource = self
+        listTableView.allowsMultipleSelection = true
         listTableView.register(TextRoutineTableViewCell.self)
         listTableView.register(CheckRoutineTableViewCell.self)
         listTableView.register(CountRoutineTableViewCell.self)
@@ -178,12 +182,12 @@ final class ListViewController: UIViewController {
         self.navigationItem.title = "\(todayDate.year)년 \(todayDate.month)월"
     }
     
-    private func buttonSetting() {
-        listAddButton.addTarget(self, action: #selector(listAddButtonClick), for: .touchUpInside)
+    private func addAction() {
+        listAddButton.addTarget(self, action: #selector(listAdd), for: .touchUpInside)
     }
     
     @objc
-    func listAddButtonClick() {
+    func listAdd() {
         let addVC = CreateRoutineViewController()
         addVC.modalPresentationStyle = .fullScreen
         present(addVC, animated: true)
@@ -299,10 +303,12 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
         } else if let countTask = task as? RoutineCountTask {
             guard let countCell = tableView.dequeueReusableCell(CountRoutineTableViewCell.self, for: indexPath) as? CountRoutineTableViewCell else { return cell }
             countCell.routineCountTask = countTask
+            countCell.delegate = self
             cell = countCell
         } else if let checkTask = task as? RoutineCheckTask {
             guard let checkCell = tableView.dequeueReusableCell(CheckRoutineTableViewCell.self, for: indexPath) as? CheckRoutineTableViewCell else { return cell }
             checkCell.routineCheckTask = checkTask
+            checkCell.delegate = self
             cell = checkCell
         }
         
@@ -316,17 +322,33 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     
 }
 
-extension ListViewController: PresentTextProtocol, TaskAddProtocol {
+extension ListViewController: RoutineDelegate, TaskAddDelegate {
     
     func textTaskIsDone(textTask: RoutineTextTask) {
         listViewModel.append(routinTask: textTask)
     }
     
-    func excute(task: RoutineTextTask) {
+    func textTaskAdd(task: RoutineTextTask) {
         let vc = TextAddViewController()
         vc.modalPresentationStyle = .overFullScreen
         vc.delegate = self
         vc.textTask = task
         present(vc, animated: true)
     }
+    
+    func taskUpdate(task: RoutineTask) {
+        RoutineManager.update(task)
+    }
+    
+    func routineUpdate(routine: Routine) {
+        let vc = CreateRoutineViewController()
+        vc.modalPresentationStyle = .fullScreen
+        vc.routine = routine
+        present(vc, animated: true)
+    }
+    
+    func routineRemove(routineIdentifier: UUID) {
+        listViewModel.remove(routineIdentifier: routineIdentifier)
+    }
+    
 }

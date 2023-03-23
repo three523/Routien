@@ -28,7 +28,7 @@ final class TaskListViewModelTests: XCTestCase {
         sut.create(routine: routine)
         if let fetchRoutine = sut.fetch(routineIdentifier: routine.identifier) {
             XCTAssertEqual(fetchRoutine.identifier, routine.identifier, "루틴이 저장되지 않음")
-            sut.remove(routine: routine)
+            sut.remove(routineIdentifier: fetchRoutine.identifier)
             return
         }
         XCTAssert(false , "루틴 값이 nil")
@@ -52,7 +52,7 @@ final class TaskListViewModelTests: XCTestCase {
         sut.append(routinTask: routineTask)
         if let fetchTask = sut.fetchTask(routineTask: routineTask) {
             XCTAssertEqual(fetchTask.identifier, routineTask.identifier, "루틴 작업을 제대로 가져오지 못함")
-            sut.remove(routine: routine)
+            sut.remove(routineIdentifier: fetchTask.routineIdentifier)
             return
         }
         XCTAssert(false, "루틴 작업이 nil")

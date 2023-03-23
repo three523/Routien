@@ -48,7 +48,14 @@ class RoutineManager {
         RoutineManager.routines[routineIndex].myTaskList[taskIndex] = task
     }
     
-    func fetch(_ identifier: UUID) -> Routine? {
+    static func update(_ routine: Routine) {
+        guard let routineIndex = RoutineManager.routines.firstIndex(where: { $0.identifier == routine.identifier }) else { return }
+        //MARK: 완료한 루틴 이전의 내용도 바꿀것인지 현재 내용만 바꿀것인지, 특정날 이후로만 바꿀 것인지 선택 가능하게 하기
+        RoutineManager.routines[routineIndex] = routine
+        RoutineManager.routines[routineIndex].allDoneTaskUpdate()
+    }
+    
+    static func fetch(_ identifier: UUID) -> Routine? {
         return RoutineManager.routines.first(where: { $0.identifier == identifier })
     }
     
@@ -63,18 +70,26 @@ class RoutineManager {
     static func fetchAllTask(to date: Date) -> [Task] {
         var tasks = [Task]()
         let calendar = Calendar.current
-        RoutineManager.routines.forEach { routine in
-            if let routineTask = routine.myTaskList.first(where: { calendar.isDate(date, equalTo: $0.taskDate, toGranularity: .day) }) {
+//        RoutineManager.routines.forEach { routine in
+//            if let routineTask = routine.myTaskList.first(where: { calendar.isDate(date, equalTo: $0.taskDate, toGranularity: .day) }) {
+//                tasks.append(routineTask)
+//            } else if let newRoutineTask = routine.createTask(date: date) {
+//                tasks.append(newRoutineTask)
+//                RoutineManager.routines
+//            }
+//        }
+        for index in 0..<RoutineManager.routines.count {
+            if let routineTask = RoutineManager.routines[index].myTaskList.first(where: { calendar.isDate(date, equalTo: $0.taskDate, toGranularity: .day) }) {
                 tasks.append(routineTask)
-            } else if let newRoutineTask = routine.createTask(date: date) {
+            } else if let newRoutineTask = RoutineManager.routines[index].createTask(date: date) {
                 tasks.append(newRoutineTask)
             }
         }
         return tasks
     }
     
-    static func remove(routine: Routine) {
-        RoutineManager.routines.removeAll { $0.identifier == routine.identifier }
+    static func remove(routineIdentifier: UUID) {
+        RoutineManager.routines.removeAll { $0.identifier == routineIdentifier }
     }
     
     func remove(routineTask: RoutineTask) {

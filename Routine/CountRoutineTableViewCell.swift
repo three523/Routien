@@ -12,8 +12,10 @@ class CountRoutineTableViewCell: UITableViewCell {
     var routineCountTask: RoutineCountTask? = nil {
         didSet {
             routineButton.setTitle(routineCountTask?.description, for: .normal)
-            guard let isDone = routineCountTask?.isDone else { return }
+            guard let isDone = routineCountTask?.isDone,
+                  let count = routineCountTask?.count else { return }
             isDone ? setAll(color: UIColor.systemGray) : setAll(color: UIColor.black)
+            descriptionLabel.text = "\(count)"
         }
     }
     
@@ -50,6 +52,8 @@ class CountRoutineTableViewCell: UITableViewCell {
         button.tintColor = .black
         return button
     }()
+    
+    weak var delegate: RoutineDelegate? = nil
         
     private var plusTimer: Timer? = nil
     private var minusTimer: Timer? = nil
@@ -73,6 +77,7 @@ class CountRoutineTableViewCell: UITableViewCell {
     }
     
     private func autolayoutSetting() {
+        
         routineButton.snp.makeConstraints { make in
             make.top.leading.bottom.equalToSuperview()
         }
@@ -97,6 +102,7 @@ class CountRoutineTableViewCell: UITableViewCell {
     }
     
     private func actionSetting() {
+        routineButton.addTarget(self, action: #selector(routineUpdate), for: .touchUpInside)
         let plusLongPress = UILongPressGestureRecognizer(target: self, action: #selector(plusLongPress))
         plusLongPress.minimumPressDuration = 1.5
         let minusLongPress = UILongPressGestureRecognizer(target: self, action: #selector(minusLongPress))
@@ -128,6 +134,12 @@ class CountRoutineTableViewCell: UITableViewCell {
     }
     
     @objc
+    func removeRoutine() {
+        guard let routineIdentifier = routineCountTask?.routineIdentifier else { return }
+        delegate?.routineRemove(routineIdentifier: routineIdentifier)
+    }
+    
+    @objc
     func plusLongPress(recognizer: UILongPressGestureRecognizer) {
         switch recognizer.state {
         case .began:
@@ -142,13 +154,14 @@ class CountRoutineTableViewCell: UITableViewCell {
     
     @objc
     func countIncrease() {
-        routineCountTask?.count += 1
-        guard let count = routineCountTask?.count,
-              let goal = routineCountTask?.goal else { return }
+        self.routineCountTask?.count += 1
+        guard let routineCountTask = routineCountTask else { return }
+        delegate?.taskUpdate(task: routineCountTask)
+        let count = routineCountTask.count
+        let goal = routineCountTask.goal
         DispatchQueue.main.async {
             if goal <= count {
                 self.descriptionLabel.textColor = .mainColor
-//                self.allBorderColor(color: UIColor.mainColor.cgColor)
                 self.routineCountTask?.isDone = true
             }
             self.descriptionLabel.text = "\(count)"
@@ -171,9 +184,11 @@ class CountRoutineTableViewCell: UITableViewCell {
     @objc
     func countDecrease() {
         if routineCountTask?.count == 0 { return }
-        routineCountTask?.count -= 1
-        guard let count = routineCountTask?.count,
-              let goal = routineCountTask?.goal else { return }
+        self.routineCountTask?.count -= 1
+        guard let routineCountTask = routineCountTask else { return }
+        delegate?.taskUpdate(task: routineCountTask)
+        let count = routineCountTask.count
+        let goal = routineCountTask.goal
         DispatchQueue.main.async {
             if goal > count {
                 self.descriptionLabel.textColor = .black
@@ -182,5 +197,12 @@ class CountRoutineTableViewCell: UITableViewCell {
             }
             self.descriptionLabel.text = "\(count)"
         }
+    }
+    
+    @objc
+    func routineUpdate() {
+        guard let routineIdentifier = routineCountTask?.routineIdentifier,
+              let routine = RoutineManager.fetch(routineIdentifier) else { return }
+        delegate?.routineUpdate(routine: routine)
     }
 }

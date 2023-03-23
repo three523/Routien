@@ -24,12 +24,14 @@ class CircleTextView: UIView {
     }
     var isSelected: Bool = true {
         didSet {
-            if isSelected {
-                self.backgroundColor = .mainColor
-                dailyLabel.textColor = .black
-            } else {
-                self.backgroundColor = .secondaryColor
-                dailyLabel.textColor = .white
+            DispatchQueue.main.async {
+                if self.isSelected {
+                    self.backgroundColor = .mainColor
+                    self.dailyLabel.textColor = .black
+                } else {
+                    self.backgroundColor = .secondaryColor
+                    self.dailyLabel.textColor = .white
+                }
             }
         }
     }

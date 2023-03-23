@@ -28,7 +28,7 @@ final class ListViewModel {
     }
     
     func fetch(routineIdentifier: UUID) -> Routine? {
-        return routineManager.fetch(routineIdentifier)
+        return RoutineManager.fetch(routineIdentifier)
     }
     
     func fetchTask(todoIdentifier: UUID) -> Task? {
@@ -45,8 +45,8 @@ final class ListViewModel {
         return tasks
     }
     
-    func remove(routine: Routine) {
-        RoutineManager.remove(routine: routine)
+    func remove(routineIdentifier: UUID) {
+        RoutineManager.remove(routineIdentifier: routineIdentifier)
         update()
     }
     

@@ -28,7 +28,15 @@ class CheckRoutineTableViewCell: UITableViewCell {
         return button
     }()
     
-    var routineCheckTask: RoutineCheckTask? = nil
+    weak var delegate: RoutineDelegate? = nil
+
+    var routineCheckTask: RoutineCheckTask? = nil {
+        didSet {
+            routineButton.setTitle(routineCheckTask?.description, for: .normal)
+            guard let isDone = routineCheckTask?.isDone else { return }
+            isDone ? setAll(color: UIColor.systemGray) : setAll(color: UIColor.black)
+        }
+    }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -55,11 +63,12 @@ class CheckRoutineTableViewCell: UITableViewCell {
         checkButton.snp.makeConstraints { make in
             make.top.trailing.bottom.equalToSuperview()
             make.leading.equalTo(routineButton.snp.trailing)
-            make.width.height.equalTo(56)
+            make.width.height.equalTo(56).priority(999)
         }
     }
     
     func addAction() {
+        routineButton.addTarget(self, action: #selector(routineUpdate), for: .touchUpInside)
         checkButton.addTarget(self, action: #selector(checkButtonClick), for: .touchUpInside)
     }
 
@@ -83,7 +92,16 @@ class CheckRoutineTableViewCell: UITableViewCell {
     func checkButtonClick() {
         guard let isDone = routineCheckTask?.isDone else { return }
         self.routineCheckTask?.isDone = !isDone
+        guard let routineCheckTask = routineCheckTask else { return }
+        delegate?.taskUpdate(task: routineCheckTask)
         !isDone ? setAll(color: UIColor.systemGray) : setAll(color: UIColor.black)
+    }
+    
+    @objc
+    func routineUpdate() {
+        guard let routineIdentifier = routineCheckTask?.routineIdentifier,
+              let routine = RoutineManager.fetch(routineIdentifier) else { return }
+        delegate?.routineUpdate(routine: routine)
     }
 
 }

@@ -149,7 +149,9 @@ final class CreateRoutineViewController: UIViewController {
         button.isEnabled = false
         return button
     }()
-
+    
+    var routine: Routine? = nil
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -171,6 +173,7 @@ final class CreateRoutineViewController: UIViewController {
         textFieldSetting()
         notificationSwitchSetting()
         buttonSetting()
+        update()
     }
     
     private func viewAdd() {
@@ -273,6 +276,52 @@ final class CreateRoutineViewController: UIViewController {
             make.height.equalTo(44)
             make.leading.trailing.bottom.equalToSuperview()
         }
+    }
+    
+    func update() {
+        guard let routine = self.routine else { return }
+        routineTextField.text = routine.description
+        workDailyStackView.arrangedSubviews.forEach { view in
+            guard let circleView = view as? CircleTextView else { return }
+            if routine.dayOfWeek.contains(circleView.dayOfWeek) {
+                circleView.isSelected = true
+            } else {
+                circleView.isSelected = false
+            }
+        }
+        
+        if let countRoutine = routine as? CountRoutine {
+            typeStackView.arrangedSubviews.forEach { view in
+                guard let button = view as? UIButton,
+                      let text = button.titleLabel?.text else { return }
+                if text == RoutineType.count.rawValue {
+                    button.isSelected = true
+                    typeButtonClick(button)
+                }
+            }
+            goalTextField.text = "\(countRoutine.goal)"
+            goalAreaVisible()
+        } else if let _ = routine as? CheckRoutine {
+            typeStackView.arrangedSubviews.forEach { view in
+                guard let button = view as? UIButton,
+                      let text = button.titleLabel?.text else { return }
+                if text == RoutineType.check.rawValue {
+                    button.isSelected = true
+                    typeButtonClick(button)
+                }
+            }
+        } else if let _ = routine as? TextRoutine {
+            typeStackView.arrangedSubviews.forEach { view in
+                guard let button = view as? UIButton,
+                      let text = button.titleLabel?.text else { return }
+                if text == RoutineType.text.rawValue {
+                    button.isSelected = true
+                    typeButtonClick(button)
+                }
+            }
+        }
+        doneButton.isEnabled = true
+        doneButton.backgroundColor = .mainColor
     }
     
     private func dailyStackViewSetting() {
@@ -396,12 +445,18 @@ final class CreateRoutineViewController: UIViewController {
     
     @objc
     func doneButtonClick() {
-        guard let routine = createRoutine() else {
+        if self.routine != nil {
+            guard let updateRoutine = updateRoutine() else { return }
+            RoutineManager.update(updateRoutine)
+            dismiss(animated: true)
+            return
+        }
+        guard let newRoutine = createRoutine() else {
             //TODO: 루틴 텍스트를 작성하지 않은 경우 에러 처리
             print("routine is nil")
             return
         }
-        RoutineManager.create(routine)
+        RoutineManager.create(newRoutine)
         dismiss(animated: true)
     }
     
@@ -421,6 +476,22 @@ final class CreateRoutineViewController: UIViewController {
             guard let goal = fetchGoal() else { return nil }
             return CountRoutine(description: description, dayOfWeek: dayOfWeeks, startDate: startDate, endDate: endDate, notificationTime: notificationTime, goal: goal)
         }
+    }
+    
+    func updateRoutine() -> Routine? {
+        guard var routine = routine,
+              let description = routineTextField.text else { return nil }
+        let dayOfWeeks = selectedDayOfWeeks()
+        let startDate = fetchDate(to: startDateStackView) ?? Date()
+        let endDate = fetchDate(to: endDateStackView)
+        let notificationTime = selectedNotificationTime()
+        let type = selectedType()
+        routine.description = description
+        routine.dayOfWeek = dayOfWeeks
+        routine.startDate = startDate
+        routine.endDate = endDate
+        routine.notificationTime = notificationTime
+        return routine
     }
     
     private func selectedDayOfWeeks() -> [DayOfWeek] {

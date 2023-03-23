@@ -39,7 +39,7 @@ class TextAddViewController: UIViewController {
     }()
     
     var textTask: RoutineTextTask? = nil
-    weak var delegate: TaskAddProtocol? = nil
+    weak var delegate: TaskAddDelegate? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -33,7 +33,23 @@ protocol Routine {
     var notificationTime: Date? { get set }
     var myTaskList: [RoutineTask] { get set }
     
-    func createTask(date: Date) -> RoutineTask?
+    mutating func createTask(date: Date) -> RoutineTask?
+    mutating func allDoneTaskUpdate()
+    mutating func afterTaskUpdate(date: Date)
+}
+
+extension Routine {
+    mutating func allDoneTaskUpdate() {
+        for index in 0..<myTaskList.count {
+            myTaskList[index].description = self.description
+        }
+    }
+    mutating func afterTaskUpdate(date: Date) {
+        guard let afterIndex = myTaskList.firstIndex(where: { $0.taskDate >= date }) else { return }
+        for index in afterIndex..<myTaskList.count {
+            myTaskList[index].description = self.description
+        }
+    }
 }
 
 struct CheckRoutine: Routine {
@@ -45,10 +61,12 @@ struct CheckRoutine: Routine {
     var notificationTime: Date?
     var myTaskList: [RoutineTask] = []
     
-    func createTask(date: Date) -> RoutineTask? {
+    mutating func createTask(date: Date) -> RoutineTask? {
         guard let weekDay = date.weekDay else { return nil }
         let isExits = dayOfWeek.first { $0 == weekDay }
-        return isExits == nil ? nil : RoutineCheckTask(routine: self, taskDate: date )
+        let task = RoutineCheckTask(routine: self, taskDate: date )
+        myTaskList.append(task)
+        return isExits == nil ? nil : task
     }
 }
 
@@ -61,10 +79,12 @@ struct TextRoutine: Routine {
     var notificationTime: Date?
     var myTaskList: [RoutineTask] = []
     
-    func createTask(date: Date) -> RoutineTask? {
+    mutating func createTask(date: Date) -> RoutineTask? {
         guard let weekDay = date.weekDay else { return nil }
         let isExits = dayOfWeek.first { $0 == weekDay }
-        return isExits == nil ? nil : RoutineTextTask(routine: self, text: "", taskDate: date)
+        let task = RoutineTextTask(routine: self, text: "", taskDate: date)
+        myTaskList.append(task)
+        return isExits == nil ? nil : task
     }
 }
 
@@ -78,10 +98,12 @@ struct CountRoutine: Routine {
     var goal: Int
     var myTaskList: [RoutineTask] = []
     
-    func createTask(date: Date) -> RoutineTask? {
+    mutating func createTask(date: Date) -> RoutineTask? {
         guard let weekDay = date.weekDay else { return nil }
         let isExits = dayOfWeek.first { $0 == weekDay }
-        return isExits == nil ? nil : RoutineCountTask(routine: self, description: description, goal: goal, taskDate: date )
+        let task = RoutineCountTask(routine: self, description: description, goal: goal, taskDate: date )
+        myTaskList.append(task)
+        return isExits == nil ? nil : task
     }
 }
 

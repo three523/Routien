@@ -26,8 +26,8 @@ class TextRoutineTableViewCell: UITableViewCell {
         label.text = "상세 내용"
         return label
     }()
-    
-    weak var delegate: PresentTextProtocol? = nil
+        
+    weak var delegate: RoutineDelegate? = nil
     
     var routineTextTask: RoutineTextTask? = nil {
         didSet {
@@ -70,9 +70,10 @@ class TextRoutineTableViewCell: UITableViewCell {
     }
     
     func autolayoutSetting() {
+        
         routineButton.snp.makeConstraints { make in
             make.top.leading.bottom.equalToSuperview()
-            make.width.equalToSuperview().dividedBy(3)
+            make.width.equalToSuperview().dividedBy(2.5)
             make.height.equalTo(56).priority(999)
         }
         
@@ -85,13 +86,14 @@ class TextRoutineTableViewCell: UITableViewCell {
     
     func actionSetting() {
         descriptionLabel.isUserInteractionEnabled = true
-        let descriptionTap = UITapGestureRecognizer(target: self, action: #selector(descriptionTap))
+        let descriptionTap = UITapGestureRecognizer(target: self, action: #selector(descriptionUpdate))
         descriptionLabel.addGestureRecognizer(descriptionTap)
+        
+        routineButton.addTarget(self, action: #selector(routineUpdate), for: .touchUpInside)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        
         // Configure the view for the selected state
     }
     
@@ -106,10 +108,16 @@ class TextRoutineTableViewCell: UITableViewCell {
     }
     
     @objc
-    func descriptionTap() {
-        guard let delegate = delegate,
-            let routineTextTask = routineTextTask else { return }
-        delegate.excute(task: routineTextTask)
+    func descriptionUpdate() {
+        guard let routineTextTask = routineTextTask else { return }
+        delegate?.textTaskAdd(task: routineTextTask)
+    }
+    
+    @objc
+    func routineUpdate() {
+        guard let routineIdentifier = routineTextTask?.routineIdentifier,
+              let routine = RoutineManager.fetch(routineIdentifier) else { return }
+        delegate?.routineUpdate(routine: routine)
     }
 
 }
