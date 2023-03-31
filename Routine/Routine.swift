@@ -62,6 +62,10 @@ struct CheckRoutine: Routine {
     var myTaskList: [RoutineTask] = []
     
     mutating func createTask(date: Date) -> RoutineTask? {
+        if let endDate = endDate,
+           endDate < date || startDate > date {
+            return nil
+        }
         guard let weekDay = date.weekDay else { return nil }
         let isExits = dayOfWeek.first { $0 == weekDay }
         let task = RoutineCheckTask(routine: self, taskDate: date )
@@ -80,6 +84,10 @@ struct TextRoutine: Routine {
     var myTaskList: [RoutineTask] = []
     
     mutating func createTask(date: Date) -> RoutineTask? {
+        if let endDate = endDate,
+           endDate < date || startDate > date {
+            return nil
+        }
         guard let weekDay = date.weekDay else { return nil }
         let isExits = dayOfWeek.first { $0 == weekDay }
         let task = RoutineTextTask(routine: self, text: "", taskDate: date)
@@ -99,6 +107,10 @@ struct CountRoutine: Routine {
     var myTaskList: [RoutineTask] = []
     
     mutating func createTask(date: Date) -> RoutineTask? {
+        if let endDate = endDate,
+           endDate < date || startDate > date {
+            return nil
+        }
         guard let weekDay = date.weekDay else { return nil }
         let isExits = dayOfWeek.first { $0 == weekDay }
         let task = RoutineCountTask(routine: self, description: description, goal: goal, taskDate: date )

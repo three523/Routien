@@ -69,6 +69,18 @@ final class CreateRoutineViewController: UIViewController {
         return stackView
     }()
     
+    private let startDateTextField: DatePickerTextField = {
+        let textField = DatePickerTextField()
+        textField.text = Date().dateToString
+        textField.textColor = .black
+        textField.textAlignment = .center
+        textField.tintColor = .clear
+        textField.clipsToBounds = true
+        textField.layer.cornerRadius = 5
+        textField.backgroundColor = .secondaryColor
+        return textField
+    }()
+    
     private let endDateStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
@@ -76,6 +88,18 @@ final class CreateRoutineViewController: UIViewController {
         stackView.distribution = .equalSpacing
         stackView.spacing = 12
         return stackView
+    }()
+    
+    private let endDateTextField: DatePickerTextField = {
+        let textField = DatePickerTextField()
+        textField.text = "설정안함"
+        textField.textColor = .white
+        textField.textAlignment = .center
+        textField.tintColor = .clear
+        textField.clipsToBounds = true
+        textField.layer.cornerRadius = 5
+        textField.backgroundColor = .secondaryColor
+        return textField
     }()
     
     private let notificationLabel: UILabel = {
@@ -148,6 +172,32 @@ final class CreateRoutineViewController: UIViewController {
         button.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         button.isEnabled = false
         return button
+    }()
+    
+    private let startDatePicker: UIDatePicker = {
+        let picker = UIDatePicker()
+        picker.datePickerMode = .date
+        picker.locale = Locale(identifier: "ko-KR")
+        picker.preferredDatePickerStyle = .inline
+        picker.tag = 1
+        picker.backgroundColor = .white
+        return picker
+    }()
+    private let endDatePicker: UIDatePicker = {
+        let picker = UIDatePicker()
+        picker.datePickerMode = .date
+        picker.locale = Locale(identifier: "ko-KR")
+        picker.preferredDatePickerStyle = .inline
+        picker.tag = 2
+        picker.backgroundColor = .white
+        return picker
+    }()
+    private let notificationDatePicker: UIDatePicker = {
+        let picker = UIDatePicker()
+        picker.datePickerMode = .time
+        picker.locale = Locale(identifier: "ko-KR")
+        picker.timeZone = .autoupdatingCurrent
+        return picker
     }()
     
     var routine: Routine? = nil
@@ -271,7 +321,7 @@ final class CreateRoutineViewController: UIViewController {
             make.width.equalTo(view.frame.width/2)
             make.centerX.equalToSuperview()
         }
-        
+                
         doneButton.snp.makeConstraints { make in
             make.height.equalTo(44)
             make.leading.trailing.bottom.equalToSuperview()
@@ -338,10 +388,25 @@ final class CreateRoutineViewController: UIViewController {
     }
     
     private func dateStackViewSetting() {
+        startDatePicker.addTarget(self, action: #selector(dateFormatting), for: .valueChanged)
+        endDatePicker.addTarget(self, action: #selector(dateFormatting), for: .valueChanged)
         startDateStackView.addArrangedSubview(createLabel(text: "시작일:"))
-        startDateStackView.addArrangedSubview(createButton(type: .nomarl, size: .medium))
+        startDateTextField.snp.makeConstraints { make in
+            make.width.equalTo(ButtonSize.medium.rawValue)
+            make.height.equalTo(30)
+        }
+        startDateTextField.inputView = startDatePicker
+        startDateTextField.inputAccessoryView = addInputAccessoryView(datePickerState: .start)
+        startDateStackView.addArrangedSubview(startDateTextField)
+        endDateTextField.snp.makeConstraints { make in
+            make.width.equalTo(ButtonSize.medium.rawValue)
+            make.height.equalTo(30)
+        }
+        endDateTextField.inputView = endDatePicker
+        endDateTextField.inputAccessoryView = addInputAccessoryView(datePickerState: .end)
         endDateStackView.addArrangedSubview(createLabel(text: "종료일:"))
-        endDateStackView.addArrangedSubview(createButton(type: .disable, size: .medium))
+        endDateStackView.addArrangedSubview(endDateTextField)
+        
     }
     
     private func notificationStackViewSetting() {
@@ -414,6 +479,36 @@ final class CreateRoutineViewController: UIViewController {
         return button
     }
     
+    enum DatePickerState {
+        case start, end
+    }
+    
+    func addInputAccessoryView(datePickerState: DatePickerState) -> UIView {
+        let width = UIScreen.main.bounds.width
+        let toolBar = UIToolbar(frame: CGRect(x: 0.0, y: 0.0, width: width, height: 44.0))
+        let flexible = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let barButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(datePickerDone))
+        switch datePickerState {
+        case .start:
+            toolBar.setItems([flexible, barButton], animated: false)
+        case .end:
+            let noSettingButton = UIBarButtonItem(title: "설정안함", style: .plain, target: self, action: #selector(noSetting))
+            toolBar.setItems([noSettingButton, flexible, barButton], animated: false)
+        }
+        return toolBar
+        
+    }
+    
+    @objc func datePickerDone() {
+        view.endEditing(true)
+    }
+    
+    @objc func noSetting() {
+        endDateTextField.textColor = .white
+        endDateTextField.text = "설정안함"
+        endDateTextField.resignFirstResponder()
+    }
+    
     @objc func keyboardWillShow(_ notification: Notification) {
         guard let userInfo: NSDictionary = notification.userInfo as? NSDictionary else {
                 return
@@ -423,13 +518,13 @@ final class CreateRoutineViewController: UIViewController {
         }
         
         let keyboardHeight = keyboardFrame.cgRectValue.height
-        doneButton.snp.makeConstraints { make in
+        doneButton.snp.updateConstraints { make in
             make.bottom.equalToSuperview().inset(keyboardHeight)
         }
     }
     
     @objc func keyboardWillHide(_ notification: Notification) {
-        doneButton.snp.makeConstraints { make in
+        doneButton.snp.updateConstraints { make in
             make.bottom.equalToSuperview()
         }
     }
@@ -485,7 +580,6 @@ final class CreateRoutineViewController: UIViewController {
         let startDate = fetchDate(to: startDateStackView) ?? Date()
         let endDate = fetchDate(to: endDateStackView)
         let notificationTime = selectedNotificationTime()
-        let type = selectedType()
         routine.description = description
         routine.dayOfWeek = dayOfWeeks
         routine.startDate = startDate
@@ -511,13 +605,16 @@ final class CreateRoutineViewController: UIViewController {
     
     private func fetchDate(to stackView: UIStackView) -> Date? {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy년MM월dd일"
-        var date: Date?
-        if let dateButton = stackView.arrangedSubviews.compactMap({ $0 as? UIButton }).first,
-           let dateString = dateButton.title(for: .normal) {
-            date = formatter.date(from: dateString)
+        formatter.dateFormat = "yyyy년 MM월 dd일"
+        if let dateTextField = stackView.arrangedSubviews.compactMap({ $0 as? UITextField }).first,
+           let dateString = dateTextField.text {
+            let gmtDate = formatter.date(from: dateString)
+            guard let gmtDate = gmtDate else { return nil }
+            let secondsFromGMT = TimeZone.autoupdatingCurrent.secondsFromGMT(for: gmtDate)
+            guard let localizedDate = gmtDate.addingTimeInterval(TimeInterval(secondsFromGMT)).removeTimeStamp else { return nil }
+            return localizedDate
         }
-        return date
+        return nil
     }
     
     private func selectedNotificationTime() -> Date? {
@@ -545,6 +642,27 @@ final class CreateRoutineViewController: UIViewController {
         typeButtonList.forEach { button in
             button.isSelected = false
             button.backgroundColor = .secondaryColor
+        }
+    }
+    
+    // tag 1: StartDatePicker, tag 2: EndDatePicker
+    @objc
+    func dateFormatting(datePicker: UIDatePicker) {
+        var textField = UITextField()
+        if datePicker.tag == 1 {
+            textField = startDateTextField
+            textField.text = startDatePicker.date.dateToString
+        } else if datePicker.tag == 2 {
+            textField = endDateTextField
+            if startDatePicker.date > endDatePicker.date {
+                let alert = UIAlertController(title: nil, message: "시작일과 종료일이 올바르지 않게 입력되었습니다.", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "확인", style: .default)
+                alert.addAction(okAction)
+                present(alert, animated: false)
+                return
+            }
+            textField.text = endDatePicker.date.dateToString
+            textField.textColor = .black
         }
     }
     

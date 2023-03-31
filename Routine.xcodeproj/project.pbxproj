@@ -25,6 +25,7 @@
 		18A9B24B299B8195006C370D /* CountRoutineTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A9B24A299B8195006C370D /* CountRoutineTableViewCell.swift */; };
 		18A9B24D299B9231006C370D /* TextAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A9B24C299B9231006C370D /* TextAddViewController.swift */; };
 		18AB794C29C9BB680080A0DE /* UITaskTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AB794B29C9BB680080A0DE /* UITaskTableViewCell.swift */; };
+		18AEDA1D29CD7F3B00DAEA0F /* UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AEDA1C29CD7F3B00DAEA0F /* UITextField.swift */; };
 		18B6265C296F111200BDAB50 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18B6265B296F111200BDAB50 /* UIColor.swift */; };
 		18B6265E296F118F00BDAB50 /* CheckRoutineTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18B6265D296F118F00BDAB50 /* CheckRoutineTableViewCell.swift */; };
 		18B62669296F11F200BDAB50 /* TextRoutineTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18B62667296F11F200BDAB50 /* TextRoutineTableViewCell.swift */; };
@@ -95,6 +96,7 @@
 		18A9B24A299B8195006C370D /* CountRoutineTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountRoutineTableViewCell.swift; sourceTree = "<group>"; };
 		18A9B24C299B9231006C370D /* TextAddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextAddViewController.swift; sourceTree = "<group>"; };
 		18AB794B29C9BB680080A0DE /* UITaskTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITaskTableViewCell.swift; sourceTree = "<group>"; };
+		18AEDA1C29CD7F3B00DAEA0F /* UITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextField.swift; sourceTree = "<group>"; };
 		18B6265B296F111200BDAB50 /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		18B6265D296F118F00BDAB50 /* CheckRoutineTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CheckRoutineTableViewCell.swift; path = Cell/CheckRoutineTableViewCell.swift; sourceTree = "<group>"; };
 		18B62667296F11F200BDAB50 /* TextRoutineTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TextRoutineTableViewCell.swift; path = Cell/TextRoutineTableViewCell.swift; sourceTree = "<group>"; };
@@ -202,6 +204,7 @@
 				18C36401296DBFFC00745400 /* CALayer.swift */,
 				188300C1296FA71600E418DB /* UITableView.swift */,
 				1885082129784FC9005B7BAB /* Date.swift */,
+				18AEDA1C29CD7F3B00DAEA0F /* UITextField.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -312,7 +315,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1400;
-				LastUpgradeCheck = 1400;
+				LastUpgradeCheck = 1420;
 				TargetAttributes = {
 					1888269429794BDF00B6523A = {
 						CreatedOnToolsVersion = 14.0;
@@ -444,6 +447,7 @@
 				18C363DB296D105100745400 /* SettingViewController.swift in Sources */,
 				18C363D3296D0D0900745400 /* TabBarController.swift in Sources */,
 				18A9B24B299B8195006C370D /* CountRoutineTableViewCell.swift in Sources */,
+				18AEDA1D29CD7F3B00DAEA0F /* UITextField.swift in Sources */,
 				188508022977A2BF005B7BAB /* Task.swift in Sources */,
 				1885081C2977F4C0005B7BAB /* ListViewModel.swift in Sources */,
 				188BF94329724E3B0057C250 /* CreateRoutineViewController.swift in Sources */,
@@ -485,7 +489,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2FY7M8J988;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = KD.RoutineUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -503,7 +507,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2FY7M8J988;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = KD.RoutineUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -520,10 +524,11 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 2FY7M8J988;
 				ENABLE_TESTABILITY = NO;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MACOSX_DEPLOYMENT_TARGET = 12.3;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = KD.RoutineTests;
@@ -543,10 +548,11 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 2FY7M8J988;
 				ENABLE_TESTABILITY = NO;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MACOSX_DEPLOYMENT_TARGET = 12.3;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = KD.RoutineTests;
@@ -610,7 +616,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -664,7 +670,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -689,7 +695,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -718,7 +724,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

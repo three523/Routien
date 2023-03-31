@@ -66,7 +66,7 @@ final class ListViewController: UIViewController {
     }()
     private var todayIndex = 0
     private var beginPositionX: CGFloat = 0.0
-    private var selectedDate = Date() {
+    private var selectedDate = Date().removeTimeStamp! {
         didSet {
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy년 M월"
@@ -256,6 +256,7 @@ extension ListViewController: UICollectionViewDelegate, UICollectionViewDataSour
             return
         }
         selectedDate = selectedCell.date
+        listTableView.reloadData()
     }
     
     func appendDateList() {
