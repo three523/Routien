@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UserNotifications
 
 enum DayOfWeek: String, CaseIterable {
     case mon = "월"
@@ -49,6 +50,30 @@ extension Routine {
         for index in afterIndex..<myTaskList.count {
             myTaskList[index].description = self.description
         }
+    }
+    func notification() -> [UNNotificationRequest] {
+        if notificationTime == nil { return [] }
+        let triggers = createTrigger()
+        var requestList = [UNNotificationRequest]()
+        triggers.forEach { trigger in
+            let content = UNMutableNotificationContent()
+            content.title = self.description
+            content.sound = UNNotificationSound.default
+            guard let weekday = trigger.dateComponents.weekday else { return }
+            requestList.append(UNNotificationRequest(identifier: self.identifier.uuidString + String(weekday), content: content, trigger: trigger))
+        }
+        return requestList
+    }
+    //TODO: 루틴 업데이트시 기존 루틴 제거방법 생각하기
+    private func createTrigger() -> [UNCalendarNotificationTrigger] {
+        var triggerWeekly = [UNCalendarNotificationTrigger]()
+        let allDayOfWeek = DayOfWeek.allCases
+        for weekday in 0..<allDayOfWeek.count where self.dayOfWeek.contains(allDayOfWeek[weekday]) {
+            var weekDayDateComponents = DateComponents(hour: notificationTime?.hour, minute: notificationTime?.minute, weekday: weekday + 1)
+            let trigger = UNCalendarNotificationTrigger(dateMatching: weekDayDateComponents, repeats: true)
+            triggerWeekly.append(trigger)
+        }
+        return triggerWeekly
     }
 }
 

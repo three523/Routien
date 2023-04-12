@@ -16,7 +16,10 @@ extension Date {
     
     var timeToString: String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.dateFormat = "a h:mm"
+        formatter.amSymbol = "오전"
+        formatter.pmSymbol = "오후"
         return formatter.string(from: self)
     }
     
@@ -36,6 +39,14 @@ extension Date {
     
     var day: Int {
         return Calendar.current.component(.day, from: self)
+    }
+    
+    var hour: Int {
+        return Calendar.current.component(.hour, from: self)
+    }
+    
+    var minute: Int {
+        return Calendar.current.component(.minute, from: self)
     }
     
     var weekDay: DayOfWeek? {
@@ -70,7 +81,6 @@ extension Date {
         let weekdays = calendar.range(of: .weekday, in: .weekOfMonth, for: date) ?? Range(uncheckedBounds: (lower: 1, upper: 8))
         let days = (weekdays.lowerBound ..< weekdays.upperBound)
             .compactMap { calendar.date(byAdding: .day, value: $0 - dayOfWeek, to: date)?.removeTimeStamp }
-        print(days)
         return days
     }
     

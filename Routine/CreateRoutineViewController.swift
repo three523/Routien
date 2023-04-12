@@ -14,7 +14,7 @@ enum RoutineType: String {
     static let allCases: [RoutineType] = [.check, .text, .count]
 }
 
-final class CreateRoutineViewController: UIViewController {
+final class CreateRoutineViewController: UIViewController, UNUserNotificationCenterDelegate {
     
     private let routineLabel: UILabel = {
         let label = UILabel()
@@ -77,7 +77,7 @@ final class CreateRoutineViewController: UIViewController {
         textField.tintColor = .clear
         textField.clipsToBounds = true
         textField.layer.cornerRadius = 5
-        textField.backgroundColor = .secondaryColor
+        textField.backgroundColor = .mainColor
         return textField
     }()
     
@@ -118,7 +118,7 @@ final class CreateRoutineViewController: UIViewController {
         stackView.spacing = 12
         return stackView
     }()
-    
+        
     private let notificationSwitch: UISwitch = {
         let toggle = UISwitch()
         toggle.onTintColor = .mainColor
@@ -195,8 +195,15 @@ final class CreateRoutineViewController: UIViewController {
     private let notificationDatePicker: UIDatePicker = {
         let picker = UIDatePicker()
         picker.datePickerMode = .time
+        picker.preferredDatePickerStyle = .compact
         picker.locale = Locale(identifier: "ko-KR")
         picker.timeZone = .autoupdatingCurrent
+        picker.contentHorizontalAlignment = .center
+        picker.contentVerticalAlignment = .center
+        picker.backgroundColor = .secondaryColor
+        picker.layer.cornerRadius = 5
+        picker.clipsToBounds = true
+        picker.alpha = 0.01001
         return picker
     }()
     
@@ -339,6 +346,22 @@ final class CreateRoutineViewController: UIViewController {
                 circleView.isSelected = false
             }
         }
+        startDatePicker.date = routine.startDate
+        if let endDate = routine.endDate {
+            endDatePicker.date = endDate
+            endDateTextField.backgroundColor = .mainColor
+            endDateTextField.text = endDate.dateToString
+            endDateTextField.textColor = .black
+        }
+        if let routineNotification = routine.notificationTime {
+            notificationSwitch.isOn = true
+            notificationStackView.bringSubviewToFront(notificationDatePicker)
+            notificationDatePicker.date = routineNotification
+            guard let notificationButton = notificationStackView.subviews.compactMap({ $0 as? UIButton }).first else { return }
+            notificationButton.backgroundColor = .mainColor
+            notificationButton.setTitle(routineNotification.timeToString, for: .normal)
+            notificationButton.setTitleColor(.black, for: .normal)
+        }
         
         if let countRoutine = routine as? CountRoutine {
             typeStackView.arrangedSubviews.forEach { view in
@@ -390,6 +413,7 @@ final class CreateRoutineViewController: UIViewController {
     private func dateStackViewSetting() {
         startDatePicker.addTarget(self, action: #selector(dateFormatting), for: .valueChanged)
         endDatePicker.addTarget(self, action: #selector(dateFormatting), for: .valueChanged)
+        endDateTextField.addTarget(self, action: #selector(setEndDatePicker), for: .touchDown)
         startDateStackView.addArrangedSubview(createLabel(text: "시작일:"))
         startDateTextField.snp.makeConstraints { make in
             make.width.equalTo(ButtonSize.medium.rawValue)
@@ -406,12 +430,29 @@ final class CreateRoutineViewController: UIViewController {
         endDateTextField.inputAccessoryView = addInputAccessoryView(datePickerState: .end)
         endDateStackView.addArrangedSubview(createLabel(text: "종료일:"))
         endDateStackView.addArrangedSubview(endDateTextField)
-        
+    }
+    
+    @objc
+    func setEndDatePicker() {
+        endDateTextField.text = endDatePicker.date.dateToString
+        endDateTextField.backgroundColor = .mainColor
+        endDateTextField.textColor = .black
     }
     
     private func notificationStackViewSetting() {
         notificationStackView.addArrangedSubview(createLabel(text: "알림 시간:"))
-        notificationStackView.addArrangedSubview(createButton(type: .disable, size: .small))
+        let notificationButton = createButton(type: .disable, size: .medium)
+        notificationStackView.addArrangedSubview(notificationDatePicker)
+        notificationStackView.addSubview(notificationButton)
+        notificationStackView.sendSubviewToBack(notificationDatePicker)
+        notificationButton.snp.makeConstraints { make in
+            make.top.leading.trailing.bottom.equalTo(notificationDatePicker)
+        }
+        notificationDatePicker.snp.makeConstraints { make in
+            make.width.equalTo(ButtonSize.medium.rawValue)
+            make.height.equalTo(30)
+        }
+        notificationDatePicker.addTarget(self, action: #selector(notificationPicker), for: .valueChanged)
     }
     
     private func typeStackViewSetting() {
@@ -487,11 +528,12 @@ final class CreateRoutineViewController: UIViewController {
         let width = UIScreen.main.bounds.width
         let toolBar = UIToolbar(frame: CGRect(x: 0.0, y: 0.0, width: width, height: 44.0))
         let flexible = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let barButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(datePickerDone))
         switch datePickerState {
         case .start:
+            let barButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(startDatePickerDone))
             toolBar.setItems([flexible, barButton], animated: false)
         case .end:
+            let barButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(endDatePickerDone))
             let noSettingButton = UIBarButtonItem(title: "설정안함", style: .plain, target: self, action: #selector(noSetting))
             toolBar.setItems([noSettingButton, flexible, barButton], animated: false)
         }
@@ -499,13 +541,23 @@ final class CreateRoutineViewController: UIViewController {
         
     }
     
-    @objc func datePickerDone() {
+    @objc
+    func startDatePickerDone() {
         view.endEditing(true)
     }
     
-    @objc func noSetting() {
+    @objc
+    func endDatePickerDone() {
+        view.endEditing(true)
+        endDateTextField.backgroundColor = .mainColor
+        endDateTextField.textColor = .black
+    }
+    
+    @objc
+    func noSetting() {
         endDateTextField.textColor = .white
         endDateTextField.text = "설정안함"
+        endDateTextField.backgroundColor = .secondaryColor
         endDateTextField.resignFirstResponder()
     }
     
@@ -540,8 +592,10 @@ final class CreateRoutineViewController: UIViewController {
     
     @objc
     func doneButtonClick() {
-        if self.routine != nil {
+        if let routine = self.routine {
+            let afterDescription = routine.description
             guard let updateRoutine = updateRoutine() else { return }
+            updateNotification(routine: updateRoutine)
             RoutineManager.update(updateRoutine)
             dismiss(animated: true)
             return
@@ -552,6 +606,7 @@ final class CreateRoutineViewController: UIViewController {
             return
         }
         RoutineManager.create(newRoutine)
+        addNotification(routine: newRoutine)
         dismiss(animated: true)
     }
     
@@ -588,6 +643,32 @@ final class CreateRoutineViewController: UIViewController {
         return routine
     }
     
+    private func addNotification(routine: Routine) {
+        let requestList = routine.notification()
+        requestList.forEach { request in
+            UNUserNotificationCenter.current().add(request) { error in
+                if let error {
+                    print(error.localizedDescription)
+                }
+            }
+        }
+    }
+    
+    private func removeNotification(routine: Routine) {
+        let notificationCenter = UNUserNotificationCenter.current()
+        let allDayOfWeek = DayOfWeek.allCases
+        var identifiers = [String]()
+        for index in 0..<allDayOfWeek.count where routine.dayOfWeek.contains(allDayOfWeek[index]) {
+            identifiers.append(routine.identifier.uuidString + String(index + 1))
+        }
+        notificationCenter.removePendingNotificationRequests(withIdentifiers: identifiers)
+    }
+    
+    private func updateNotification(routine: Routine) {
+        removeNotification(routine: routine)
+        addNotification(routine: routine)
+    }
+    
     private func selectedDayOfWeeks() -> [DayOfWeek] {
         var dayOfWeeks: [DayOfWeek] = []
         let selectedCircleView = workDailyStackView.arrangedSubviews
@@ -618,14 +699,8 @@ final class CreateRoutineViewController: UIViewController {
     }
     
     private func selectedNotificationTime() -> Date? {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
-        var date: Date?
-        if let dateButton = notificationStackView.arrangedSubviews.compactMap({ $0 as? UIButton }).first,
-           let dateString = dateButton.title(for: .normal) {
-            date = formatter.date(from: dateString)
-        }
-        return date
+        guard notificationSwitch.isOn else { return nil }
+        return notificationDatePicker.date
     }
     
     private func selectedType() -> RoutineType {
@@ -650,6 +725,15 @@ final class CreateRoutineViewController: UIViewController {
     func dateFormatting(datePicker: UIDatePicker) {
         var textField = UITextField()
         if datePicker.tag == 1 {
+            if startDatePicker.date > endDatePicker.date {
+                let alert = UIAlertController(title: nil, message: "시작일과 종료일이 올바르지 않게 입력되었습니다.", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "확인", style: .default)
+                alert.addAction(okAction)
+                present(alert, animated: false)
+                startDatePicker.date = endDatePicker.date
+                startDateTextField.text = endDatePicker.date.dateToString
+                return
+            }
             textField = startDateTextField
             textField.text = startDatePicker.date.dateToString
         } else if datePicker.tag == 2 {
@@ -659,25 +743,38 @@ final class CreateRoutineViewController: UIViewController {
                 let okAction = UIAlertAction(title: "확인", style: .default)
                 alert.addAction(okAction)
                 present(alert, animated: false)
+                endDatePicker.date = startDatePicker.date
+                endDateTextField.text = endDatePicker.date.dateToString
                 return
             }
             textField.text = endDatePicker.date.dateToString
             textField.textColor = .black
+            textField.backgroundColor = .mainColor
         }
     }
     
     @objc
     func switchChange(_ toggle: UISwitch) {
-        guard let notificationButton = notificationStackView.arrangedSubviews.compactMap({ $0 as? UIButton }).first else { return }
+        guard let notificationButton = notificationStackView.subviews.compactMap({ $0 as? UIButton }).first else { return }
         if toggle.isOn {
-            notificationButton.isSelected = true
-            notificationButton.setTitle(Date().timeToString, for: .normal)
+            notificationStackView.bringSubviewToFront(notificationDatePicker)
+            notificationDatePicker.date = Date()
+            let date = Date().timeToString
+            notificationButton.setTitle(date, for: .normal)
             notificationButton.backgroundColor = .mainColor
+            notificationButton.setTitleColor(.black, for: .normal)
         } else {
-            notificationButton.isSelected = false
+            notificationStackView.sendSubviewToBack(notificationDatePicker)
             notificationButton.setTitle("설정 안함", for: .normal)
             notificationButton.backgroundColor = .secondaryColor
+            notificationButton.setTitleColor(.white, for: .normal)
         }
+    }
+    
+    @objc
+    func notificationPicker(datePicker: UIDatePicker) {
+        guard let notificationButton = notificationStackView.subviews.compactMap({ $0 as? UIButton }).first else { return }
+        notificationButton.setTitle(notificationDatePicker.date.timeToString, for: .normal)
     }
     
     @objc
