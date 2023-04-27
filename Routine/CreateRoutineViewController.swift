@@ -16,6 +16,20 @@ enum RoutineType: String {
 
 final class CreateRoutineViewController: UIViewController, UNUserNotificationCenterDelegate {
     
+    private let exitButton: UIButton = {
+        let btn = UIButton()
+        btn.setTitle("취소", for: .normal)
+        btn.setTitleColor(UIColor.red, for: .normal)
+        return btn
+    }()
+    
+    private let removeButton: UIButton = {
+        let btn = UIButton()
+        btn.setTitle("삭제", for: .normal)
+        btn.setTitleColor(UIColor.red, for: .normal)
+        return btn
+    }()
+    
     private let routineLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 17, weight: .semibold)
@@ -129,7 +143,7 @@ final class CreateRoutineViewController: UIViewController, UNUserNotificationCen
         let label = UILabel()
         label.font = .systemFont(ofSize: 17, weight: .semibold)
         label.textColor = .black
-        label.text = "타입:"
+        label.text = "타입"
         return label
     }()
     
@@ -183,6 +197,7 @@ final class CreateRoutineViewController: UIViewController, UNUserNotificationCen
         picker.backgroundColor = .white
         return picker
     }()
+    
     private let endDatePicker: UIDatePicker = {
         let picker = UIDatePicker()
         picker.datePickerMode = .date
@@ -192,6 +207,7 @@ final class CreateRoutineViewController: UIViewController, UNUserNotificationCen
         picker.backgroundColor = .white
         return picker
     }()
+    
     private let notificationDatePicker: UIDatePicker = {
         let picker = UIDatePicker()
         picker.datePickerMode = .time
@@ -206,7 +222,7 @@ final class CreateRoutineViewController: UIViewController, UNUserNotificationCen
         picker.alpha = 0.01001
         return picker
     }()
-    
+        
     var routine: Routine? = nil
     
     override func viewDidLoad() {
@@ -234,6 +250,8 @@ final class CreateRoutineViewController: UIViewController, UNUserNotificationCen
     }
     
     private func viewAdd() {
+        view.addSubview(exitButton)
+        view.addSubview(removeButton)
         view.addSubview(routineLabel)
         view.addSubview(routineTextField)
         view.addSubview(workDailyLabel)
@@ -252,8 +270,19 @@ final class CreateRoutineViewController: UIViewController, UNUserNotificationCen
     }
     
     private func autolayoutSetting() {
-        routineLabel.snp.makeConstraints { make in
+        exitButton.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide).inset(12)
+            make.trailing.equalTo(removeButton.snp.leading).inset(-10)
+        }
+        
+        removeButton.snp.makeConstraints { make in
+            make.top.equalTo(exitButton.snp.top)
+            make.trailing.equalTo(view.safeAreaLayoutGuide).inset(10)
+            make.width.equalTo(0)
+        }
+        
+        routineLabel.snp.makeConstraints { make in
+            make.top.equalTo(exitButton.snp.bottom)
             make.leading.equalToSuperview().inset(10)
         }
         
@@ -319,12 +348,12 @@ final class CreateRoutineViewController: UIViewController, UNUserNotificationCen
         }
         
         goalLabel.snp.makeConstraints { make in
-            make.top.equalTo(typeStackView.snp.bottom).inset(-16)
+            make.top.equalTo(typeStackView.snp.bottom).inset(-32)
             make.leading.equalToSuperview().inset(10)
         }
         
         goalTextField.snp.makeConstraints { make in
-            make.top.equalTo(typeStackView.snp.bottom).inset(-16)
+            make.top.equalTo(typeStackView.snp.bottom).inset(-32)
             make.width.equalTo(view.frame.width/2)
             make.centerX.equalToSuperview()
         }
@@ -338,6 +367,7 @@ final class CreateRoutineViewController: UIViewController, UNUserNotificationCen
     func update() {
         guard let routine = self.routine else { return }
         routineTextField.text = routine.description
+        removeButtonEnabled()
         workDailyStackView.arrangedSubviews.forEach { view in
             guard let circleView = view as? CircleTextView else { return }
             if routine.dayOfWeek.contains(circleView.dayOfWeek) {
@@ -393,8 +423,51 @@ final class CreateRoutineViewController: UIViewController, UNUserNotificationCen
                 }
             }
         }
+        typeStackView.arrangedSubviews.compactMap { $0 as? UIButton }.forEach { button in
+            button.removeTarget(nil, action: nil, for: .allTouchEvents)
+            button.addTarget(self, action: #selector(enabledAlert), for: .touchUpInside)
+        }
         doneButton.isEnabled = true
         doneButton.backgroundColor = .mainColor
+    }
+    
+    private var isAnimation: Bool = false
+    
+    @objc
+    func enabledAlert() {
+        
+        if isAnimation { return }
+        isAnimation = true
+        let label = UILabel()
+        label.frame.origin = CGPoint(x: view.frame.minX, y: typeStackView.frame.maxY)
+        label.frame.size = CGSize(width: view.frame.width, height: typeStackView.frame.height)
+        label.textAlignment = .center
+        label.font = .systemFont(ofSize: 12, weight: .regular)
+        label.text = "타입은 변경할 수 없습니다."
+        label.textColor = .red
+        view.addSubview(label)
+        CATransaction.begin()
+        CATransaction.setCompletionBlock {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                label.removeFromSuperview()
+                self.isAnimation = false
+            }
+        }
+        let animation = CABasicAnimation(keyPath: "position")
+        animation.duration = 0.1
+        animation.repeatCount = 5
+        animation.autoreverses = true
+        animation.fromValue = NSValue(cgPoint: CGPoint(x: label.center.x - 5, y: label.center.y))
+        animation.toValue = NSValue(cgPoint: CGPoint(x: label.center.x + 5, y: label.center.y))
+        label.layer.add(animation, forKey: "shake")
+        CATransaction.commit()
+    }
+    
+    private func removeButtonEnabled() {
+        exitButton.layoutIfNeeded()
+        removeButton.snp.updateConstraints { make in
+            make.width.equalTo(exitButton.bounds.width)
+        }
     }
     
     private func dailyStackViewSetting() {
@@ -456,7 +529,7 @@ final class CreateRoutineViewController: UIViewController, UNUserNotificationCen
     }
     
     private func typeStackViewSetting() {
-        typeStackView.addArrangedSubview(createLabel(text: "타입"))
+        typeStackView.addArrangedSubview(createLabel(text: "타입:"))
         let buttonTextList = RoutineType.allCases
         buttonTextList.forEach({ buttonType in
             let button = createButton(type: .disable, size: .small)
@@ -587,7 +660,84 @@ final class CreateRoutineViewController: UIViewController, UNUserNotificationCen
     }
     
     private func buttonSetting() {
+        if routine != nil {
+            exitButton.addTarget(self, action: #selector(exitRoutineUpdate), for: .touchUpInside)
+        } else {
+            exitButton.addTarget(self, action: #selector(exitRoutineCreate), for: .touchUpInside)
+        }
+        removeButton.addTarget(self, action: #selector(removeRoutine), for: .touchUpInside)
         doneButton.addTarget(self, action: #selector(doneButtonClick), for: .touchUpInside)
+    }
+    
+    @objc
+    func exitRoutineCreate() {
+        let isWrite = isRoutineWrite()
+        if isWrite {
+            let alert = UIAlertController(title: "닫으시겠습니까?", message: nil, preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "확인", style: .destructive) { _ in
+                self.dismiss(animated: true)
+            }
+            let cancelAction = UIAlertAction(title: "취소", style: .cancel)
+            alert.addAction(okAction)
+            alert.addAction(cancelAction)
+            present(alert, animated: false)
+            return
+        }
+        self.dismiss(animated: true)
+    }
+    
+    func isRoutineWrite() -> Bool {
+        if let routineTitle = routineTextField.text,
+           let endDateText = endDateTextField.text {
+            let isRoutineTitleWrite = routineTitle.isEmpty == false
+            let isDateWrite = startDatePicker.date.isToday == false || endDateText != "설정안함"
+            let isNotificationWrite = notificationSwitch.isOn == true
+            let isWrite = isRoutineTitleWrite != false || isDateWrite != false || isNotificationWrite != false
+            return isWrite
+        }
+        return false
+    }
+    
+    @objc
+    func exitRoutineUpdate() {
+        let isAmend = isRoutineAmend()
+        if isAmend {
+            let alert = UIAlertController(title: "닫으시겠습니까?", message: "루틴에 수정사항이 있습니다", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "확인", style: .destructive) { _ in
+                self.dismiss(animated: true)
+            }
+            let cancelAction = UIAlertAction(title: "취소", style: .cancel)
+            alert.addAction(okAction)
+            alert.addAction(cancelAction)
+            present(alert, animated: false)
+            return
+        }
+        self.dismiss(animated: true)
+    }
+    
+    func isRoutineAmend() -> Bool {
+        guard let updateRoutine = updateRoutine(),
+              let routine = routine else { return false }
+        let isRoutineTitleAmend = routine.description != updateRoutine.description
+        let isDateAmend = routine.startDate != updateRoutine.startDate || routine.endDate != updateRoutine.endDate
+        let isNotificationAmend = routine.notificationTime != updateRoutine.notificationTime
+        let isAmend = isRoutineTitleAmend != false || isDateAmend != false || isNotificationAmend != false
+        return isAmend
+    }
+    
+    @objc
+    func removeRoutine() {
+        guard let routine = routine else { return }
+        let alert = UIAlertController(title: "루틴을 삭제하시겠습니까?", message: "지우면 다시 복구할수 없습니다", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "확인", style: .destructive) { _ in
+            RoutineManager.remove(routineIdentifier: routine.identifier)
+            self.removeNotification(routine: routine)
+            self.dismiss(animated: true)
+        }
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel)
+        alert.addAction(okAction)
+        alert.addAction(cancelAction)
+        present(alert, animated: false)
     }
     
     @objc
@@ -780,8 +930,11 @@ final class CreateRoutineViewController: UIViewController, UNUserNotificationCen
     @objc
     func typeButtonClick(_ button: UIButton) {
         unSelectAllTypeButton()
-        button.backgroundColor = .mainColor
+        DispatchQueue.main.async {
+            button.backgroundColor = .mainColor
+        }
         button.isSelected = true
+        button.setTitleColor(.black, for: .normal)
     }
     
     @objc
