@@ -22,8 +22,6 @@ class TodoListTableViewCell: UITableViewCell {
     private let checkButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "checkmark"), for: .normal)
-        button.layer.borderWidth = 0.5
-        button.layer.borderColor = UIColor.systemGray.cgColor
         button.tintColor = .systemGray
         return button
     }()
