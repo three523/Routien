@@ -19,9 +19,15 @@
 		188826AE29794C2100B6523A /* ListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188826AD29794C2100B6523A /* ListViewModelTests.swift */; };
 		188826B629796D6E00B6523A /* CreateRoutineViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188826B529796D6E00B6523A /* CreateRoutineViewControllerTests.swift */; };
 		188826B729796D6E00B6523A /* CreateRoutineViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188826B529796D6E00B6523A /* CreateRoutineViewControllerTests.swift */; };
+		1888996D29839DEE00F03EA9 /* DateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1888996C29839DEE00F03EA9 /* DateTests.swift */; };
+		1888996E2983A86900F03EA9 /* SnapKit-Dynamic in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 18C363FF296DBCFE00745400 /* SnapKit-Dynamic */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		188BF94329724E3B0057C250 /* CreateRoutineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188BF94229724E3B0057C250 /* CreateRoutineViewController.swift */; };
+		18A9B24B299B8195006C370D /* CountRoutineTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A9B24A299B8195006C370D /* CountRoutineTableViewCell.swift */; };
+		18A9B24D299B9231006C370D /* TextAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A9B24C299B9231006C370D /* TextAddViewController.swift */; };
+		18AB794C29C9BB680080A0DE /* UITaskTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AB794B29C9BB680080A0DE /* UITaskTableViewCell.swift */; };
+		18AEDA1D29CD7F3B00DAEA0F /* UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AEDA1C29CD7F3B00DAEA0F /* UITextField.swift */; };
 		18B6265C296F111200BDAB50 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18B6265B296F111200BDAB50 /* UIColor.swift */; };
-		18B6265E296F118F00BDAB50 /* ButtonRoutineTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18B6265D296F118F00BDAB50 /* ButtonRoutineTableViewCell.swift */; };
+		18B6265E296F118F00BDAB50 /* CheckRoutineTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18B6265D296F118F00BDAB50 /* CheckRoutineTableViewCell.swift */; };
 		18B62669296F11F200BDAB50 /* TextRoutineTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18B62667296F11F200BDAB50 /* TextRoutineTableViewCell.swift */; };
 		18B6266A296F11F200BDAB50 /* DailyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18B62668296F11F200BDAB50 /* DailyCollectionViewCell.swift */; };
 		18B6266E296F123800BDAB50 /* TodoListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18B6266D296F123800BDAB50 /* TodoListTableViewCell.swift */; };
@@ -57,6 +63,20 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		1888996F2983A86900F03EA9 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				1888996E2983A86900F03EA9 /* SnapKit-Dynamic in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		188300C1296FA71600E418DB /* UITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableView.swift; sourceTree = "<group>"; };
 		188508012977A2BF005B7BAB /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
@@ -69,11 +89,16 @@
 		1888269729794BDF00B6523A /* ListViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewControllerTests.swift; sourceTree = "<group>"; };
 		188826AD29794C2100B6523A /* ListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewModelTests.swift; sourceTree = "<group>"; };
 		188826B529796D6E00B6523A /* CreateRoutineViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRoutineViewControllerTests.swift; sourceTree = "<group>"; };
-		188826C32979825E00B6523A /* RoutineUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = RoutineUITests.xctest; path = "/Users/apple/Desktop/swift/Routine/build/Debug-iphoneos/RoutineUITests.xctest"; sourceTree = "<absolute>"; };
-		188826C42979825E00B6523A /* RoutineTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = RoutineTests.xctest; path = /Users/apple/Desktop/swift/Routine/build/Debug/RoutineTests.xctest; sourceTree = "<absolute>"; };
+		1888996A2983902000F03EA9 /* RoutineUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RoutineUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1888996B2983902000F03EA9 /* RoutineTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RoutineTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1888996C29839DEE00F03EA9 /* DateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTests.swift; sourceTree = "<group>"; };
 		188BF94229724E3B0057C250 /* CreateRoutineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRoutineViewController.swift; sourceTree = "<group>"; };
+		18A9B24A299B8195006C370D /* CountRoutineTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountRoutineTableViewCell.swift; sourceTree = "<group>"; };
+		18A9B24C299B9231006C370D /* TextAddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextAddViewController.swift; sourceTree = "<group>"; };
+		18AB794B29C9BB680080A0DE /* UITaskTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITaskTableViewCell.swift; sourceTree = "<group>"; };
+		18AEDA1C29CD7F3B00DAEA0F /* UITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextField.swift; sourceTree = "<group>"; };
 		18B6265B296F111200BDAB50 /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
-		18B6265D296F118F00BDAB50 /* ButtonRoutineTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ButtonRoutineTableViewCell.swift; path = Cell/ButtonRoutineTableViewCell.swift; sourceTree = "<group>"; };
+		18B6265D296F118F00BDAB50 /* CheckRoutineTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CheckRoutineTableViewCell.swift; path = Cell/CheckRoutineTableViewCell.swift; sourceTree = "<group>"; };
 		18B62667296F11F200BDAB50 /* TextRoutineTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TextRoutineTableViewCell.swift; path = Cell/TextRoutineTableViewCell.swift; sourceTree = "<group>"; };
 		18B62668296F11F200BDAB50 /* DailyCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DailyCollectionViewCell.swift; path = Cell/DailyCollectionViewCell.swift; sourceTree = "<group>"; };
 		18B6266D296F123800BDAB50 /* TodoListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TodoListTableViewCell.swift; path = Cell/TodoListTableViewCell.swift; sourceTree = "<group>"; };
@@ -131,6 +156,7 @@
 		188826A529794BF800B6523A /* RoutineTests */ = {
 			isa = PBXGroup;
 			children = (
+				1888996C29839DEE00F03EA9 /* DateTests.swift */,
 				188826AD29794C2100B6523A /* ListViewModelTests.swift */,
 			);
 			path = RoutineTests;
@@ -141,8 +167,10 @@
 			children = (
 				18B62668296F11F200BDAB50 /* DailyCollectionViewCell.swift */,
 				18B62667296F11F200BDAB50 /* TextRoutineTableViewCell.swift */,
-				18B6265D296F118F00BDAB50 /* ButtonRoutineTableViewCell.swift */,
+				18B6265D296F118F00BDAB50 /* CheckRoutineTableViewCell.swift */,
 				18B6266D296F123800BDAB50 /* TodoListTableViewCell.swift */,
+				18A9B24A299B8195006C370D /* CountRoutineTableViewCell.swift */,
+				18AB794B29C9BB680080A0DE /* UITaskTableViewCell.swift */,
 			);
 			name = Cell;
 			sourceTree = "<group>";
@@ -155,6 +183,7 @@
 				18C363D5296D100200745400 /* MyInfoViewController.swift */,
 				18C363D9296D105100745400 /* SettingViewController.swift */,
 				188BF94229724E3B0057C250 /* CreateRoutineViewController.swift */,
+				18A9B24C299B9231006C370D /* TextAddViewController.swift */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -175,6 +204,7 @@
 				18C36401296DBFFC00745400 /* CALayer.swift */,
 				188300C1296FA71600E418DB /* UITableView.swift */,
 				1885082129784FC9005B7BAB /* Date.swift */,
+				18AEDA1C29CD7F3B00DAEA0F /* UITextField.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -187,6 +217,8 @@
 				18C363C6296D091B00745400 /* Routine.app */,
 				1888269629794BDF00B6523A /* RoutineUITests */,
 				188826A529794BF800B6523A /* RoutineTests */,
+				1888996A2983902000F03EA9 /* RoutineUITests.xctest */,
+				1888996B2983902000F03EA9 /* RoutineTests.xctest */,
 			);
 			sourceTree = "<group>";
 		};
@@ -232,7 +264,7 @@
 			packageProductDependencies = (
 			);
 			productName = RoutineUITests;
-			productReference = 188826C32979825E00B6523A /* RoutineUITests.xctest */;
+			productReference = 1888996A2983902000F03EA9 /* RoutineUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 		188826A329794BF700B6523A /* RoutineTests */ = {
@@ -250,7 +282,7 @@
 			);
 			name = RoutineTests;
 			productName = RoutineTests;
-			productReference = 188826C42979825E00B6523A /* RoutineTests.xctest */;
+			productReference = 1888996B2983902000F03EA9 /* RoutineTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		18C6529229628DDD00EEB927 /* Routine */ = {
@@ -261,6 +293,7 @@
 				18C6529029628DDD00EEB927 /* Frameworks */,
 				18C6529129628DDD00EEB927 /* Resources */,
 				18C652AB29629F3500EEB927 /* ShellScript */,
+				1888996F2983A86900F03EA9 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -282,7 +315,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1400;
-				LastUpgradeCheck = 1400;
+				LastUpgradeCheck = 1420;
 				TargetAttributes = {
 					1888269429794BDF00B6523A = {
 						CreatedOnToolsVersion = 14.0;
@@ -383,6 +416,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				188826AE29794C2100B6523A /* ListViewModelTests.swift in Sources */,
+				1888996D29839DEE00F03EA9 /* DateTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -399,9 +433,11 @@
 				18C363CF296D0C4F00745400 /* ListViewController.swift in Sources */,
 				18C6529929628DDD00EEB927 /* SceneDelegate.swift in Sources */,
 				18C363F5296D828400745400 /* UICollectionViewCell.swift in Sources */,
+				18A9B24D299B9231006C370D /* TextAddViewController.swift in Sources */,
 				18C363D7296D100200745400 /* MyInfoViewController.swift in Sources */,
 				188508202977F5CF005B7BAB /* TodoManager.swift in Sources */,
-				18B6265E296F118F00BDAB50 /* ButtonRoutineTableViewCell.swift in Sources */,
+				18AB794C29C9BB680080A0DE /* UITaskTableViewCell.swift in Sources */,
+				18B6265E296F118F00BDAB50 /* CheckRoutineTableViewCell.swift in Sources */,
 				188300C2296FA71600E418DB /* UITableView.swift in Sources */,
 				188826B629796D6E00B6523A /* CreateRoutineViewControllerTests.swift in Sources */,
 				18B6266E296F123800BDAB50 /* TodoListTableViewCell.swift in Sources */,
@@ -410,6 +446,8 @@
 				1885081E2977F53A005B7BAB /* RoutineManager.swift in Sources */,
 				18C363DB296D105100745400 /* SettingViewController.swift in Sources */,
 				18C363D3296D0D0900745400 /* TabBarController.swift in Sources */,
+				18A9B24B299B8195006C370D /* CountRoutineTableViewCell.swift in Sources */,
+				18AEDA1D29CD7F3B00DAEA0F /* UITextField.swift in Sources */,
 				188508022977A2BF005B7BAB /* Task.swift in Sources */,
 				1885081C2977F4C0005B7BAB /* ListViewModel.swift in Sources */,
 				188BF94329724E3B0057C250 /* CreateRoutineViewController.swift in Sources */,
@@ -451,7 +489,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2FY7M8J988;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = KD.RoutineUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -469,7 +507,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2FY7M8J988;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = KD.RoutineUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -486,10 +524,11 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 2FY7M8J988;
 				ENABLE_TESTABILITY = NO;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MACOSX_DEPLOYMENT_TARGET = 12.3;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = KD.RoutineTests;
@@ -509,10 +548,11 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 2FY7M8J988;
 				ENABLE_TESTABILITY = NO;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MACOSX_DEPLOYMENT_TARGET = 12.3;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = KD.RoutineTests;
@@ -576,7 +616,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -630,7 +670,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -655,7 +695,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -684,7 +724,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

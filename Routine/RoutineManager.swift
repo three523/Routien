@@ -6,26 +6,37 @@
 //
 
 import Foundation
+import UserNotifications
 
 class RoutineManager {
-    static var routines: [Routine] = []
+    static var routines: [Routine] = [] {
+        didSet {
+            RoutineManager.update()
+        }
+    }
+    static var update: () -> Void = {}
     var routineCount: Int {
         return RoutineManager.routines.count
     }
     
-    func create(_ routine: Routine) {
+    static func create(_ routine: Routine) {
         RoutineManager.routines.append(routine)
     }
     
-    func append(_ task: RoutineTask) {
+    static func append(_ task: RoutineTask) {
         guard let index = RoutineManager.routines.firstIndex( where: { $0.identifier == task.routineIdentifier }) else {
             print("Routine does not exist")
+            return
+        }
+        let isExist = RoutineManager.routines[index].myTaskList.contains { $0.identifier == task.identifier }
+        if isExist {
+            RoutineManager.update(task)
             return
         }
         RoutineManager.routines[index].myTaskList.append(task)
     }
     
-    func update(_ task: RoutineTask) {
+    static func update(_ task: RoutineTask) {
         guard let routineIndex = RoutineManager.routines.firstIndex( where: { $0.identifier == task.routineIdentifier }) else {
             print("Routine does not exist")
             return
@@ -38,7 +49,14 @@ class RoutineManager {
         RoutineManager.routines[routineIndex].myTaskList[taskIndex] = task
     }
     
-    func fetch(_ identifier: UUID) -> Routine? {
+    static func update(_ routine: Routine) {
+        guard let routineIndex = RoutineManager.routines.firstIndex(where: { $0.identifier == routine.identifier }) else { return }
+        //MARK: 완료한 루틴 이전의 내용도 바꿀것인지 현재 내용만 바꿀것인지, 특정날 이후로만 바꿀 것인지 선택 가능하게 하기
+        RoutineManager.routines[routineIndex] = routine
+        RoutineManager.routines[routineIndex].allDoneTaskUpdate()
+    }
+    
+    static func fetch(_ identifier: UUID) -> Routine? {
         return RoutineManager.routines.first(where: { $0.identifier == identifier })
     }
     
@@ -47,32 +65,30 @@ class RoutineManager {
             print("routine does not exits")
             return nil
         }
-    return routine.myTaskList.first(where: { $0.identifier == routineTask.identifier })
+        return routine.myTaskList.first(where: { $0.identifier == routineTask.identifier })
     }
     
-    func fetchAllTask(to date: Date) -> [Task] {
+    static func fetchAllTask(to date: Date) -> [Task] {
         var tasks = [Task]()
         let calendar = Calendar.current
-        RoutineManager.routines.forEach { routine in
-            if let routineTask = routine.myTaskList.first(where: { calendar.isDate(date, equalTo: $0.taskDate, toGranularity: .day) }) {
+        for index in 0..<RoutineManager.routines.count {
+            if let routineTask = RoutineManager.routines[index].myTaskList.first(where: { calendar.isDate(date, equalTo: $0.taskDate, toGranularity: .day) }) {
                 tasks.append(routineTask)
-            } else if let newRoutineTask = routine.createTask(date: date) {
+            } else if let newRoutineTask = RoutineManager.routines[index].createTask(date: date) {
                 tasks.append(newRoutineTask)
             }
         }
         return tasks
     }
     
-    func remove(routine: Routine) {
-        RoutineManager.routines.removeAll { $0.identifier == routine.identifier }
+    static func remove(routineIdentifier: UUID) {
+        RoutineManager.routines.removeAll { $0.identifier == routineIdentifier }
     }
     
     func remove(routineTask: RoutineTask) {
-        for (index, routine) in RoutineManager.routines.enumerated() {
-            if routine.identifier == routineTask.routineIdentifier {
-                RoutineManager.routines[index].myTaskList.removeAll { $0.identifier == routineTask.identifier }
-                return
-            }
+        for (index, routine) in RoutineManager.routines.enumerated() where routine.identifier == routineTask.routineIdentifier {
+            RoutineManager.routines[index].myTaskList.removeAll { $0.identifier == routineTask.identifier }
+            return
         }
     }
 }

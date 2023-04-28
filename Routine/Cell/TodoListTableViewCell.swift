@@ -25,8 +25,11 @@ class TodoListTableViewCell: UITableViewCell {
         button.tintColor = .systemGray
         return button
     }()
+    
+    private let todo: Todo?
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        self.todo = nil
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         viewAdd()
         autolayoutSetting()
@@ -51,7 +54,6 @@ class TodoListTableViewCell: UITableViewCell {
             make.top.trailing.bottom.equalToSuperview()
             make.width.height.equalTo(56)
         }
-        
     }
 
 }

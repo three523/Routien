@@ -9,7 +9,7 @@ import Foundation
 
 protocol Task {
     var identifier: UUID { get }
-    var descrpition: String { get }
+    var description: String { get set }
     var taskDate: Date { get set }
     var isDone: Bool { get set }
 }
