@@ -11,10 +11,12 @@ import UserNotifications
 class RoutineManager {
     static var routines: [Routine] = [] {
         didSet {
-            RoutineManager.update()
+            RoutineManager.viewUpdates.forEach { viewUpdate in
+                viewUpdate()
+            }
         }
     }
-    static var update: () -> Void = {}
+    static var viewUpdates: [() -> Void] = []
     var routineCount: Int {
         return RoutineManager.routines.count
     }

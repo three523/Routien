@@ -9,9 +9,16 @@ import Foundation
 
 extension Date {
     
-    var removeTimeStamp: Date? {
-        guard let date = Calendar.current.date(from: Calendar.current.dateComponents([.year, .month, .day], from: self)) else { return nil }
+    var removeTimeDate: Date {
+        guard let date = Calendar.current.date(from: Calendar.current.dateComponents([.year, .month, .day], from: self)) else { return self }
         return date
+    }
+    
+    var lastTimeDate: Date {
+        let calendar = Calendar.current
+        guard let addDate = calendar.date(byAdding: .day, value: 1, to: self),
+              let lastTimeDate = calendar.date(byAdding: .second, value: -1, to: addDate) else { return self }
+        return lastTimeDate
     }
     
     var timeToString: String {
@@ -80,7 +87,7 @@ extension Date {
         let dayOfWeek = calendar.component(.weekday, from: date)
         let weekdays = calendar.range(of: .weekday, in: .weekOfMonth, for: date) ?? Range(uncheckedBounds: (lower: 1, upper: 8))
         let days = (weekdays.lowerBound ..< weekdays.upperBound)
-            .compactMap { calendar.date(byAdding: .day, value: $0 - dayOfWeek, to: date)?.removeTimeStamp }
+            .compactMap { calendar.date(byAdding: .day, value: $0 - dayOfWeek, to: date)?.removeTimeDate }
         return days
     }
     

@@ -40,6 +40,54 @@ protocol Routine {
 }
 
 extension Routine {
+    var goalTask: [RoutineTask] {
+        return myTaskList.filter { task in
+            task.isDone
+        }
+    }
+    var goalRate: Double {
+        var firstAndLastWeekDays = 0 // 첫째주와 마지막주의 날짜 갯수를 표시해줄 변수
+        var allTask = 0 // 기간동안 해야할 모든 작업들의 갯수를 표시해줄 변수
+        let fromDate = startDate
+        var toDate = Date()
+        if let endDate,
+           endDate < toDate {
+            toDate = endDate
+        }
+        guard let fromDateWeek = fromDate.weekDay,
+              let toDateWeek = toDate.weekDay,
+              let differnceDay = Calendar.current.dateComponents([.day], from: fromDate, to: toDate).day else { return 0.0 }
+        //taskTerm: 작업기간
+        let taskTerm = differnceDay + 1
+        
+        let allCase = DayOfWeek.allCases
+        guard let fromDateIndex = allCase.firstIndex(of: fromDateWeek),
+              let toDateIndex = allCase.firstIndex(of: toDateWeek) else { return 0.0 }
+        
+        // 작업기간이 한주에 모두 포함되어 있는 경우
+        if taskTerm < 7 && fromDateIndex < toDateIndex {
+            allTask = allCase[fromDateIndex...toDateIndex].filter { allCaseWeek in
+                self.dayOfWeek.contains(allCaseWeek)
+            }.count
+        } else { // 작업기간을 계산할때 처음과 마지막이 모든 요일이 포함되어있는지 빠져있는지 알 수 없기때문에 첫째주와 마지막주에만 시작요일과 종료요일을 구해서
+                 // 첫째주와 마지막주는 몇일이 존재하는지 구하고 총 작업기간에서 빼준뒤에 작업을 수행한다.
+            firstAndLastWeekDays += allCase[fromDateIndex...].count + allCase[...toDateIndex].count // 첫째주와 마지막주의 날짜만큼 더해준다
+            allTask += allCase[fromDateIndex...].filter { allCaseWeek in // 첫째주에 해야할 작업의 갯수 구하기
+                self.dayOfWeek.contains(allCaseWeek)
+            }.count
+            allTask += allCase[...toDateIndex].filter { allCaseWeek in // 마지막주에 해야할 작업의 갯수 구하기
+                self.dayOfWeek.contains(allCaseWeek)
+            }.count
+            let middleTerm = (taskTerm - firstAndLastWeekDays) / 7 // 첫째주와 마지막주를 제외하여 7일이 모두 있는 주가 몇번있는지
+            allTask += allCase.filter{ allCaseWeek in
+                self.dayOfWeek.contains(allCaseWeek)
+            }.count * middleTerm
+        }
+        print(differnceDay, allTask, goalTask.count)
+        let goalRate = round((Double(goalTask.count) / Double(allTask)) * 1000) / 10
+        
+        return goalRate
+    }
     mutating func allDoneTaskUpdate() {
         for index in 0..<myTaskList.count {
             myTaskList[index].description = self.description
@@ -87,8 +135,9 @@ struct CheckRoutine: Routine {
     var myTaskList: [RoutineTask] = []
     
     mutating func createTask(date: Date) -> RoutineTask? {
+        if startDate > date { return nil }
         if let endDate = endDate,
-           endDate < date || startDate > date {
+           endDate < date {
             return nil
         }
         guard let weekDay = date.weekDay else { return nil }
@@ -109,8 +158,9 @@ struct TextRoutine: Routine {
     var myTaskList: [RoutineTask] = []
     
     mutating func createTask(date: Date) -> RoutineTask? {
+        if startDate > date { return nil }
         if let endDate = endDate,
-           endDate < date || startDate > date {
+           endDate < date {
             return nil
         }
         guard let weekDay = date.weekDay else { return nil }
@@ -132,8 +182,9 @@ struct CountRoutine: Routine {
     var myTaskList: [RoutineTask] = []
     
     mutating func createTask(date: Date) -> RoutineTask? {
+        if startDate > date { return nil }
         if let endDate = endDate,
-           endDate < date || startDate > date {
+           endDate < date {
             return nil
         }
         guard let weekDay = date.weekDay else { return nil }

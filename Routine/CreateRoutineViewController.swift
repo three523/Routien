@@ -205,6 +205,9 @@ final class CreateRoutineViewController: UIViewController, UNUserNotificationCen
         picker.preferredDatePickerStyle = .inline
         picker.tag = 2
         picker.backgroundColor = .white
+        if let date = Calendar.current.date(byAdding: .year, value: 100, to: Date()) {
+            picker.date = date
+        }
         return picker
     }()
     
@@ -274,90 +277,74 @@ final class CreateRoutineViewController: UIViewController, UNUserNotificationCen
             make.top.equalTo(view.safeAreaLayoutGuide).inset(12)
             make.trailing.equalTo(removeButton.snp.leading).inset(-10)
         }
-        
         removeButton.snp.makeConstraints { make in
             make.top.equalTo(exitButton.snp.top)
             make.trailing.equalTo(view.safeAreaLayoutGuide).inset(10)
             make.width.equalTo(0)
         }
-        
         routineLabel.snp.makeConstraints { make in
             make.top.equalTo(exitButton.snp.bottom)
             make.leading.equalToSuperview().inset(10)
         }
-        
         routineTextField.snp.makeConstraints { make in
             make.top.equalTo(routineLabel.snp.bottom).inset(-12)
             make.centerX.equalToSuperview()
             make.width.equalTo(260)
             make.height.equalTo(36)
         }
-        
         workDailyLabel.snp.makeConstraints { make in
             make.top.equalTo(routineTextField.snp.bottom).inset(-32)
             make.leading.equalToSuperview().inset(10)
         }
-        
         workDailyStackView.snp.makeConstraints { make in
             make.top.equalTo(workDailyLabel.snp.bottom).inset(-12)
             make.leading.trailing.equalToSuperview().inset(12)
             make.height.equalTo(44)
         }
-        
         workDateLabel.snp.makeConstraints { make in
             make.top.equalTo(workDailyStackView.snp.bottom).inset(-32)
             make.leading.equalToSuperview().inset(10)
         }
-        
         startDateStackView.snp.makeConstraints { make in
             make.top.equalTo(workDateLabel.snp.bottom).inset(-16)
             make.leading.equalToSuperview().inset(10)
         }
-        
         endDateStackView.snp.makeConstraints { make in
             make.top.equalTo(startDateStackView.snp.bottom).inset(-16)
             make.leading.equalToSuperview().inset(10)
         }
-        
         notificationLabel.snp.makeConstraints { make in
             make.top.equalTo(endDateStackView.snp.bottom).inset(-32)
             make.leading.equalToSuperview().inset(10)
         }
-        
         notificationStackView.snp.makeConstraints { make in
             make.top.equalTo(notificationLabel.snp.bottom).inset(-16)
             make.leading.equalToSuperview().inset(10)
         }
-        
         notificationSwitch.snp.makeConstraints { make in
             make.centerY.equalTo(notificationStackView.snp.centerY)
             make.trailing.equalToSuperview().inset(12)
             make.width.equalTo(51)
             make.height.equalTo(30)
         }
-        
         typeLabel.snp.makeConstraints { make in
             make.top.equalTo(notificationStackView.snp.bottom).inset(-32)
             make.leading.equalToSuperview().inset(10)
         }
-        
         typeStackView.snp.makeConstraints { make in
             make.top.equalTo(typeLabel.snp.bottom).inset(-16)
             make.leading.equalToSuperview().inset(10)
             make.trailing.equalToSuperview().inset(22)
         }
-        
         goalLabel.snp.makeConstraints { make in
             make.top.equalTo(typeStackView.snp.bottom).inset(-32)
             make.leading.equalToSuperview().inset(10)
         }
-        
         goalTextField.snp.makeConstraints { make in
             make.top.equalTo(typeStackView.snp.bottom).inset(-32)
             make.width.equalTo(view.frame.width/2)
             make.centerX.equalToSuperview()
         }
-                
         doneButton.snp.makeConstraints { make in
             make.height.equalTo(44)
             make.leading.trailing.bottom.equalToSuperview()
@@ -377,6 +364,7 @@ final class CreateRoutineViewController: UIViewController, UNUserNotificationCen
             }
         }
         startDatePicker.date = routine.startDate
+        startDateTextField.text = routine.startDate.dateToString
         if let endDate = routine.endDate {
             endDatePicker.date = endDate
             endDateTextField.backgroundColor = .mainColor
@@ -435,7 +423,6 @@ final class CreateRoutineViewController: UIViewController, UNUserNotificationCen
     
     @objc
     func enabledAlert() {
-        
         if isAnimation { return }
         isAnimation = true
         let label = UILabel()
@@ -507,6 +494,12 @@ final class CreateRoutineViewController: UIViewController, UNUserNotificationCen
     
     @objc
     func setEndDatePicker() {
+        if startDatePicker.date > Date() {
+            endDatePicker.date = startDatePicker.date
+        } else {
+            endDatePicker.date = Date()
+        }
+        endDatePicker.date = startDatePicker.date > Date() ? startDatePicker.date : Date()
         endDateTextField.text = endDatePicker.date.dateToString
         endDateTextField.backgroundColor = .mainColor
         endDateTextField.textColor = .black
@@ -628,6 +621,9 @@ final class CreateRoutineViewController: UIViewController, UNUserNotificationCen
     
     @objc
     func noSetting() {
+        if let date = Calendar.current.date(byAdding: .year, value: 100, to: Date()) {
+            endDatePicker.date = date
+        }
         endDateTextField.textColor = .white
         endDateTextField.text = "설정안함"
         endDateTextField.backgroundColor = .secondaryColor
@@ -721,6 +717,7 @@ final class CreateRoutineViewController: UIViewController, UNUserNotificationCen
         let isRoutineTitleAmend = routine.description != updateRoutine.description
         let isDateAmend = routine.startDate != updateRoutine.startDate || routine.endDate != updateRoutine.endDate
         let isNotificationAmend = routine.notificationTime != updateRoutine.notificationTime
+        print(isRoutineTitleAmend, isDateAmend, isNotificationAmend)
         let isAmend = isRoutineTitleAmend != false || isDateAmend != false || isNotificationAmend != false
         return isAmend
     }
@@ -751,7 +748,6 @@ final class CreateRoutineViewController: UIViewController, UNUserNotificationCen
             return
         }
         guard let newRoutine = createRoutine() else {
-            //TODO: 루틴 텍스트를 작성하지 않은 경우 에러 처리
             print("routine is nil")
             return
         }
@@ -764,7 +760,10 @@ final class CreateRoutineViewController: UIViewController, UNUserNotificationCen
         guard let description = routineTextField.text else { return nil }
         let dayOfWeeks = selectedDayOfWeeks()
         let startDate = fetchDate(to: startDateStackView) ?? Date()
-        let endDate = fetchDate(to: endDateStackView)
+        var endDate: Date? = nil
+        if let endFetchDate = fetchDate(to: endDateStackView) {
+            endDate = endFetchDate.lastTimeDate
+        }
         let notificationTime = selectedNotificationTime()
         let type = selectedType()
         switch type {
@@ -782,8 +781,11 @@ final class CreateRoutineViewController: UIViewController, UNUserNotificationCen
         guard var routine = routine,
               let description = routineTextField.text else { return nil }
         let dayOfWeeks = selectedDayOfWeeks()
-        let startDate = fetchDate(to: startDateStackView) ?? Date()
-        let endDate = fetchDate(to: endDateStackView)
+        let startDate = fetchDate(to: startDateStackView) ?? Date().removeTimeDate
+        var endDate: Date? = nil
+        if let endFetchDate = fetchDate(to: endDateStackView) {
+            endDate = endFetchDate.lastTimeDate
+        }
         let notificationTime = selectedNotificationTime()
         routine.description = description
         routine.dayOfWeek = dayOfWeeks
@@ -839,11 +841,7 @@ final class CreateRoutineViewController: UIViewController, UNUserNotificationCen
         formatter.dateFormat = "yyyy년 MM월 dd일"
         if let dateTextField = stackView.arrangedSubviews.compactMap({ $0 as? UITextField }).first,
            let dateString = dateTextField.text {
-            let gmtDate = formatter.date(from: dateString)
-            guard let gmtDate = gmtDate else { return nil }
-            let secondsFromGMT = TimeZone.autoupdatingCurrent.secondsFromGMT(for: gmtDate)
-            guard let localizedDate = gmtDate.addingTimeInterval(TimeInterval(secondsFromGMT)).removeTimeStamp else { return nil }
-            return localizedDate
+            return formatter.date(from: dateString)
         }
         return nil
     }
@@ -874,14 +872,18 @@ final class CreateRoutineViewController: UIViewController, UNUserNotificationCen
     @objc
     func dateFormatting(datePicker: UIDatePicker) {
         var textField = UITextField()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy년 MM월 dd일"
         if datePicker.tag == 1 {
             if startDatePicker.date > endDatePicker.date {
                 let alert = UIAlertController(title: nil, message: "시작일과 종료일이 올바르지 않게 입력되었습니다.", preferredStyle: .alert)
                 let okAction = UIAlertAction(title: "확인", style: .default)
                 alert.addAction(okAction)
                 present(alert, animated: false)
-                startDatePicker.date = endDatePicker.date
-                startDateTextField.text = endDatePicker.date.dateToString
+                if let startDateText = startDateTextField.text,
+                   let beforeDate = dateFormatter.date(from: startDateText) {
+                    startDatePicker.date = beforeDate
+                }
                 return
             }
             textField = startDateTextField
@@ -893,8 +895,10 @@ final class CreateRoutineViewController: UIViewController, UNUserNotificationCen
                 let okAction = UIAlertAction(title: "확인", style: .default)
                 alert.addAction(okAction)
                 present(alert, animated: false)
-                endDatePicker.date = startDatePicker.date
-                endDateTextField.text = endDatePicker.date.dateToString
+                if let endDateText = endDateTextField.text,
+                   let beforeDate = dateFormatter.date(from: endDateText) {
+                    endDatePicker.date = beforeDate
+                }
                 return
             }
             textField.text = endDatePicker.date.dateToString
