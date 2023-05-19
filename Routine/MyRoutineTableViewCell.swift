@@ -78,8 +78,8 @@ class MyRoutineTableViewCell: UITableViewCell {
     private func routineUpdate() {
         guard let routine = routine else { return }
         myRoutineLabel.text = routine.description
-        countLabel.text = "\(routine.goalTask.count)"
-        goalRateLabel.text = "\(routine.goalRate)"
+        countLabel.text = "\(routine.goalTask.count)회"
+        goalRateLabel.text = "\(routine.goalRate)%"
     }
 
 }

@@ -45,7 +45,7 @@ extension Routine {
             task.isDone
         }
     }
-    var goalRate: Double {
+    var goalRate: Int {
         var firstAndLastWeekDays = 0 // 첫째주와 마지막주의 날짜 갯수를 표시해줄 변수
         var allTask = 0 // 기간동안 해야할 모든 작업들의 갯수를 표시해줄 변수
         let fromDate = startDate
@@ -56,13 +56,13 @@ extension Routine {
         }
         guard let fromDateWeek = fromDate.weekDay,
               let toDateWeek = toDate.weekDay,
-              let differnceDay = Calendar.current.dateComponents([.day], from: fromDate, to: toDate).day else { return 0.0 }
+              let differnceDay = Calendar.current.dateComponents([.day], from: fromDate, to: toDate).day else { return 0 }
         //taskTerm: 작업기간
         let taskTerm = differnceDay + 1
         
         let allCase = DayOfWeek.allCases
         guard let fromDateIndex = allCase.firstIndex(of: fromDateWeek),
-              let toDateIndex = allCase.firstIndex(of: toDateWeek) else { return 0.0 }
+              let toDateIndex = allCase.firstIndex(of: toDateWeek) else { return 0 }
         
         // 작업기간이 한주에 모두 포함되어 있는 경우
         if taskTerm < 7 && fromDateIndex < toDateIndex {
@@ -83,10 +83,9 @@ extension Routine {
                 self.dayOfWeek.contains(allCaseWeek)
             }.count * middleTerm
         }
-        print(differnceDay, allTask, goalTask.count)
         let goalRate = round((Double(goalTask.count) / Double(allTask)) * 1000) / 10
         
-        return goalRate
+        return Int(goalRate)
     }
     mutating func allDoneTaskUpdate() {
         for index in 0..<myTaskList.count {
