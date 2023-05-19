@@ -12,10 +12,14 @@ class CountRoutineTableViewCell: UITableViewCell {
     var routineCountTask: RoutineCountTask? = nil {
         didSet {
             routineButton.setTitle(routineCountTask?.description, for: .normal)
-            guard let isDone = routineCountTask?.isDone,
-                  let count = routineCountTask?.count else { return }
+            guard let count = routineCountTask?.count,
+                  let goal = routineCountTask?.goal else { return }
+            routineCountTask?.isDone = goal <= count
+            guard let isDone = routineCountTask?.isDone else { return }
             isDone ? setAll(color: UIColor.systemGray) : setAll(color: UIColor.black)
-            descriptionLabel.text = "\(count)"
+            DispatchQueue.main.async {
+                self.descriptionLabel.text = "\(count)"
+            }
         }
     }
     
@@ -159,13 +163,6 @@ class CountRoutineTableViewCell: UITableViewCell {
         delegate?.taskUpdate(task: routineCountTask)
         let count = routineCountTask.count
         let goal = routineCountTask.goal
-        DispatchQueue.main.async {
-            if goal <= count {
-                self.descriptionLabel.textColor = .mainColor
-                self.routineCountTask?.isDone = true
-            }
-            self.descriptionLabel.text = "\(count)"
-        }
     }
 
     @objc
@@ -189,14 +186,6 @@ class CountRoutineTableViewCell: UITableViewCell {
         delegate?.taskUpdate(task: routineCountTask)
         let count = routineCountTask.count
         let goal = routineCountTask.goal
-        DispatchQueue.main.async {
-            if goal > count {
-                self.descriptionLabel.textColor = .black
-                self.routineCountTask?.isDone = false
-
-            }
-            self.descriptionLabel.text = "\(count)"
-        }
     }
     
     @objc
