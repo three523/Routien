@@ -392,20 +392,20 @@ final class CreateRoutineViewController: UIViewController, UNUserNotificationCen
             }
             goalTextField.text = "\(countRoutine.goal)"
             goalAreaVisible()
-        } else if let _ = routine as? CheckRoutine {
-            typeStackView.arrangedSubviews.forEach { view in
-                guard let button = view as? UIButton,
-                      let text = button.titleLabel?.text else { return }
-                if text == RoutineType.check.rawValue {
-                    button.isSelected = true
-                    typeButtonClick(button)
-                }
-            }
         } else if let _ = routine as? TextRoutine {
             typeStackView.arrangedSubviews.forEach { view in
                 guard let button = view as? UIButton,
                       let text = button.titleLabel?.text else { return }
                 if text == RoutineType.text.rawValue {
+                    button.isSelected = true
+                    typeButtonClick(button)
+                }
+            }
+        }  else {
+            typeStackView.arrangedSubviews.forEach { view in
+                guard let button = view as? UIButton,
+                      let text = button.titleLabel?.text else { return }
+                if text == RoutineType.check.rawValue {
                     button.isSelected = true
                     typeButtonClick(button)
                 }
@@ -768,7 +768,7 @@ final class CreateRoutineViewController: UIViewController, UNUserNotificationCen
         let type = selectedType()
         switch type {
         case .check:
-            return CheckRoutine(description: description, dayOfWeek: dayOfWeeks, startDate: startDate, endDate: endDate, notificationTime: notificationTime)
+            return Routine(description: description, dayOfWeek: dayOfWeeks, startDate: startDate, endDate: endDate, notificationTime: notificationTime)
         case .text:
             return TextRoutine(description: description, dayOfWeek: dayOfWeeks, startDate: startDate, endDate: endDate, notificationTime: notificationTime)
         case .count:

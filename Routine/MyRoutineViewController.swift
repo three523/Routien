@@ -35,7 +35,7 @@ class MyRoutineViewController: UIViewController {
         myRoutineTableView.register(MyRoutineTableViewCell.self)
         myRoutineTableView.delegate = self
         myRoutineTableView.dataSource = self
-        RoutineManager.viewUpdates.append(myRoutineTableView.reloadData)
+        RoutineManager.arrayViewUpdates.append(myRoutineTableView.reloadData)
     }
 }
 

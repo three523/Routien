@@ -11,15 +11,7 @@ class CountRoutineTableViewCell: UITableViewCell {
         
     var routineCountTask: RoutineCountTask? = nil {
         didSet {
-            routineButton.setTitle(routineCountTask?.description, for: .normal)
-            guard let count = routineCountTask?.count,
-                  let goal = routineCountTask?.goal else { return }
-            routineCountTask?.isDone = goal <= count
-            guard let isDone = routineCountTask?.isDone else { return }
-            isDone ? setAll(color: UIColor.systemGray) : setAll(color: UIColor.black)
-            DispatchQueue.main.async {
-                self.descriptionLabel.text = "\(count)"
-            }
+            viewUpdate()
         }
     }
     
@@ -79,7 +71,7 @@ class CountRoutineTableViewCell: UITableViewCell {
         contentView.addSubview(plusButton)
         contentView.addSubview(minusButton)
     }
-    
+        
     private func autolayoutSetting() {
         
         routineButton.snp.makeConstraints { make in
@@ -117,10 +109,16 @@ class CountRoutineTableViewCell: UITableViewCell {
         minusButton.addGestureRecognizer(minusLongPress)
     }
     
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+    private func viewUpdate() {
+        routineButton.setTitle(routineCountTask?.description, for: .normal)
+        guard let count = routineCountTask?.count,
+              let goal = routineCountTask?.goal else { return }
+        routineCountTask?.isDone = goal <= count
+        guard let isDone = routineCountTask?.isDone else { return }
+        isDone ? setAll(color: UIColor.systemGray) : setAll(color: UIColor.black)
+        DispatchQueue.main.async {
+            self.descriptionLabel.text = "\(count)"
+        }
     }
     
     func setAll(color: UIColor) {
@@ -161,8 +159,7 @@ class CountRoutineTableViewCell: UITableViewCell {
         self.routineCountTask?.count += 1
         guard let routineCountTask = routineCountTask else { return }
         delegate?.taskUpdate(task: routineCountTask)
-        let count = routineCountTask.count
-        let goal = routineCountTask.goal
+        viewUpdate()
     }
 
     @objc
@@ -184,8 +181,7 @@ class CountRoutineTableViewCell: UITableViewCell {
         self.routineCountTask?.count -= 1
         guard let routineCountTask = routineCountTask else { return }
         delegate?.taskUpdate(task: routineCountTask)
-        let count = routineCountTask.count
-        let goal = routineCountTask.goal
+        viewUpdate()
     }
     
     @objc

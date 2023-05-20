@@ -163,7 +163,7 @@ final class ListViewController: UIViewController {
         dailyCollectionView.selectItem(at: todayIndexPath, animated: true, scrollPosition: .centeredHorizontally)
         guard let date = (dailyCollectionView.cellForItem(at: todayIndexPath) as? DailyCollectionViewCell)?.date else { return }
         selectedDate = date
-        RoutineManager.viewUpdates.append(listTableView.reloadData)
+        RoutineManager.arrayViewUpdates.append(listTableView.reloadData)
     }
     
     private func tableViewSetting() {
@@ -183,7 +183,18 @@ final class ListViewController: UIViewController {
     }
     
     private func addAction() {
+        sortButton.addTarget(self, action: #selector(routineSort), for: .touchUpInside)
+        filterButton.addTarget(self, action: #selector(routineFilter), for: .touchUpInside)
         listAddButton.addTarget(self, action: #selector(listAdd), for: .touchUpInside)
+    }
+    
+    @objc
+    func routineSort() {
+        
+    }
+    
+    @objc func routineFilter() {
+        
     }
     
     @objc

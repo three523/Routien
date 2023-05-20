@@ -24,7 +24,7 @@ final class TaskListViewModelTests: XCTestCase {
     }
     
     func testRoutine_추가시_정보가_저장됨() {
-        let routine = CheckRoutine(description: "title", dayOfWeek: DayOfWeek.allCases, startDate: Date())
+        let routine = Routine(description: "title", dayOfWeek: DayOfWeek.allCases, startDate: Date())
         sut.create(routine: routine)
         if let fetchRoutine = sut.fetch(routineIdentifier: routine.identifier) {
             XCTAssertEqual(fetchRoutine.identifier, routine.identifier, "루틴이 저장되지 않음")
@@ -46,7 +46,7 @@ final class TaskListViewModelTests: XCTestCase {
     }
     
     func test루틴_할일_성공시_저장() {
-        let routine = CheckRoutine(description: "title", dayOfWeek: DayOfWeek.allCases, startDate: Date())
+        let routine = Routine(description: "title", dayOfWeek: DayOfWeek.allCases, startDate: Date())
         sut.create(routine: routine)
         let routineTask = RoutineTextTask(routine: routine, text: "TestTask", taskDate: Date())
         sut.append(routinTask: routineTask)
@@ -66,9 +66,9 @@ final class TaskListViewModelTests: XCTestCase {
         }
         
         var routines: [Routine] = []
-        routines.append(CheckRoutine(description: "title", dayOfWeek: DayOfWeek.allCases, startDate: Date()))
-        routines.append(CheckRoutine(description: "title", dayOfWeek: [.mon, .wed, .fir], startDate: Date()))
-        routines.append(CheckRoutine(description: "title", dayOfWeek: [.tue, .thu], startDate: Date()))
+        routines.append(Routine(description: "title", dayOfWeek: DayOfWeek.allCases, startDate: Date()))
+        routines.append(Routine(description: "title", dayOfWeek: [.mon, .wed, .fir], startDate: Date()))
+        routines.append(Routine(description: "title", dayOfWeek: [.tue, .thu], startDate: Date()))
         
         routines.forEach { routine in
             sut.create(routine: routine)
