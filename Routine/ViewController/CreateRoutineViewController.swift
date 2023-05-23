@@ -751,8 +751,8 @@ final class CreateRoutineViewController: UIViewController, UNUserNotificationCen
             print("routine is nil")
             return
         }
-        RoutineManager.create(newRoutine)
         addNotification(routine: newRoutine)
+        RoutineManager.create(newRoutine)
         dismiss(animated: true)
     }
     

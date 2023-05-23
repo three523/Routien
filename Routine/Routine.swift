@@ -27,6 +27,7 @@ protocol RoutineTask: Task {
 
 class Routine {
     let identifier: UUID = UUID()
+    let createTime: Date = Date()
     var description: String
     var dayOfWeek: [DayOfWeek]
     var startDate: Date

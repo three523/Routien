@@ -36,6 +36,8 @@
 		18AACA812A1C938800CC7557 /* UITaskTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AACA792A1C938700CC7557 /* UITaskTableViewCell.swift */; };
 		18AACA822A1C938800CC7557 /* CountRoutineTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AACA7A2A1C938700CC7557 /* CountRoutineTableViewCell.swift */; };
 		18AACA832A1C938800CC7557 /* ButtonRoutineTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AACA7B2A1C938700CC7557 /* ButtonRoutineTableViewCell.swift */; };
+		18AACA872A1C947400CC7557 /* SortAndFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AACA862A1C947400CC7557 /* SortAndFilterViewController.swift */; };
+		18AACA8B2A1CBD1400CC7557 /* SortAndFilterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AACA8A2A1CBD1400CC7557 /* SortAndFilterTableViewCell.swift */; };
 		18AEDA1D29CD7F3B00DAEA0F /* UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AEDA1C29CD7F3B00DAEA0F /* UITextField.swift */; };
 		18B6265C296F111200BDAB50 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18B6265B296F111200BDAB50 /* UIColor.swift */; };
 		18C363E7296D4D2700745400 /* CircleTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C363E6296D4D2700745400 /* CircleTextView.swift */; };
@@ -110,6 +112,8 @@
 		18AACA792A1C938700CC7557 /* UITaskTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITaskTableViewCell.swift; sourceTree = "<group>"; };
 		18AACA7A2A1C938700CC7557 /* CountRoutineTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountRoutineTableViewCell.swift; sourceTree = "<group>"; };
 		18AACA7B2A1C938700CC7557 /* ButtonRoutineTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonRoutineTableViewCell.swift; sourceTree = "<group>"; };
+		18AACA862A1C947400CC7557 /* SortAndFilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortAndFilterViewController.swift; sourceTree = "<group>"; };
+		18AACA8A2A1CBD1400CC7557 /* SortAndFilterTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortAndFilterTableViewCell.swift; sourceTree = "<group>"; };
 		18AEDA1C29CD7F3B00DAEA0F /* UITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextField.swift; sourceTree = "<group>"; };
 		18B6265B296F111200BDAB50 /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		18C363C6296D091B00745400 /* Routine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Routine.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -178,6 +182,7 @@
 				18AACA692A1C937C00CC7557 /* MyInfoViewController.swift */,
 				18AACA6A2A1C937C00CC7557 /* CreateRoutineViewController.swift */,
 				18AACA6B2A1C937C00CC7557 /* TabBarController.swift */,
+				18AACA862A1C947400CC7557 /* SortAndFilterViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -193,6 +198,7 @@
 				18AACA792A1C938700CC7557 /* UITaskTableViewCell.swift */,
 				18AACA7A2A1C938700CC7557 /* CountRoutineTableViewCell.swift */,
 				18AACA7B2A1C938700CC7557 /* ButtonRoutineTableViewCell.swift */,
+				18AACA8A2A1CBD1400CC7557 /* SortAndFilterTableViewCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -459,6 +465,8 @@
 				18C36402296DBFFC00745400 /* CALayer.swift in Sources */,
 				1885081E2977F53A005B7BAB /* RoutineManager.swift in Sources */,
 				18AEDA1D29CD7F3B00DAEA0F /* UITextField.swift in Sources */,
+				18AACA872A1C947400CC7557 /* SortAndFilterViewController.swift in Sources */,
+				18AACA8B2A1CBD1400CC7557 /* SortAndFilterTableViewCell.swift in Sources */,
 				18AACA712A1C937C00CC7557 /* CreateRoutineViewController.swift in Sources */,
 				188508022977A2BF005B7BAB /* Task.swift in Sources */,
 				1885081C2977F4C0005B7BAB /* ListViewModel.swift in Sources */,
