@@ -22,6 +22,7 @@
 		1888996D29839DEE00F03EA9 /* DateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1888996C29839DEE00F03EA9 /* DateTests.swift */; };
 		1888996E2983A86900F03EA9 /* SnapKit-Dynamic in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 18C363FF296DBCFE00745400 /* SnapKit-Dynamic */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		188BF94329724E3B0057C250 /* CreateRoutineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188BF94229724E3B0057C250 /* CreateRoutineViewController.swift */; };
+		18A369A22A18590700AEE9B9 /* RoutineSortViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A369A12A18590700AEE9B9 /* RoutineSortViewController.swift */; };
 		18A9B24B299B8195006C370D /* CountRoutineTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A9B24A299B8195006C370D /* CountRoutineTableViewCell.swift */; };
 		18A9B24D299B9231006C370D /* TextAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A9B24C299B9231006C370D /* TextAddViewController.swift */; };
 		18AB794C29C9BB680080A0DE /* UITaskTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AB794B29C9BB680080A0DE /* UITaskTableViewCell.swift */; };
@@ -95,6 +96,7 @@
 		1888996B2983902000F03EA9 /* RoutineTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RoutineTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1888996C29839DEE00F03EA9 /* DateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTests.swift; sourceTree = "<group>"; };
 		188BF94229724E3B0057C250 /* CreateRoutineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRoutineViewController.swift; sourceTree = "<group>"; };
+		18A369A12A18590700AEE9B9 /* RoutineSortViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineSortViewController.swift; sourceTree = "<group>"; };
 		18A9B24A299B8195006C370D /* CountRoutineTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountRoutineTableViewCell.swift; sourceTree = "<group>"; };
 		18A9B24C299B9231006C370D /* TextAddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextAddViewController.swift; sourceTree = "<group>"; };
 		18AB794B29C9BB680080A0DE /* UITaskTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITaskTableViewCell.swift; sourceTree = "<group>"; };
@@ -190,6 +192,7 @@
 				188BF94229724E3B0057C250 /* CreateRoutineViewController.swift */,
 				18A9B24C299B9231006C370D /* TextAddViewController.swift */,
 				18B7936129FBAEEC00C2A472 /* MyRoutineViewController.swift */,
+				18A369A12A18590700AEE9B9 /* RoutineSortViewController.swift */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -445,6 +448,7 @@
 				18B7936029FB9D5E00C2A472 /* MyRoutineTableViewCell.swift in Sources */,
 				188508202977F5CF005B7BAB /* TodoManager.swift in Sources */,
 				18AB794C29C9BB680080A0DE /* UITaskTableViewCell.swift in Sources */,
+				18A369A22A18590700AEE9B9 /* RoutineSortViewController.swift in Sources */,
 				18B6265E296F118F00BDAB50 /* CheckRoutineTableViewCell.swift in Sources */,
 				188300C2296FA71600E418DB /* UITableView.swift in Sources */,
 				188826B629796D6E00B6523A /* CreateRoutineViewControllerTests.swift in Sources */,

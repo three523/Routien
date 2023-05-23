@@ -25,21 +25,24 @@ protocol RoutineTask: Task {
     var routineIdentifier: UUID { get }
 }
 
-protocol Routine {
-    var identifier: UUID { get }
-    var description: String { get set }
-    var dayOfWeek: [DayOfWeek] { get set }
-    var startDate: Date { get set }
-    var endDate: Date? { get set }
-    var notificationTime: Date? { get set }
-    var myTaskList: [RoutineTask] { get set }
+class Routine {
+    let identifier: UUID = UUID()
+    var description: String
+    var dayOfWeek: [DayOfWeek]
+    var startDate: Date
+    var endDate: Date?
+    var notificationTime: Date?
+    var myTaskList: [RoutineTask]
     
-    mutating func createTask(date: Date) -> RoutineTask?
-    mutating func allDoneTaskUpdate()
-    mutating func afterTaskUpdate(date: Date)
-}
-
-extension Routine {
+    init(description: String, dayOfWeek: [DayOfWeek], startDate: Date, endDate: Date? = nil, notificationTime: Date? = nil, myTaskList: [RoutineTask] = []) {
+        self.description = description
+        self.dayOfWeek = dayOfWeek
+        self.startDate = startDate
+        self.endDate = endDate
+        self.notificationTime = notificationTime
+        self.myTaskList = myTaskList
+    }
+    
     var goalTask: [RoutineTask] {
         return myTaskList.filter { task in
             task.isDone
@@ -83,16 +86,35 @@ extension Routine {
                 self.dayOfWeek.contains(allCaseWeek)
             }.count * middleTerm
         }
+        
         let goalRate = round((Double(goalTask.count) / Double(allTask)) * 1000) / 10
         
         return Int(goalRate)
     }
-    mutating func allDoneTaskUpdate() {
+    
+    fileprivate func createTask(date: Date) -> RoutineTask {
+        return RoutineCheckTask(routine: self, taskDate: date)
+    }
+    //MARK: get은 좋지않음 다른 단어 생각해보기
+    func getTask(date: Date) -> RoutineTask? {
+        if startDate > date { return nil }
+        if let endDate = endDate,
+           endDate < date {
+            return nil
+        }
+        guard let weekDay = date.weekDay else { return nil }
+        let isExits = dayOfWeek.first { $0 == weekDay }
+        if isExits == nil { return nil }
+        let task = createTask(date: date)
+        myTaskList.append(task)
+        return task
+    }
+    func allDoneTaskUpdate() {
         for index in 0..<myTaskList.count {
             myTaskList[index].description = self.description
         }
     }
-    mutating func afterTaskUpdate(date: Date) {
+    func afterTaskUpdate(date: Date) {
         guard let afterIndex = myTaskList.firstIndex(where: { $0.taskDate >= date }) else { return }
         for index in afterIndex..<myTaskList.count {
             myTaskList[index].description = self.description
@@ -124,100 +146,40 @@ extension Routine {
     }
 }
 
-struct CheckRoutine: Routine {
-    let identifier: UUID = UUID()
-    var description: String
-    var dayOfWeek: [DayOfWeek]
-    var startDate: Date
-    var endDate: Date?
-    var notificationTime: Date?
-    var myTaskList: [RoutineTask] = []
+class TextRoutine: Routine {
     
-    mutating func createTask(date: Date) -> RoutineTask? {
-        if startDate > date { return nil }
-        if let endDate = endDate,
-           endDate < date {
-            return nil
-        }
-        guard let weekDay = date.weekDay else { return nil }
-        let isExits = dayOfWeek.first { $0 == weekDay }
-        let task = RoutineCheckTask(routine: self, taskDate: date )
-        myTaskList.append(task)
-        return isExits == nil ? nil : task
+    override func createTask(date: Date) -> RoutineTask {
+        return RoutineTextTask(routine: self, taskDate: date)
     }
 }
 
-struct TextRoutine: Routine {
-    let identifier: UUID = UUID()
-    var description: String
-    var dayOfWeek: [DayOfWeek]
-    var startDate: Date
-    var endDate: Date?
-    var notificationTime: Date?
-    var myTaskList: [RoutineTask] = []
-    
-    mutating func createTask(date: Date) -> RoutineTask? {
-        if startDate > date { return nil }
-        if let endDate = endDate,
-           endDate < date {
-            return nil
-        }
-        guard let weekDay = date.weekDay else { return nil }
-        let isExits = dayOfWeek.first { $0 == weekDay }
-        let task = RoutineTextTask(routine: self, text: "", taskDate: date)
-        myTaskList.append(task)
-        return isExits == nil ? nil : task
-    }
-}
-
-struct CountRoutine: Routine {
-    let identifier: UUID = UUID()
-    var description: String
-    var dayOfWeek: [DayOfWeek]
-    var startDate: Date
-    var endDate: Date?
-    var notificationTime: Date?
+class CountRoutine: Routine {
     var goal: Int
-    var myTaskList: [RoutineTask] = []
     
-    mutating func createTask(date: Date) -> RoutineTask? {
-        if startDate > date { return nil }
-        if let endDate = endDate,
-           endDate < date {
-            return nil
-        }
-        guard let weekDay = date.weekDay else { return nil }
-        let isExits = dayOfWeek.first { $0 == weekDay }
-        let task = RoutineCountTask(routine: self, description: description, goal: goal, taskDate: date )
-        myTaskList.append(task)
-        return isExits == nil ? nil : task
+    init(description: String, dayOfWeek: [DayOfWeek], startDate: Date, endDate: Date? = nil, notificationTime: Date? = nil, myTaskList: [RoutineTask] = [], goal: Int) {
+        self.goal = goal
+        super.init(description: description, dayOfWeek: dayOfWeek, startDate: startDate)
+    }
+    
+    override func createTask(date: Date) -> RoutineTask {
+        return RoutineCountTask(routine: self, description: self.description, goal: self.goal, taskDate: date)
     }
 }
 
-struct RoutineTextTask: RoutineTask {
-    var routineIdentifier: UUID
-    var identifier: UUID = UUID()
-    var description: String
+class RoutineTextTask: RoutineCheckTask {
     var text: String {
         didSet {
             isDone = false == text.isEmpty
         }
     }
-    var taskDate: Date
-    var isDone: Bool = false
     
-    init(routine: Routine, text: String, taskDate: Date, isDone: Bool = false) {
-        self.routineIdentifier = routine.identifier
-        self.description = routine.description
+    init(routine: Routine, text: String = "", taskDate: Date, isDone: Bool = false) {
         self.text = text
-        self.taskDate = taskDate
+        super.init(routine: routine, taskDate: taskDate)
     }
 }
 
-struct RoutineCountTask: RoutineTask {
-    var routineIdentifier: UUID
-    var identifier: UUID = UUID()
-    var description: String
+class RoutineCountTask: RoutineCheckTask {
     private var taskDescription: String
     var goal: Int
     var count: Int = 0 {
@@ -225,19 +187,15 @@ struct RoutineCountTask: RoutineTask {
             if goal == count { isDone = true }
         }
     }
-    var taskDate: Date
-    var isDone: Bool = false
     
     init(routine: Routine, description: String, goal: Int, taskDate: Date) {
-        self.routineIdentifier = routine.identifier
-        self.description = routine.description
         self.taskDescription = description
         self.goal = goal
-        self.taskDate = taskDate
+        super.init(routine: routine, taskDate: taskDate)
     }
 }
 
-struct RoutineCheckTask: RoutineTask {
+class RoutineCheckTask: RoutineTask {
     var routineIdentifier: UUID
     var identifier: UUID = UUID()
     var description: String

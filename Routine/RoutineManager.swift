@@ -9,20 +9,22 @@ import Foundation
 import UserNotifications
 
 class RoutineManager {
-    static var routines: [Routine] = [] {
-        didSet {
-            RoutineManager.viewUpdates.forEach { viewUpdate in
-                viewUpdate()
-            }
-        }
-    }
-    static var viewUpdates: [() -> Void] = []
+    static var routines: [Routine] = []
+    static var arrayViewUpdates: [() -> Void] = []
+    
     var routineCount: Int {
         return RoutineManager.routines.count
     }
     
+    static func viewUpdate() {
+        RoutineManager.arrayViewUpdates.forEach { viewUpdate in
+            viewUpdate()
+        }
+    }
+    
     static func create(_ routine: Routine) {
         RoutineManager.routines.append(routine)
+        viewUpdate()
     }
     
     static func append(_ task: RoutineTask) {
@@ -36,6 +38,7 @@ class RoutineManager {
             return
         }
         RoutineManager.routines[index].myTaskList.append(task)
+        viewUpdate()
     }
     
     static func update(_ task: RoutineTask) {
@@ -49,6 +52,7 @@ class RoutineManager {
             return
         }
         RoutineManager.routines[routineIndex].myTaskList[taskIndex] = task
+        viewUpdate()
     }
     
     static func update(_ routine: Routine) {
@@ -56,6 +60,7 @@ class RoutineManager {
         //MARK: 완료한 루틴 이전의 내용도 바꿀것인지 현재 내용만 바꿀것인지, 특정날 이후로만 바꿀 것인지 선택 가능하게 하기
         RoutineManager.routines[routineIndex] = routine
         RoutineManager.routines[routineIndex].allDoneTaskUpdate()
+        viewUpdate()
     }
     
     static func fetch(_ identifier: UUID) -> Routine? {
@@ -76,15 +81,17 @@ class RoutineManager {
         for index in 0..<RoutineManager.routines.count {
             if let routineTask = RoutineManager.routines[index].myTaskList.first(where: { calendar.isDate(date, equalTo: $0.taskDate, toGranularity: .day) }) {
                 tasks.append(routineTask)
-            } else if let newRoutineTask = RoutineManager.routines[index].createTask(date: date) {
+            } else if let newRoutineTask = RoutineManager.routines[index].getTask(date: date) {
                 tasks.append(newRoutineTask)
             }
         }
+        viewUpdate()
         return tasks
     }
     
     static func remove(routineIdentifier: UUID) {
         RoutineManager.routines.removeAll { $0.identifier == routineIdentifier }
+        viewUpdate()
     }
     
     func remove(routineTask: RoutineTask) {
