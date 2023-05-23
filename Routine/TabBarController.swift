@@ -24,7 +24,7 @@ class TabBarController: UITabBarController {
     
     private func viewControllerSetting() {
         let vc1 = UINavigationController(rootViewController: ListViewController(viewModel: ListViewModel()))
-        let vc2 = UINavigationController(rootViewController: MyInfoViewController())
+        let vc2 = UINavigationController(rootViewController: MyRoutineViewController())
         let vc3 = UINavigationController(rootViewController: SettingViewController())
 
         vc1.title = "목록"

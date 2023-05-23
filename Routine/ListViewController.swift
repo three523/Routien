@@ -66,7 +66,7 @@ final class ListViewController: UIViewController {
     }()
     private var todayIndex = 0
     private var beginPositionX: CGFloat = 0.0
-    private var selectedDate = Date().removeTimeStamp! {
+    private var selectedDate = Date() {
         didSet {
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy년 M월"
@@ -163,7 +163,7 @@ final class ListViewController: UIViewController {
         dailyCollectionView.selectItem(at: todayIndexPath, animated: true, scrollPosition: .centeredHorizontally)
         guard let date = (dailyCollectionView.cellForItem(at: todayIndexPath) as? DailyCollectionViewCell)?.date else { return }
         selectedDate = date
-        RoutineManager.update = listTableView.reloadData
+        RoutineManager.viewUpdates.append(listTableView.reloadData)
     }
     
     private func tableViewSetting() {

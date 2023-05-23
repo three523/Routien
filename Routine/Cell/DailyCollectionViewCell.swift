@@ -82,6 +82,7 @@ final class DailyCollectionViewCell: UICollectionViewCell {
             print("date range over")
             return
         }
+        dailyLabel.text = date.weekDay?.rawValue
         dateCircleView.date = date
     }
     
