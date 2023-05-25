@@ -40,7 +40,7 @@ final class ListViewModel {
     }
     
     func fetchAllTask(to date: Date) -> [Task] {
-        var tasks = RoutineManager.fetchAllTask(to: date)
+        var tasks = RoutineManager.fetchAllTask(to: date, isSortAndFilter: true)
         tasks.append(contentsOf: TodoManager.fetchAllTask(to: date))
         return tasks
     }

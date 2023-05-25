@@ -52,7 +52,7 @@ final class ListViewController: UIViewController {
     
     private let filterButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "line.3.horizontal.decrease"), for: .normal)
+        button.setImage(UIImage(systemName: "eye.fill"), for: .normal)
         button.tintColor = .mainColor
         return button
     }()
@@ -103,6 +103,7 @@ final class ListViewController: UIViewController {
     
     init(viewModel: ListViewModel) {
         self.listViewModel = viewModel
+        RoutineManager.arrayViewUpdates.append(listTableView.reloadData) 
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -190,11 +191,19 @@ final class ListViewController: UIViewController {
     
     @objc
     func routineSort() {
-        
+        let vc = SortAndFilterViewController()
+        vc.delegate = self
+        vc.isSort = true
+        vc.modalPresentationStyle = .overCurrentContext
+        present(vc, animated: false)
     }
     
     @objc func routineFilter() {
-        
+        let vc = SortAndFilterViewController()
+        vc.delegate = self
+        vc.isSort = false
+        vc.modalPresentationStyle = .overCurrentContext
+        present(vc, animated: false)
     }
     
     @objc
@@ -304,7 +313,6 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell: UITableViewCell = UITableViewCell()
-        
         let task = tasks[indexPath.section]
                 
         if let textTask = task as? RoutineTextTask {
@@ -334,7 +342,7 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     
 }
 
-extension ListViewController: RoutineDelegate, TaskAddDelegate {
+extension ListViewController: RoutineDelegate, TaskAddDelegate, TabbarHiddenDelegate {
     
     func textTaskIsDone(textTask: RoutineTextTask) {
         listViewModel.append(routinTask: textTask)
@@ -363,4 +371,7 @@ extension ListViewController: RoutineDelegate, TaskAddDelegate {
         listViewModel.remove(routineIdentifier: routineIdentifier)
     }
     
+    func tabbarHidden(isHidden: Bool) {
+        tabBarController?.tabBar.isHidden = isHidden
+    }
 }
