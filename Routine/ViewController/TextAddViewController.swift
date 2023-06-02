@@ -8,8 +8,8 @@
 import UIKit
 import SnapKit
 
-class TextAddViewController: UIViewController {
-    
+final class TextAddViewController: UIViewController {
+  
     let exitButton: UIButton = {
         let btn: UIButton = UIButton()
         btn.setTitle("X", for: .normal)
@@ -93,10 +93,9 @@ class TextAddViewController: UIViewController {
     
     @objc
     func saveButtonClick() {
-        guard var textTask = textTask else { return }
+        guard let textTask = textTask else { return }
         textTask.text = todoTextView.text
-        textTask.isDone = false == textTask.text.isEmpty
-        delegate?.textTaskIsDone(textTask: textTask)
+        delegate?.textTaskIsUpdate()
         dismiss(animated: true)
     }
 

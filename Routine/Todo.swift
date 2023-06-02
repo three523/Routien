@@ -7,9 +7,9 @@
 
 import Foundation
 
-struct Todo: Task {
+class Todo: Task {
     var identifier: UUID = UUID()
-    var description: String
-    var taskDate: Date
+    var title: String = ""
+    var taskDate: Date = Date()
     var isDone: Bool = false
 }

@@ -1,13 +1,13 @@
 //
-//  ButtonRoutineTableViewCell.swift
 //  Routine
 //
 //  Created by 김도현 on 2023/01/12.
 //
 
 import UIKit
+import RealmSwift
 
-class CheckRoutineTableViewCell: UITableViewCell {
+final class CheckRoutineTableViewCell: UITableViewCell {
     
     private let routineButton: UIButton = {
         let button = UIButton()
@@ -29,10 +29,11 @@ class CheckRoutineTableViewCell: UITableViewCell {
     }()
     
     weak var delegate: RoutineDelegate? = nil
+    let routineManager = RoutineManager.shared
 
-    var routineCheckTask: RoutineCheckTask? = nil {
+    var routineCheckTask: RoutineTask? = nil {
         didSet {
-            routineButton.setTitle(routineCheckTask?.description, for: .normal)
+            routineButton.setTitle(routineCheckTask?.title, for: .normal)
             guard let isDone = routineCheckTask?.isDone else { return }
             isDone ? setAll(color: UIColor.systemGray) : setAll(color: UIColor.black)
         }
@@ -91,16 +92,24 @@ class CheckRoutineTableViewCell: UITableViewCell {
     @objc
     func checkButtonClick() {
         guard let isDone = routineCheckTask?.isDone else { return }
-        self.routineCheckTask?.isDone = !isDone
+        
+        do {
+            let realm = try Realm(configuration: .defaultConfiguration)
+            try realm.write({
+                routineCheckTask?.isDone = !isDone
+            })
+        } catch let error {
+            print(error.localizedDescription)
+        }
         guard let routineCheckTask = routineCheckTask else { return }
-        delegate?.taskUpdate(task: routineCheckTask)
+        delegate?.taskUpdate(routineTask: routineCheckTask)
         !isDone ? setAll(color: UIColor.systemGray) : setAll(color: UIColor.black)
     }
     
     @objc
     func routineUpdate() {
         guard let routineIdentifier = routineCheckTask?.routineIdentifier,
-              let routine = RoutineManager.fetch(routineIdentifier) else { return }
+              let routine = routineManager.fetch(routineIdentifier) else { return }
         delegate?.routineUpdate(routine: routine)
     }
 

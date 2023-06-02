@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class SortAndFilterTableViewCell: UITableViewCell {
+final class SortAndFilterTableViewCell: UITableViewCell {
     
     private let checkMarkImageView: UIImageView = {
         let imgView = UIImageView(image: UIImage(systemName: "checkmark"))

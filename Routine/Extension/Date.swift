@@ -16,7 +16,7 @@ extension Date {
     
     var lastTimeDate: Date {
         let calendar = Calendar.current
-        guard let addDate = calendar.date(byAdding: .day, value: 1, to: self),
+        guard let addDate = calendar.date(byAdding: .day, value: 1, to: removeTimeDate),
               let lastTimeDate = calendar.date(byAdding: .second, value: -1, to: addDate) else { return self }
         return lastTimeDate
     }

@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class MyRoutineViewController: UIViewController {
+final class MyRoutineViewController: UIViewController {
     
     private let myRoutineTableView: UITableView = {
         let tb = UITableView()
@@ -22,6 +22,10 @@ class MyRoutineViewController: UIViewController {
         view.addSubview(myRoutineTableView)
         autoLayoutSetting()
         tableViewSetting()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        myRoutineTableView.reloadData()
     }
     
     private func autoLayoutSetting() {
@@ -42,7 +46,7 @@ class MyRoutineViewController: UIViewController {
 extension MyRoutineViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return RoutineManager.routines.count
+        return RoutineManager.shared.fetchAllRoutine().count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -60,7 +64,7 @@ extension MyRoutineViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let routine = RoutineManager.routines[indexPath.section]
+        let routine = RoutineManager.shared.fetchAllRoutine()[indexPath.section]
         let myRoutineCell = tableView.dequeueReusableCell(MyRoutineTableViewCell.self, for: indexPath)
         myRoutineCell.layer.borderWidth = 0.5
         myRoutineCell.layer.borderColor = UIColor.systemGray.cgColor

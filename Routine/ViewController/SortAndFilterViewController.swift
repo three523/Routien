@@ -12,7 +12,7 @@ protocol TabbarHiddenDelegate: AnyObject {
     func tabbarHidden(isHidden: Bool)
 }
 
-class SortAndFilterViewController: UIViewController {
+final class SortAndFilterViewController: UIViewController {
     
     private let backgroundView: UIView = UIView()
     private let sortAndFilterTableView: UITableView = {
@@ -22,8 +22,8 @@ class SortAndFilterViewController: UIViewController {
         tableView.layer.cornerRadius = 10
         return tableView
     }()
-    private let sortTypes: [SortType] = SortType.allCase
-    private let filterTypes: [FilterType] = FilterType.allCase
+    private let sortTypes: [SortType] = SortType.allCases
+    private let filterTypes: [FilterType] = FilterType.allCases
     var isSort: Bool = true
     
     weak var delegate: TabbarHiddenDelegate? = nil

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TodoListTableViewCell: UITableViewCell {
+final class TodoListTableViewCell: UITableViewCell {
 
     private let routineButton: UIButton = {
         let button = UIButton()

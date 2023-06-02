@@ -6,29 +6,35 @@
 //
 
 import Foundation
+import RealmSwift
 
 final class ListViewModel {
-    private let routineManager: RoutineManager = RoutineManager()
+    private let routineManager: RoutineManager = RoutineManager.shared
     private let todoManager: TodoManager = TodoManager()
-    var update: ()->() = {}
+    var viewUpdate: ()->() = {}
     
-    func create(routine: Routine) {
-        RoutineManager.create(routine)
-        update()
+    func create<T: Object & Routine>(routine: T) {
+        routineManager.create(routine)
+        viewUpdate()
     }
     
     func append(routinTask: RoutineTask) {
-        RoutineManager.append(routinTask)
-        update()
+        routineManager.append(routinTask)
+        viewUpdate()
     }
     
     func append(todo: Todo) {
         todoManager.append(todo)
-        update()
+        viewUpdate()
     }
     
-    func fetch(routineIdentifier: UUID) -> Routine? {
-        return RoutineManager.fetch(routineIdentifier)
+    func update<T: Object & Routine>(routine: T.Type, routineTask: RoutineTask) {
+        routineManager.update(routineType: routine, routineTask)
+        viewUpdate()
+    }
+    
+    func fetch(routineIdentifier: UUID) -> (any Routine)? {
+        return routineManager.fetch(routineIdentifier)
     }
     
     func fetchTask(todoIdentifier: UUID) -> Task? {
@@ -40,23 +46,23 @@ final class ListViewModel {
     }
     
     func fetchAllTask(to date: Date) -> [Task] {
-        var tasks = RoutineManager.fetchAllTask(to: date, isSortAndFilter: true)
+        var tasks = routineManager.fetchAllTask(to: date, isSortAndFilter: true)
         tasks.append(contentsOf: TodoManager.fetchAllTask(to: date))
         return tasks
     }
     
-    func remove(routineIdentifier: UUID) {
-        RoutineManager.remove(routineIdentifier: routineIdentifier)
-        update()
+    func delete(routineIdentifier: UUID) {
+        routineManager.delete(routineIdentifier: routineIdentifier)
+        viewUpdate()
     }
     
-    func remove(routineTask: RoutineTask) {
-        routineManager.remove(routineTask: routineTask)
-        update()
+    func delete(routineTask: RoutineTask) {
+        routineManager.delete(routineTask: routineTask)
+        viewUpdate()
     }
     
-    func remove(todo: Todo) {
+    func delete(todo: Todo) {
         TodoManager.remove(todo)
-        update()
+        viewUpdate()
     }
 }

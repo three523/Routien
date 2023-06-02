@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TextRoutineTableViewCell: UITableViewCell {
+final class TextRoutineTableViewCell: UITableViewCell {
     
     private let routineButton: UIButton = {
         let button = UIButton()
@@ -31,9 +31,8 @@ class TextRoutineTableViewCell: UITableViewCell {
     
     var routineTextTask: RoutineTextTask? = nil {
         didSet {
-            routineButton.setTitle(routineTextTask?.description, for: .normal)
+            routineButton.setTitle(routineTextTask?.title, for: .normal)
             if false == routineTextTask?.text.isEmpty {
-                routineTextTask?.isDone = true
                 DispatchQueue.main.async {
                     self.descriptionLabel.text = self.routineTextTask?.text
                 }
@@ -116,7 +115,7 @@ class TextRoutineTableViewCell: UITableViewCell {
     @objc
     func routineUpdate() {
         guard let routineIdentifier = routineTextTask?.routineIdentifier,
-              let routine = RoutineManager.fetch(routineIdentifier) else { return }
+              let routine = RoutineManager.shared.fetch(routineIdentifier) else { return }
         delegate?.routineUpdate(routine: routine)
     }
 
