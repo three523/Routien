@@ -24,12 +24,16 @@ final class SortAndFilterTableViewCell: UITableViewCell {
         didSet {
             guard let sortType = sortType else { return }
             titleLabel.text = sortType.rawValue
+            var checkMarkVisible = sortType == RoutineManager.shared.sortType
+            checkMarkReMake(isVisible: checkMarkVisible)
         }
     }
     var filterType: FilterType? = nil {
         didSet {
             guard let filterType = filterType else { return }
             titleLabel.text = filterType.rawValue
+            var checkMarkVisible = filterType == RoutineManager.shared.filterType
+            checkMarkReMake(isVisible: checkMarkVisible)
         }
     }
     
@@ -53,22 +57,47 @@ final class SortAndFilterTableViewCell: UITableViewCell {
             make.leading.equalToSuperview().inset(12)
             make.top.bottom.equalToSuperview()
         }
+        
+        var isSelected: Bool = false
+        if let filterType {
+            isSelected = filterType == RoutineManager.shared.filterType
+        } else if let sortType {
+            isSelected = sortType == RoutineManager.shared.sortType
+        }
+                
+        checkMarkImageView.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview().inset(12)
+            make.trailing.equalToSuperview().inset(12)
+            make.leading.equalTo(titleLabel.snp.trailing).inset(12)
+            if isSelected {
+                make.width.equalTo(checkMarkImageView.snp.height)
+            } else {
+                make.width.equalTo(0)
+            }
+        }
     }
     
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
+    private func checkMarkReMake(isVisible: Bool) {
         checkMarkImageView.snp.remakeConstraints { make in
             make.top.bottom.equalToSuperview().inset(12)
             make.trailing.equalToSuperview().inset(12)
             make.leading.equalTo(titleLabel.snp.trailing).inset(12)
-            selected ? make.width.equalTo(checkMarkImageView.snp.height) : make.width.equalTo(0)
+            if isVisible {
+                make.width.equalTo(checkMarkImageView.snp.height)
+            } else {
+                make.width.equalTo(0)
+            }
         }
+    }
+    
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
         if selected {
             if let sortType {
-                RoutineManager.sortType = sortType
+                RoutineManager.shared.sortType = sortType
             }
             if let filterType {
-                RoutineManager.filterType = filterType
+                RoutineManager.shared.filterType = filterType
             }
         }
     }

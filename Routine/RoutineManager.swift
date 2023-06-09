@@ -27,28 +27,20 @@ enum FilterType: String, CaseIterable {
 final class RoutineManager {
     static let shared: RoutineManager = RoutineManager()
     var realm: Realm?
-    static var arrayViewUpdates: [() -> Void] = []
+    var arrayViewUpdates: [() -> Void] = []
     
-    static var sortType: SortType = .createTimeAscending {
+    
+    //MARK: 루틴 필터랑 정렬 기능 UserDefaults 에 저장하고 가져오기
+    var sortType: SortType = SortType(rawValue: UserDefaults.standard.string(forKey: "SortType") ?? SortType.createTimeAscending.rawValue) ?? SortType.createTimeAscending {
         didSet {
+            UserDefaults.standard.set(sortType.rawValue, forKey: "SortType")
             viewUpdate()
         }
     }
     
-    var sortType: SortType = .createTimeAscending {
+    var filterType: FilterType = FilterType(rawValue: UserDefaults.standard.string(forKey: "FilterType") ?? FilterType.none.rawValue) ?? FilterType.none {
         didSet {
-            viewUpdate()
-        }
-    }
-    
-    static var filterType: FilterType = .none {
-        didSet {
-            viewUpdate()
-        }
-    }
-    
-    var filterType: FilterType = .none {
-        didSet {
+            UserDefaults.standard.set(filterType.rawValue, forKey: "FilterType")
             viewUpdate()
         }
     }
@@ -59,14 +51,8 @@ final class RoutineManager {
         realm = try? Realm(configuration: config)
     }
     
-    static func viewUpdate() {
-        RoutineManager.arrayViewUpdates.forEach { viewUpdate in
-            viewUpdate()
-        }
-    }
-    
     func viewUpdate() {
-        RoutineManager.arrayViewUpdates.forEach { viewUpdate in
+        RoutineManager.shared.arrayViewUpdates.forEach { viewUpdate in
             viewUpdate()
         }
     }
@@ -228,7 +214,7 @@ final class RoutineManager {
     }
     
     private func filter(tasks: [Task]) -> [Task] {
-        switch RoutineManager.filterType {
+        switch RoutineManager.shared.filterType {
         case .none:
             return tasks
         case .doneRoutine:

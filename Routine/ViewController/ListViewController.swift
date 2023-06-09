@@ -104,7 +104,7 @@ final class ListViewController: UIViewController {
     
     init(viewModel: ListViewModel) {
         self.listViewModel = viewModel
-        RoutineManager.arrayViewUpdates.append(listTableView.reloadData) 
+        RoutineManager.shared.arrayViewUpdates.append(listTableView.reloadData)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -165,7 +165,7 @@ final class ListViewController: UIViewController {
         dailyCollectionView.selectItem(at: todayIndexPath, animated: true, scrollPosition: .centeredHorizontally)
         guard let date = (dailyCollectionView.cellForItem(at: todayIndexPath) as? DailyCollectionViewCell)?.date else { return }
         selectedDate = date
-        RoutineManager.arrayViewUpdates.append(listTableView.reloadData)
+        RoutineManager.shared.arrayViewUpdates.append(listTableView.reloadData)
     }
     
     private func tableViewSetting() {
