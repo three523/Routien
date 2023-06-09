@@ -6,16 +6,17 @@
 //
 
 import UIKit
+import RealmSwift
 
 protocol TaskAddDelegate: AnyObject {
-    func textTaskIsDone(textTask: RoutineTextTask)
+    func textTaskIsUpdate()
 }
 
 protocol RoutineDelegate: AnyObject {
     func textTaskAdd(task: RoutineTextTask)
-    func taskUpdate(task: RoutineTask)
+    func taskUpdate(routineTask: RoutineTask)
     func routineUpdate(routine: Routine)
-    func routineRemove(routineIdentifier: UUID)
+    func routineDelete(routineIdentifier: UUID)
 }
 
 final class ListViewController: UIViewController {
@@ -103,7 +104,7 @@ final class ListViewController: UIViewController {
     
     init(viewModel: ListViewModel) {
         self.listViewModel = viewModel
-        RoutineManager.arrayViewUpdates.append(listTableView.reloadData) 
+        RoutineManager.shared.arrayViewUpdates.append(listTableView.reloadData)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -164,11 +165,11 @@ final class ListViewController: UIViewController {
         dailyCollectionView.selectItem(at: todayIndexPath, animated: true, scrollPosition: .centeredHorizontally)
         guard let date = (dailyCollectionView.cellForItem(at: todayIndexPath) as? DailyCollectionViewCell)?.date else { return }
         selectedDate = date
-        RoutineManager.arrayViewUpdates.append(listTableView.reloadData)
+        RoutineManager.shared.arrayViewUpdates.append(listTableView.reloadData)
     }
     
     private func tableViewSetting() {
-        listViewModel.update = listTableView.reloadData
+        listViewModel.viewUpdate = listTableView.reloadData
         listTableView.delegate = self
         listTableView.dataSource = self
         listTableView.allowsMultipleSelection = true
@@ -314,7 +315,6 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell: UITableViewCell = UITableViewCell()
         let task = tasks[indexPath.section]
-                
         if let textTask = task as? RoutineTextTask {
             guard let textCell = tableView.dequeueReusableCell(TextRoutineTableViewCell.self, for: indexPath) as? TextRoutineTableViewCell else { return cell }
             textCell.routineTextTask = textTask
@@ -325,7 +325,7 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
             countCell.routineCountTask = countTask
             countCell.delegate = self
             cell = countCell
-        } else if let checkTask = task as? RoutineCheckTask {
+        } else if let checkTask = task as? RoutineTask {
             guard let checkCell = tableView.dequeueReusableCell(CheckRoutineTableViewCell.self, for: indexPath) as? CheckRoutineTableViewCell else { return cell }
             checkCell.routineCheckTask = checkTask
             checkCell.delegate = self
@@ -344,8 +344,8 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
 
 extension ListViewController: RoutineDelegate, TaskAddDelegate, TabbarHiddenDelegate {
     
-    func textTaskIsDone(textTask: RoutineTextTask) {
-        listViewModel.append(routinTask: textTask)
+    func textTaskIsUpdate() {
+        listTableView.reloadData()
     }
     
     func textTaskAdd(task: RoutineTextTask) {
@@ -356,8 +356,8 @@ extension ListViewController: RoutineDelegate, TaskAddDelegate, TabbarHiddenDele
         present(vc, animated: true)
     }
     
-    func taskUpdate(task: RoutineTask) {
-        RoutineManager.update(task)
+    func taskUpdate(routineTask: RoutineTask) {
+        listViewModel.update(routine: CheckRoutine.self, routineTask: routineTask)
     }
     
     func routineUpdate(routine: Routine) {
@@ -367,8 +367,8 @@ extension ListViewController: RoutineDelegate, TaskAddDelegate, TabbarHiddenDele
         present(vc, animated: true)
     }
     
-    func routineRemove(routineIdentifier: UUID) {
-        listViewModel.remove(routineIdentifier: routineIdentifier)
+    func routineDelete(routineIdentifier: UUID) {
+        listViewModel.delete(routineIdentifier: routineIdentifier)
     }
     
     func tabbarHidden(isHidden: Bool) {

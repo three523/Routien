@@ -7,7 +7,7 @@
 
 import Foundation
 
-class TodoManager {
+final class TodoManager {
     static var todoList: [Todo] = []
     var todoCount: Int {
         return TodoManager.todoList.count

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class UITaskTableViewCell: UITableViewCell {
+final class UITaskTableViewCell: UITableViewCell {
     
     private let checkBox: UIImageView = {
         let image = UIImage(systemName: "checkmark.square")

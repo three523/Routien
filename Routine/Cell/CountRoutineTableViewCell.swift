@@ -6,8 +6,9 @@
 //
 
 import UIKit
+import RealmSwift
 
-class CountRoutineTableViewCell: UITableViewCell {
+final class CountRoutineTableViewCell: UITableViewCell {
         
     var routineCountTask: RoutineCountTask? = nil {
         didSet {
@@ -50,6 +51,8 @@ class CountRoutineTableViewCell: UITableViewCell {
     }()
     
     weak var delegate: RoutineDelegate? = nil
+    
+    let routineManager = RoutineManager.shared
         
     private var plusTimer: Timer? = nil
     private var minusTimer: Timer? = nil
@@ -110,10 +113,9 @@ class CountRoutineTableViewCell: UITableViewCell {
     }
     
     private func viewUpdate() {
-        routineButton.setTitle(routineCountTask?.description, for: .normal)
+        routineButton.setTitle(routineCountTask?.title, for: .normal)
         guard let count = routineCountTask?.count,
               let goal = routineCountTask?.goal else { return }
-        routineCountTask?.isDone = goal <= count
         guard let isDone = routineCountTask?.isDone else { return }
         isDone ? setAll(color: UIColor.systemGray) : setAll(color: UIColor.black)
         DispatchQueue.main.async {
@@ -138,7 +140,7 @@ class CountRoutineTableViewCell: UITableViewCell {
     @objc
     func removeRoutine() {
         guard let routineIdentifier = routineCountTask?.routineIdentifier else { return }
-        delegate?.routineRemove(routineIdentifier: routineIdentifier)
+        delegate?.routineDelete(routineIdentifier: routineIdentifier)
     }
     
     @objc
@@ -158,7 +160,7 @@ class CountRoutineTableViewCell: UITableViewCell {
     func countIncrease() {
         self.routineCountTask?.count += 1
         guard let routineCountTask = routineCountTask else { return }
-        delegate?.taskUpdate(task: routineCountTask)
+        delegate?.taskUpdate(routineTask: routineCountTask)
         viewUpdate()
     }
 
@@ -180,14 +182,14 @@ class CountRoutineTableViewCell: UITableViewCell {
         if routineCountTask?.count == 0 { return }
         self.routineCountTask?.count -= 1
         guard let routineCountTask = routineCountTask else { return }
-        delegate?.taskUpdate(task: routineCountTask)
+        delegate?.taskUpdate(routineTask: routineCountTask)
         viewUpdate()
     }
     
     @objc
     func routineUpdate() {
         guard let routineIdentifier = routineCountTask?.routineIdentifier,
-              let routine = RoutineManager.fetch(routineIdentifier) else { return }
+              let routine = routineManager.fetch(routineIdentifier) else { return }
         delegate?.routineUpdate(routine: routine)
     }
 }

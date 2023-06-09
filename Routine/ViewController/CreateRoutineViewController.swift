@@ -6,12 +6,11 @@
 //
 
 import UIKit
-enum RoutineType: String {
+import RealmSwift
+enum RoutineType: String, CaseIterable {
     case check = "체크"
     case text = "글"
     case count = "카운트"
-    
-    static let allCases: [RoutineType] = [.check, .text, .count]
 }
 
 final class CreateRoutineViewController: UIViewController, UNUserNotificationCenterDelegate {
@@ -226,11 +225,11 @@ final class CreateRoutineViewController: UIViewController, UNUserNotificationCen
         return picker
     }()
         
+    let routineManager: RoutineManager = RoutineManager.shared
     var routine: Routine? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(keyboardWillShow),
                                                name: UIResponder.keyboardWillShowNotification,
@@ -353,11 +352,11 @@ final class CreateRoutineViewController: UIViewController, UNUserNotificationCen
     
     func update() {
         guard let routine = self.routine else { return }
-        routineTextField.text = routine.description
+        routineTextField.text = routine.title
         removeButtonEnabled()
         workDailyStackView.arrangedSubviews.forEach { view in
             guard let circleView = view as? CircleTextView else { return }
-            if routine.dayOfWeek.contains(circleView.dayOfWeek) {
+            if routine.dayOfWeeks.contains(circleView.dayOfWeek) {
                 circleView.isSelected = true
             } else {
                 circleView.isSelected = false
@@ -712,13 +711,18 @@ final class CreateRoutineViewController: UIViewController, UNUserNotificationCen
     }
     
     func isRoutineAmend() -> Bool {
-        guard let updateRoutine = updateRoutine(),
-              let routine = routine else { return false }
-        let isRoutineTitleAmend = routine.description != updateRoutine.description
-        let isDateAmend = routine.startDate != updateRoutine.startDate || routine.endDate != updateRoutine.endDate
-        let isNotificationAmend = routine.notificationTime != updateRoutine.notificationTime
-        print(isRoutineTitleAmend, isDateAmend, isNotificationAmend)
-        let isAmend = isRoutineTitleAmend != false || isDateAmend != false || isNotificationAmend != false
+        guard let routine = routine,
+              let updateTitle = routineTextField.text else { return false }
+        let isRoutineTitleAmend = routine.title != updateTitle
+        let isDayOfWeeksAmend = routine.dayOfWeeks.toArray() != selectedDayOfWeeks().toArray()
+        
+        var updateEndDate: Date? = nil
+        if let endFetchDate = fetchDate(to: endDateStackView) {
+            updateEndDate = endFetchDate.lastTimeDate
+        }
+        let isDateAmend = routine.startDate != fetchDate(to: startDateStackView) ?? Date().removeTimeDate || routine.endDate != updateEndDate
+        let isNotificationAmend = routine.notificationTime != selectedNotificationTime()
+        let isAmend = isRoutineTitleAmend != false || isDayOfWeeksAmend != false || isDateAmend != false || isNotificationAmend != false
         return isAmend
     }
     
@@ -726,9 +730,11 @@ final class CreateRoutineViewController: UIViewController, UNUserNotificationCen
     func removeRoutine() {
         guard let routine = routine else { return }
         let alert = UIAlertController(title: "루틴을 삭제하시겠습니까?", message: "지우면 다시 복구할수 없습니다", preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "확인", style: .destructive) { _ in
-            RoutineManager.remove(routineIdentifier: routine.identifier)
-            self.removeNotification(routine: routine)
+        let okAction = UIAlertAction(title: "확인", style: .destructive) { [self] _ in
+            var routineIdentifier = routine.identifier
+            let dayOfWeeks: [DayOfWeek] = routine.dayOfWeeks.map { $0 }
+            routineManager.delete(routineIdentifier: routine.identifier)
+            self.removeNotification(routineIdentifier: routineIdentifier, dayOfWeeks: dayOfWeeks)
             self.dismiss(animated: true)
         }
         let cancelAction = UIAlertAction(title: "취소", style: .cancel)
@@ -740,10 +746,10 @@ final class CreateRoutineViewController: UIViewController, UNUserNotificationCen
     @objc
     func doneButtonClick() {
         if let routine = self.routine {
-            let afterDescription = routine.description
+            let afterDescription = routine.title
             guard let updateRoutine = updateRoutine() else { return }
             updateNotification(routine: updateRoutine)
-            RoutineManager.update(updateRoutine)
+            self.routineManager.update(updateRoutine)
             dismiss(animated: true)
             return
         }
@@ -752,12 +758,12 @@ final class CreateRoutineViewController: UIViewController, UNUserNotificationCen
             return
         }
         addNotification(routine: newRoutine)
-        RoutineManager.create(newRoutine)
+        routineManager.create(newRoutine)
         dismiss(animated: true)
     }
     
     func createRoutine() -> Routine? {
-        guard let description = routineTextField.text else { return nil }
+        guard let title = routineTextField.text else { return nil }
         let dayOfWeeks = selectedDayOfWeeks()
         let startDate = fetchDate(to: startDateStackView) ?? Date()
         var endDate: Date? = nil
@@ -768,18 +774,18 @@ final class CreateRoutineViewController: UIViewController, UNUserNotificationCen
         let type = selectedType()
         switch type {
         case .check:
-            return Routine(description: description, dayOfWeek: dayOfWeeks, startDate: startDate, endDate: endDate, notificationTime: notificationTime)
+            return CheckRoutine(title: title, dayOfWeeks: dayOfWeeks, startDate: startDate, endDate: endDate, notificationTime: notificationTime)
         case .text:
-            return TextRoutine(description: description, dayOfWeek: dayOfWeeks, startDate: startDate, endDate: endDate, notificationTime: notificationTime)
+            return TextRoutine(title: title, dayOfWeeks: dayOfWeeks, startDate: startDate, endDate: endDate, notificationTime: notificationTime)
         case .count:
             guard let goal = fetchGoal() else { return nil }
-            return CountRoutine(description: description, dayOfWeek: dayOfWeeks, startDate: startDate, endDate: endDate, notificationTime: notificationTime, goal: goal)
+            return CountRoutine(title: title, dayOfWeeks: dayOfWeeks, startDate: startDate, endDate: endDate, notificationTime: notificationTime, goal: goal)
         }
     }
     
     func updateRoutine() -> Routine? {
         guard var routine = routine,
-              let description = routineTextField.text else { return nil }
+              let title = routineTextField.text else { return nil }
         let dayOfWeeks = selectedDayOfWeeks()
         let startDate = fetchDate(to: startDateStackView) ?? Date().removeTimeDate
         var endDate: Date? = nil
@@ -787,11 +793,20 @@ final class CreateRoutineViewController: UIViewController, UNUserNotificationCen
             endDate = endFetchDate.lastTimeDate
         }
         let notificationTime = selectedNotificationTime()
-        routine.description = description
-        routine.dayOfWeek = dayOfWeeks
-        routine.startDate = startDate
-        routine.endDate = endDate
-        routine.notificationTime = notificationTime
+        
+        do {
+            let realm = try Realm(configuration: .defaultConfiguration)
+            try realm.write {
+                routine.title = title
+                routine.dayOfWeeks = dayOfWeeks
+                routine.startDate = startDate
+                routine.endDate = endDate
+                routine.notificationTime = notificationTime
+                routine.allTaskTitleUpdate()
+            }
+        } catch let error {
+            print(error.localizedDescription)
+        }
         return routine
     }
     
@@ -806,23 +821,23 @@ final class CreateRoutineViewController: UIViewController, UNUserNotificationCen
         }
     }
     
-    private func removeNotification(routine: Routine) {
+    private func removeNotification(routineIdentifier: UUID, dayOfWeeks: [DayOfWeek]) {
         let notificationCenter = UNUserNotificationCenter.current()
         let allDayOfWeek = DayOfWeek.allCases
         var identifiers = [String]()
-        for index in 0..<allDayOfWeek.count where routine.dayOfWeek.contains(allDayOfWeek[index]) {
-            identifiers.append(routine.identifier.uuidString + String(index + 1))
+        for index in 0..<allDayOfWeek.count where dayOfWeeks.contains(allDayOfWeek[index]) {
+            identifiers.append(routineIdentifier.uuidString + String(index + 1))
         }
         notificationCenter.removePendingNotificationRequests(withIdentifiers: identifiers)
     }
     
     private func updateNotification(routine: Routine) {
-        removeNotification(routine: routine)
+        removeNotification(routineIdentifier: routine.identifier, dayOfWeeks: routine.dayOfWeeks.map{ $0 })
         addNotification(routine: routine)
     }
     
-    private func selectedDayOfWeeks() -> [DayOfWeek] {
-        var dayOfWeeks: [DayOfWeek] = []
+    private func selectedDayOfWeeks() -> List<DayOfWeek> {
+        var dayOfWeeks = List<DayOfWeek>()
         let selectedCircleView = workDailyStackView.arrangedSubviews
             .compactMap { $0 as? CircleTextView }
             .filter { $0.isSelected }

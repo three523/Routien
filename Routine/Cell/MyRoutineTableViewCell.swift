@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class MyRoutineTableViewCell: UITableViewCell {
+final class MyRoutineTableViewCell: UITableViewCell {
     
     var routine: Routine? = nil {
         didSet {
@@ -77,9 +77,9 @@ class MyRoutineTableViewCell: UITableViewCell {
     
     private func routineUpdate() {
         guard let routine = routine else { return }
-        myRoutineLabel.text = routine.description
-        countLabel.text = "\(routine.goalTask.count)회"
-        goalRateLabel.text = "\(routine.goalRate)%"
+        myRoutineLabel.text = routine.title
+        countLabel.text = "\(routine.doneTasks().count)회"
+        goalRateLabel.text = "\(routine.goalRate())%"
     }
 
 }
